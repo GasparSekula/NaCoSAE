@@ -25,10 +25,8 @@ Następnie dla modelu o modalności tylko wizyjnej stworzona metoda zostanie zew
 | Przygotowanie i trenowanie modeli SAE dla modalności wizualnej i multimodalnej.  | G | 31.08.2025 | Not started | | | 
 | Zaprojektowanie i implementacja pipeline'u (LLM - model generatywny - SAE) do iteracyjnego odkrywania i automatycznego nazywania cech wizualnych. | M | 10.10.2025 | Not started | | |
 | Zapoznanie się z frameworkami ewaluacyjnymi CoSy dla nazwanych konceptów.  | G | 10.10.2025 | Not started | | | 
-| Opracowanie interfejsu użytkownika do wizualizacji wyników działania metody.
- | M | 20.11.2025 | Not started | | |
-| Zaadaptowanie frameworkamu CoSy i przeprowadzenie ewaluacji nowej metody nazywania konceptów, w tym porównanie z istniejącymi rozwiązaniami. 
- | G | 20.11.2025 | Not started | | | 
+| Opracowanie interfejsu użytkownika do wizualizacji wyników działania metody. | M | 20.11.2025 | Not started | | |
+| Zaadaptowanie frameworkamu CoSy i przeprowadzenie ewaluacji nowej metody nazywania konceptów, w tym porównanie z istniejącymi rozwiązaniami. | G | 20.11.2025 | Not started | | | 
 
  ## Literatura
  - Ashutosh, K., Gandelsman, Y., Chen, X., Misra, I., and Girdhar, R. LLMs can see and hear without any training. arXiv preprint arXiv:2501.18096, 2025.
