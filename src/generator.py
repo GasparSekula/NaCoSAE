@@ -83,3 +83,6 @@ class Generator:
         # call(prompt)
         # return img
         pass
+
+    def get_description(self) -> Description:
+        return self.prev_description
