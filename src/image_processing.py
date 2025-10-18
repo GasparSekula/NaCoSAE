@@ -48,4 +48,4 @@ def save_images_from_iteration(
     for image_number, image in enumerate(images):
         filename = f"{run_id}_{iteration}_{image_number}"
         save_path = f"{directory_path}/{filename}"
-        image.save(save_path, format="jpg")    
+        image.save(save_path, format="jpeg")    
