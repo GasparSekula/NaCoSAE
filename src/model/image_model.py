@@ -1,11 +1,12 @@
 from collections.abc import Sequence
+
 import diffusers
 import immutabledict
 import PIL
 import torch
 
-from src.model import model
-from src import prompt_utils
+from model import model
+import prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
     {"stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image}

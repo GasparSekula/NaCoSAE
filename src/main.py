@@ -1,12 +1,13 @@
-from src.model import image_model
-from src.model import explained_model
-from src import image_processing
-from src import scoring
+import os
 
 from absl import app
 from absl import flags
-import os
 from PIL import Image
+
+from model import image_model
+from model import explained_model
+import image_processing
+import scoring
 
 # TODO(piechotam) parameterize explained layer
 

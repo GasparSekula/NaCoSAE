@@ -1,6 +1,7 @@
 """Module for image processing tasks."""
 
 from collections.abc import Sequence
+
 import immutabledict
 from PIL import Image
 import torch

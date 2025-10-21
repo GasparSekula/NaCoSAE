@@ -2,7 +2,7 @@ import immutabledict
 import torch
 import torchvision
 
-from src.model import model
+from model import model
 
 _WEIGHTS = immutabledict.immutabledict(
     {
