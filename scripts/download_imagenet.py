@@ -1,3 +1,8 @@
+"""
+This script downloads parquet files from imagenet, processes them and saves
+images. Images are grouped into subdirectories based on their class.
+"""
+
 from collections.abc import Hashable
 from collections.abc import Iterable
 from collections.abc import Sequence
