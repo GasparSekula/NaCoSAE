@@ -73,8 +73,10 @@ def _calculate_concept_activations(
     return explained_model.get_activations(input_batch)
 
 
-def _create_model_save_path(save_path: str, model_id: str, layer: str) -> str:
-    """Creates save path for model activations and returns directory name."""
+def _create_activations_save_path(
+    save_path: str, model_id: str, layer: str
+) -> str:
+    """Creates save path for activations and returns directory name."""
     model_save_path = os.path.join(save_path, model_id, layer)
     logging.info("Creating path %s." % model_save_path)
     try:
@@ -90,17 +92,18 @@ def _create_model_save_path(save_path: str, model_id: str, layer: str) -> str:
 def _save_concept_activations(
     save_path: str, concept_name: str, activations: torch.Tensor
 ) -> None:
-    save_filepath = os.path.join(save_path, f"{concept_name}_activations.pt")
+    save_filepath = os.path.join(save_path, f"{concept_name}.pt")
     logging.info("Saving activations to %s." % save_filepath)
     torch.save(activations, save_filepath)
 
 
 def main(argv):
-    logging.info(
-        "Loading model with model_id=%s." % _EXPLAINED_MODEL_ID.value
-    )
+    logging.info("Loading model with model_id=%s." % _EXPLAINED_MODEL_ID.value)
     expl_model = explained_model.ExplainedModel(
         _EXPLAINED_MODEL_ID.value, _DEVICE.value
+    )
+    model_save_path = _create_activations_save_path(
+        _SAVE_PATH.value, _EXPLAINED_MODEL_ID.value, _LAYER.value
     )
     for concept_directory, concept_name in _get_concept_directories_and_names(
         _CONTROL_IMAGES_DIRECTORY.value
@@ -110,9 +113,6 @@ def main(argv):
             concept_directory, _EXPLAINED_MODEL_ID.value
         )
         activations = _calculate_concept_activations(expl_model, input_batch)
-        model_save_path = _create_model_save_path(
-            _SAVE_PATH.value, _EXPLAINED_MODEL_ID.value, _LAYER.value
-        )
         _save_concept_activations(model_save_path, concept_name, activations)
 
 
