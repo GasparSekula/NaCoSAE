@@ -1,5 +1,5 @@
 # NaCoSAE
-Communication Platform for Thesis Project - DS Bachelor Engineering Programme at WUT.
+Thesis Project - DS Bachelor Engineering Programme at WUT.
 
 ## Contriubutors
 [Michał](https://github.com/piechotam) & [Gaspar](https://github.com/GasparSekula)
@@ -15,18 +15,6 @@ Realizację celów niniejszej pracy inżynierskiej rozpocznie analiza literatury
 Kolejnym krokiem będzie analiza i testowanie prototypowego systemu realizującego opracowaną metodykę. Przeprowadzona zostanie ewaluacja skuteczności nowej metody na modelach multimodalnych przy użyciu metryk z pracy CoSy oraz porównanie z istniejącymi podejściami. 
 Następnie dla modelu o modalności tylko wizyjnej stworzona metoda zostanie zewaluowana. Pracę zwieńczy wizualizacja wyników, czyli opracowanie interfejsu użytkownika prezentującego dla wybranych cech SAE aktywujące prompty, wygenerowane obrazy, zaproponowane nazwy konceptów oraz wyniki ewaluacji.  
 
-## TODO
-
-| Zadanie | Wykonawca | Deadline | Progres | Uwagi | Załączniki |
-| :-----: | :-------: | :------: | :-----: | :---- | :--------- |
-| Adaptacja i implementacja frameworku MILS na potrzeby projektu. | M | 31.07.2025 | Not started | | |
-| Analiza literatury dotyczącej metod interpretacji i nazywania konceptów w SAE. | G | 31.07.2025 | Not started | | | 
-| Integracja MILS z wybranym modelem generatywnym (np. Stable Diffusion) oraz infrastrukturą SAE. | M | 31.08.2025 | Not started | | |
-| Przygotowanie i trenowanie modeli SAE dla modalności wizualnej i multimodalnej.  | G | 31.08.2025 | Not started | | | 
-| Zaprojektowanie i implementacja pipeline'u (LLM - model generatywny - SAE) do iteracyjnego odkrywania i automatycznego nazywania cech wizualnych. | M | 10.10.2025 | Not started | | |
-| Zapoznanie się z frameworkami ewaluacyjnymi CoSy dla nazwanych konceptów.  | G | 10.10.2025 | Not started | | | 
-| Opracowanie interfejsu użytkownika do wizualizacji wyników działania metody. | M | 20.11.2025 | Not started | | |
-| Zaadaptowanie frameworkamu CoSy i przeprowadzenie ewaluacji nowej metody nazywania konceptów, w tym porównanie z istniejącymi rozwiązaniami. | G | 20.11.2025 | Not started | | | 
 
  ## Literatura
  - Ashutosh, K., Gandelsman, Y., Chen, X., Misra, I., and Girdhar, R. LLMs can see and hear without any training. arXiv preprint arXiv:2501.18096, 2025.
