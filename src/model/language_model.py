@@ -1,10 +1,11 @@
+import random
+from collections.abc import Mapping
+
 import torch
 import transformers
 
 from model import model
 import prompt_utils
-from collections.abc import Mapping
-import random
 
 
 _ASSISTANT_TAG = "<|assistant|>"
@@ -14,34 +15,29 @@ _MAX_CONCEPT_DICT_SIZE = 100
 def select_concepts(concepts_dict: Mapping[str, float], 
                     new_concept: str, 
                     new_concept_score: float,
-                    p: float = 0.9) -> Mapping[str, float]:
+                    replacement_probability: float = 0.1) -> Mapping[str, float]: 
     
     if not concepts_dict:
-        return {new_concept: new_concept_score}
-    
-    if not (new_concept and new_concept_score):
-        return concepts_dict
+        raise ValueError("concepts_dict must be non-empty")
+
+    if not new_concept or new_concept_score is None:
+        raise ValueError("new_concept (non-empty string) and new_concept_score (numeric) must be provided")
     
     worst_concept = min(concepts_dict, key=concepts_dict.get)
     
+    new_dict = dict(concepts_dict)
     rng = random.Random(_RANDOM_SEED)
     
-    new_dict = dict(concepts_dict)
+    # TODO: @GasparSekula propose different way of sampling
 
     if new_concept in new_dict:
         new_dict[new_concept] = max(new_dict[new_concept], new_concept_score)
-        return new_dict
-
-    if len(new_dict) < _MAX_CONCEPT_DICT_SIZE:
+    elif len(new_dict) < _MAX_CONCEPT_DICT_SIZE:
         new_dict[new_concept] = new_concept_score
-        return new_dict
-
-    if new_concept_score > new_dict[worst_concept]:
+    elif new_concept_score > new_dict[worst_concept]:
         del new_dict[worst_concept]
         new_dict[new_concept] = new_concept_score
-        return new_dict
-
-    if rng.random() > p:
+    elif rng.random() < replacement_probability:
         replace_key = rng.choice(list(new_dict.keys()))
         del new_dict[replace_key]
         new_dict[new_concept] = new_concept_score
@@ -94,7 +90,7 @@ class LanguageModel(model.Model):
         random = {"road": 0.32, "beer": 0.71, "horse": 0.22, "cake": 0.49, "toothpaste": 0.13}
         concept_dict = {**best, **random}
         
-        self._concept_history = dict(concept_dict)
+        self._concept_history = concept_dict
 
 
     def _update_concept_history(
