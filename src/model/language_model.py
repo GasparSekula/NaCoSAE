@@ -1,11 +1,50 @@
+import random
+from collections.abc import Mapping
+
 import torch
 import transformers
 
 from model import model
 import prompt_utils
 
-_ASSISTANT_TAG = "<|assistant|>"
 
+_ASSISTANT_TAG = "<|assistant|>"
+_RANDOM_SEED = 42
+_MAX_CONCEPT_DICT_SIZE = 100
+
+def select_concepts(concepts_dict: Mapping[str, float], 
+                    new_concept: str, 
+                    new_concept_score: float,
+                    replacement_probability: float = 0.1) -> Mapping[str, float]: 
+    
+    if not concepts_dict:
+        raise ValueError("concepts_dict must be non-empty")
+
+    if not new_concept or new_concept_score is None:
+        raise ValueError("new_concept (non-empty string) and new_concept_score (numeric) must be provided")
+    
+    worst_concept = min(concepts_dict, key=concepts_dict.get)
+    
+    new_dict = dict(concepts_dict)
+    rng = random.Random(_RANDOM_SEED)
+    
+    # TODO: @GasparSekula propose different way of sampling
+
+    if new_concept in new_dict:
+        new_dict[new_concept] = max(new_dict[new_concept], new_concept_score)
+    elif len(new_dict) < _MAX_CONCEPT_DICT_SIZE:
+        new_dict[new_concept] = new_concept_score
+    elif new_concept_score > new_dict[worst_concept]:
+        del new_dict[worst_concept]
+        new_dict[new_concept] = new_concept_score
+    elif rng.random() < replacement_probability:
+        replace_key = rng.choice(list(new_dict.keys()))
+        del new_dict[replace_key]
+        new_dict[new_concept] = new_concept_score
+
+    return new_dict
+    
+        
 
 class LanguageModel(model.Model):
     def __init__(
@@ -43,13 +82,29 @@ class LanguageModel(model.Model):
         # sample random imagenet classes, score them and create a dict
         # best: {concept: score}
         # random: {concept: score}
-        self._concept_history = dict()
+        
+        # hardcoded for testing purposes 
+        # TODO: implement initialization
+        
+        best = {"cup" : 0.9, "cafe": 0.86, "tea" : 0.78, "juice": 0.71, "hot": 0.58}
+        random = {"road": 0.32, "beer": 0.71, "horse": 0.22, "cake": 0.49, "toothpaste": 0.13}
+        concept_dict = {**best, **random}
+        
+        self._concept_history = concept_dict
+
 
     def _update_concept_history(
         self, new_concept: str, auc_score: float
     ) -> None:
         """Updates concept history with most recent concept."""
-        pass
+        new_concept_dict = select_concepts(
+            self._concept_history,
+            new_concept,
+            auc_score
+        )
+        
+        self._concept_history = new_concept_dict
+        
 
     def generate_concept(self):
         """Generates new concept based on concept history."""
