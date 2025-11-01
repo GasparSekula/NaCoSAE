@@ -1,5 +1,5 @@
-import random
 from collections.abc import Mapping
+import random
 
 import torch
 import transformers
@@ -12,22 +12,27 @@ _ASSISTANT_TAG = "<|assistant|>"
 _RANDOM_SEED = 42
 _MAX_CONCEPT_DICT_SIZE = 100
 
-def select_concepts(concepts_dict: Mapping[str, float], 
-                    new_concept: str, 
-                    new_concept_score: float,
-                    replacement_probability: float = 0.1) -> Mapping[str, float]: 
-    
+
+def select_concepts(
+    concepts_dict: Mapping[str, float],
+    new_concept: str,
+    new_concept_score: float,
+    replacement_probability: float = 0.1,
+) -> Mapping[str, float]:
+
     if not concepts_dict:
         raise ValueError("concepts_dict must be non-empty")
 
     if not new_concept or new_concept_score is None:
-        raise ValueError("new_concept (non-empty string) and new_concept_score (numeric) must be provided")
-    
+        raise ValueError(
+            "new_concept (non-empty string) and new_concept_score (numeric) must be provided"
+        )
+
     worst_concept = min(concepts_dict, key=concepts_dict.get)
-    
+
     new_dict = dict(concepts_dict)
     rng = random.Random(_RANDOM_SEED)
-    
+
     # TODO: @GasparSekula propose different way of sampling
 
     if new_concept in new_dict:
@@ -43,8 +48,7 @@ def select_concepts(concepts_dict: Mapping[str, float],
         new_dict[new_concept] = new_concept_score
 
     return new_dict
-    
-        
+
 
 class LanguageModel(model.Model):
     def __init__(
@@ -56,7 +60,6 @@ class LanguageModel(model.Model):
         max_new_tokens: int,
     ) -> None:
         super().__init__(model_id, device)
-        self._load()
         self._initialize_concept_history(n_best_concepts, n_random_concepts)
         self._max_new_tokens = max_new_tokens
 
@@ -65,7 +68,7 @@ class LanguageModel(model.Model):
             task="text-generation",
             model=self._model_id,
             model_kwargs={"torch_dtype": torch.bfloat16},
-            device_map=self._device,
+            device=self._device,
         )
 
         if "llama" in self._model_id:
@@ -74,6 +77,7 @@ class LanguageModel(model.Model):
             )
 
         self._pipeline = pipeline
+        self._model = pipeline.model
 
     def _initialize_concept_history(
         self, n_best_concepts: int, n_random_concepts: int
@@ -82,32 +86,42 @@ class LanguageModel(model.Model):
         # sample random imagenet classes, score them and create a dict
         # best: {concept: score}
         # random: {concept: score}
-        
-        # hardcoded for testing purposes 
+
+        # hardcoded for testing purposes
         # TODO: implement initialization
-        
-        best = {"cup" : 0.9, "cafe": 0.86, "tea" : 0.78, "juice": 0.71, "hot": 0.58}
-        random = {"road": 0.32, "beer": 0.71, "horse": 0.22, "cake": 0.49, "toothpaste": 0.13}
+
+        best = {
+            "cup": 0.9,
+            "cafe": 0.86,
+            "tea": 0.78,
+            "juice": 0.71,
+            "hot": 0.58,
+        }
+        random = {
+            "road": 0.32,
+            "beer": 0.71,
+            "horse": 0.22,
+            "cake": 0.49,
+            "toothpaste": 0.13,
+        }
         concept_dict = {**best, **random}
-        
+
         self._concept_history = concept_dict
 
-
-    def _update_concept_history(
+    def update_concept_history(
         self, new_concept: str, auc_score: float
     ) -> None:
         """Updates concept history with most recent concept."""
         new_concept_dict = select_concepts(
-            self._concept_history,
-            new_concept,
-            auc_score
+            self._concept_history, new_concept, auc_score
         )
-        
-        self._concept_history = new_concept_dict
-        
 
+        self._concept_history = new_concept_dict
+
+    @model.gpu_inference_wrapper
     def generate_concept(self):
         """Generates new concept based on concept history."""
+        self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
         concept_generation_prompt = prompt_utils.generate_concept_prompt(
             self._concept_history
         )

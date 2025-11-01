@@ -19,8 +19,7 @@ _CONSTRUCTORS = immutabledict.immutabledict(
 class ExplainedModel(model.Model):
     def __init__(self, model_id: str, device: str) -> None:
         super().__init__(model_id, device)
-        self._load()
-    
+
     def _load(self):
         weights = _WEIGHTS[self._model_id]
         self._model = (
@@ -29,6 +28,7 @@ class ExplainedModel(model.Model):
             .eval()
         )
 
+    @model.gpu_inference_wrapper
     def get_activations(self, input_batch: torch.Tensor) -> torch.Tensor:
         """Passes the input batch through the model and collects activations."""
         activations = dict()
@@ -41,6 +41,6 @@ class ExplainedModel(model.Model):
 
         with torch.no_grad():
             torch.cuda.empty_cache()
-            _ = self._model(input_batch.float().to(self._device))
+            _ = self._model(input_batch.float().to("cuda"))
 
         return activations["output"][:, :, 0, 0].data

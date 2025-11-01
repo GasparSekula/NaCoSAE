@@ -1,13 +1,7 @@
-import os
-
 from absl import app
 from absl import flags
-from PIL import Image
 
-from model import image_model
-from model import explained_model
-import image_processing
-import scoring
+import pipeline
 
 # TODO(piechotam) parameterize explained layer
 
@@ -17,63 +11,53 @@ _TEXT_TO_IMAGE_MODEL_ID = flags.DEFINE_string(
 _EXPLAINED_MODEL_ID = flags.DEFINE_string(
     "explained_model", "resnet18", "model_id of the explained model."
 )
-_DEVICE = flags.DEFINE_string("device", "cuda", "Device to use")
+_LANGUAGE_MODEL_ID = flags.DEFINE_string(
+    "language_model",
+    "meta-llama/Llama-3.2-1B-Instruct",
+    "model_id of the language model.",
+)
 _NUM_INFERENCE_STEPS = flags.DEFINE_integer(
     "num_inf_steps", "25", "Number of inference steps in diffusion."
 )
 _NUM_IMAGES = flags.DEFINE_integer(
     "num_img", "5", "Number of images to generate per iteration."
 )
-_CONTROL_IMAGES_PATH = flags.DEFINE_string(
-    "control_images_path",
-    "control_images",
+_CONTROL_ACTIVATIONS_PATH = flags.DEFINE_string(
+    "control_activations_path",
+    "control_activations",
     "Path to directory with control images.",
 )
 _NEURON_ID = flags.DEFINE_integer("neuron_id", 0, "ID of a neuron to explain.")
+_N_ITERS = flags.DEFINE_integer("n_iters", "10", "Number of iterations.")
 
 
 def main(argv):
-    t2i_model = image_model.ImageModel(
-        _TEXT_TO_IMAGE_MODEL_ID.value, _DEVICE.value, _NUM_INFERENCE_STEPS.value
+    load_config = pipeline.LoadConfig(
+        _LANGUAGE_MODEL_ID.value,
+        _TEXT_TO_IMAGE_MODEL_ID.value,
+        _EXPLAINED_MODEL_ID.value,
+        {
+            "n_best_concepts": 5,
+            "n_random_concepts": 5,
+            "max_new_tokens": 30,
+        },
+        {
+            "num_inference_steps": _NUM_INFERENCE_STEPS.value,
+        },
+        {},
     )
-    expl_model = explained_model.ExplainedModel(
-        _EXPLAINED_MODEL_ID.value, _DEVICE.value
-    )
-
-    synthetic_images = t2i_model.generate_images(
-        _NUM_IMAGES.value, "a realistic photo of", "fruits"
-    )
-    image_processing.save_images_from_iteration(
-        "synthetic_images", synthetic_images, "test_run_id", 1
-    )
-    input_batch_synthetic = image_processing.transform_images(
-        _EXPLAINED_MODEL_ID.value, synthetic_images
-    )
-    synthetic_activations = expl_model.get_activations(input_batch_synthetic)
-
-    # this will be precalculated and input_batch will be loaded from the start
-    # for now its a rather inefficient, prototype version
-    control_images = []
-    control_images_directory = os.fsencode(_CONTROL_IMAGES_PATH.value)
-
-    for control_image in os.listdir(control_images_directory):
-        with Image.open(
-            os.path.join(control_images_directory, control_image)
-        ) as pil_image:
-            control_images.append(pil_image.copy())
-
-    input_batch_control = image_processing.transform_images(
-        _EXPLAINED_MODEL_ID.value, control_images
-    )
-    control_activations = expl_model.get_activations(input_batch_control)
-
-    metrics = scoring.calculate_metrics(
-        control_activations[:, _NEURON_ID.value],
-        synthetic_activations[:, _NEURON_ID.value],
+    image_generation_config = pipeline.ImageGenerationConfig(
+        _NUM_IMAGES.value, "A realstic photo of a"
     )
 
-    auc = metrics["auc"]
-    print(f"AUC: {auc}")
+    pipeline.run_pipeline(
+        load_config,
+        image_generation_config,
+        _CONTROL_ACTIVATIONS_PATH.value,
+        _NEURON_ID.value,
+        "auc",
+        _N_ITERS.value,
+    )
 
 
 if __name__ == "__main__":
