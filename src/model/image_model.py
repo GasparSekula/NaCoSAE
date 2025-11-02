@@ -22,10 +22,9 @@ class ImageModel(model.Model):
         super().__init__(model_id, device)
         self._generator = torch.Generator(device).manual_seed(0)
         self._num_inference_steps = num_inference_steps
-        self._load()
 
     def _load(self) -> None:
-        pipeline = (
+        model = (
             _TEXT_TO_IMAGE_MODELS[self._model_id]
             .from_pretrained(
                 self._model_id,
@@ -35,8 +34,9 @@ class ImageModel(model.Model):
             .to(self._device)
         )
 
-        self._pipeline = pipeline
+        self._model = model
 
+    @model.gpu_inference_wrapper
     def generate_images(
         self, n_images: int, prompt_text: str, concept: str
     ) -> Sequence[PIL.Image.Image]:
@@ -48,7 +48,7 @@ class ImageModel(model.Model):
         synthetic_images = []
         for _ in range(n_images):
             synthetic_images.append(
-                self._pipeline(
+                self._model(
                     text_to_image_prompt,
                     generator=self._generator,
                     num_inference_steps=self._num_inference_steps,
