@@ -9,6 +9,7 @@ from absl import logging
 import torch
 
 import image_processing
+from model import concept_history
 from model import model
 from model import explained_model
 from model import image_model
@@ -30,6 +31,12 @@ class LoadConfig:
 class ImageGenerationConfig:
     n_images: int
     prompt_text: str
+
+
+@dataclasses.dataclass
+class ConceptHistoryConfig:
+    n_best_concepts: int
+    n_random_concepts: int
 
 
 def _load_models(load_config: LoadConfig) -> Sequence[model.Model]:
@@ -87,6 +94,36 @@ def _get_neuron_activations(
     )
 
 
+def _score_concept(
+    concept: str,
+    image_generation_config: ImageGenerationConfig,
+    t2i_model: image_model.ImageModel,
+    expl_model: explained_model.ExplainedModel,
+    neuron_id: int,
+    control_activations_path: str,
+) -> Mapping[str, float]:
+    synthetic_images = t2i_model.generate_images(
+        image_generation_config.n_images,
+        image_generation_config.prompt_text,
+        concept,
+    )
+    synthetic_input_batch = image_processing.transform_images(
+        expl_model.model_id, synthetic_images
+    )
+    neuron_synthetic_activations, neuron_control_activations = (
+        _get_neuron_activations(
+            neuron_id,
+            expl_model,
+            synthetic_input_batch,
+            concept,
+            control_activations_path,
+        )
+    )
+    return scoring.calculate_metrics(
+        neuron_control_activations, neuron_synthetic_activations
+    )
+
+
 def _run_iteration(
     lang_model: language_model.LanguageModel,
     t2i_model: image_model.ImageModel,
@@ -98,34 +135,41 @@ def _run_iteration(
 ):
     """Runs single iteration of the explanation pipeline."""
     new_concept = lang_model.generate_concept()
-    synthetic_images = t2i_model.generate_images(
-        image_generation_config.n_images,
-        image_generation_config.prompt_text,
+    metrics = _score_concept(
         new_concept,
-    )
-    synthetic_input_batch = image_processing.transform_images(
-        expl_model.model_id, synthetic_images
-    )
-    neuron_synthetic_activations, neuron_control_activations = (
-        _get_neuron_activations(
-            neuron_id,
-            expl_model,
-            synthetic_input_batch,
-            new_concept,
-            control_activations_path,
-        )
-    )
-    metrics = scoring.calculate_metrics(
-        neuron_control_activations, neuron_synthetic_activations
+        image_generation_config,
+        t2i_model,
+        expl_model,
+        neuron_id,
+        control_activations_path,
     )
     lang_model.update_concept_history(new_concept, metrics[metric])
 
     return new_concept, metrics[metric]
 
 
+def _initialize_concept_history(
+    concept_history_config: ConceptHistoryConfig,
+    control_activations_path: str,
+    neuron_id: int,
+) -> Mapping[str, float]:
+    logging.info("Initializing concept history.")
+    initial_concepts = concept_history.get_initial_concepts(
+        concept_history_config.n_best_concepts,
+        concept_history_config.n_random_concepts,
+        control_activations_path,
+        neuron_id,
+    )
+
+    return dict(
+        (concept, _score_concept(concept)) for concept in initial_concepts
+    )
+
+
 def run_pipeline(
     load_config: LoadConfig,
     image_generation_config: ImageGenerationConfig,
+    concept_history_config: ConceptHistoryConfig,
     control_activations_path: str,
     neuron_id: int,
     metric: Literal["auc", "mad"],
@@ -133,6 +177,11 @@ def run_pipeline(
 ):
     """Runs the explanation pipeline."""
     lang_model, t2i_model, expl_model = _load_models(load_config)
+    lang_model.set_concept_history(
+        _initialize_concept_history(
+            concept_history_config, control_activations_path, neuron_id
+        )
+    )
 
     for iter in range(1, n_iters + 1):
         logging.info("Running iteration %s of %s." % (iter, n_iters))
