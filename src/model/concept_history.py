@@ -70,14 +70,14 @@ def get_initial_concepts(
     Gets a list of initial concepts. The list contains n_best_concepts concepts
     that activated the neuron the most and n_random_concepts random concepts.
     """
-    average__neuron_activations = _create_average_activations(
+    average_neuron_activations = _create_average_activations(
         control_activations_path, neuron_id
     )
     best_concepts = _select_best_concepts(
-        average__neuron_activations, n_best_concepts
+        average_neuron_activations, n_best_concepts
     )
     random_concepts = random.sample(
-        list(average__neuron_activations.keys()), n_random_concepts
+        list(average_neuron_activations.keys()), n_random_concepts
     )
 
     return {"best_concepts": best_concepts, "random_concepts": random_concepts}
