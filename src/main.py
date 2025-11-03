@@ -37,8 +37,6 @@ def main(argv):
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
         {
-            "n_best_concepts": 5,
-            "n_random_concepts": 5,
             "max_new_tokens": 30,
         },
         {
@@ -49,10 +47,12 @@ def main(argv):
     image_generation_config = pipeline.ImageGenerationConfig(
         _NUM_IMAGES.value, "A realstic photo of a"
     )
+    concept_history_config = pipeline.ConceptHistoryConfig(5, 5) # temp
 
     pipeline.run_pipeline(
         load_config,
         image_generation_config,
+        concept_history_config,
         _CONTROL_ACTIVATIONS_PATH.value,
         _NEURON_ID.value,
         "auc",

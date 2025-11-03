@@ -150,6 +150,9 @@ def _run_iteration(
 
 def _initialize_concept_history(
     concept_history_config: ConceptHistoryConfig,
+    image_generation_config: ImageGenerationConfig,
+    t2i_model: image_model.ImageModel,
+    expl_model: explained_model.ExplainedModel,
     control_activations_path: str,
     neuron_id: int,
 ) -> Mapping[str, float]:
@@ -162,7 +165,18 @@ def _initialize_concept_history(
     )
 
     return dict(
-        (concept, _score_concept(concept)) for concept in initial_concepts
+        (
+            concept,
+            _score_concept(
+                concept,
+                image_generation_config,
+                t2i_model,
+                expl_model,
+                neuron_id,
+                control_activations_path,
+            )["auc"],
+        )
+        for concept in initial_concepts
     )
 
 
@@ -177,9 +191,17 @@ def run_pipeline(
 ):
     """Runs the explanation pipeline."""
     lang_model, t2i_model, expl_model = _load_models(load_config)
+    model_layer_path = os.path.join(
+        control_activations_path, expl_model.model_id, "avgpool"  # temp
+    )
     lang_model.set_concept_history(
         _initialize_concept_history(
-            concept_history_config, control_activations_path, neuron_id
+            concept_history_config,
+            image_generation_config,
+            t2i_model,
+            expl_model,
+            model_layer_path,
+            neuron_id,
         )
     )
 
@@ -190,7 +212,7 @@ def run_pipeline(
             t2i_model,
             expl_model,
             image_generation_config,
-            control_activations_path,
+            model_layer_path,
             neuron_id,
             metric,
         )
