@@ -17,18 +17,18 @@ def _calculate_average_activation(
 
 
 def _get_activations(
-    control_activations_path: str,
+    model_layer_activations_path: str,
 ) -> Iterator[Tuple[str, torch.Tensor]]:
     """Returns an iterator of concept names and its control activations."""
-    for concept in os.listdir(control_activations_path):
-        filepath = os.path.join(control_activations_path, concept)
+    for concept in os.listdir(model_layer_activations_path):
+        filepath = os.path.join(model_layer_activations_path, concept)
         activations = torch.load(filepath)
 
         yield concept.replace("_", " "), activations
 
 
 def _create_average_activations(
-    control_activations_path: str, neuron_id: int
+    model_layer_activations_path: str, neuron_id: int
 ) -> Mapping[str, float]:
     """
     Creates dictionary with average activation of every control concept for
@@ -36,7 +36,7 @@ def _create_average_activations(
     """
     average_activations = dict()
 
-    for concept, activations in _get_activations(control_activations_path):
+    for concept, activations in _get_activations(model_layer_activations_path):
         average_activations[concept] = _calculate_average_activation(
             activations, neuron_id
         )
@@ -63,7 +63,7 @@ def _select_best_concepts(
 def get_initial_concepts(
     n_best_concepts: int,
     n_random_concepts: int,
-    control_activations_path: str,
+    model_layer_activations_path: str,
     neuron_id: int,
 ) -> Mapping[str, Sequence[str]]:
     """
@@ -71,7 +71,7 @@ def get_initial_concepts(
     that activated the neuron the most and n_random_concepts random concepts.
     """
     average_neuron_activations = _create_average_activations(
-        control_activations_path, neuron_id
+        model_layer_activations_path, neuron_id
     )
     best_concepts = _select_best_concepts(
         average_neuron_activations, n_best_concepts
