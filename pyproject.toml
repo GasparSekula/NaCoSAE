@@ -17,5 +17,8 @@ dependencies = [
     "torchvision>=0.24.0",
     "transformers>=4.57.1",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
 [tool.pylint.format]
 max-line-length = 100

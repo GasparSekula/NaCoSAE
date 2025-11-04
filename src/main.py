@@ -3,7 +3,6 @@ from absl import flags
 
 import pipeline
 
-# TODO(piechotam) parameterize explained layer
 
 _TEXT_TO_IMAGE_MODEL_ID = flags.DEFINE_string(
     "t2i_model", "stabilityai/sd-turbo", "model_id of the text2image model."
@@ -37,8 +36,6 @@ def main(argv):
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
         {
-            "n_best_concepts": 5,
-            "n_random_concepts": 5,
             "max_new_tokens": 30,
         },
         {
@@ -49,15 +46,17 @@ def main(argv):
     image_generation_config = pipeline.ImageGenerationConfig(
         _NUM_IMAGES.value, "A realstic photo of a"
     )
+    concept_history_config = pipeline.ConceptHistoryConfig(5, 5)  # temp
 
-    pipeline.run_pipeline(
+    explanation_pipeline = pipeline.Pipeline(
         load_config,
         image_generation_config,
+        concept_history_config,
         _CONTROL_ACTIVATIONS_PATH.value,
+        "avgpool",  # TODO(piechotam) parameterize explained layer
         _NEURON_ID.value,
-        "auc",
-        _N_ITERS.value,
     )
+    explanation_pipeline.run_pipeline("auc", _N_ITERS.value)
 
 
 if __name__ == "__main__":
