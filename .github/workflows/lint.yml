@@ -1,0 +1,13 @@
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          pylint: true
