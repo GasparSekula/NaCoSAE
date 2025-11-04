@@ -10,7 +10,6 @@ import torch
 
 import image_processing
 from model import concept_history
-from model import model
 from model import explained_model
 from model import image_model
 from model import language_model
