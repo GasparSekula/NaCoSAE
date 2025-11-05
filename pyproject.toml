@@ -22,3 +22,6 @@ dependencies = [
 pythonpath = "src"
 [tool.pylint.format]
 max-line-length = 80
+[tool.black]
+line-length = 80
+exclude = "checkpoints"
