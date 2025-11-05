@@ -9,7 +9,7 @@ from model import model
 import prompt_utils
 
 
-_ASSISTANT_TAG = "<|assistant|>"
+_ASSISTANT_TAG = "<|start_header_id|>assistant<|end_header_id|>"
 
 
 class LanguageModel(model.Model):
