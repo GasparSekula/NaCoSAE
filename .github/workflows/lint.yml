@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   run-linters:
     name: Run Linters
