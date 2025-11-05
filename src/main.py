@@ -66,7 +66,7 @@ def main(argv):
         _METRIC.value,
         _PROMPT_PATH.value
     )
-    explanation_pipeline.run_pipeline("auc", _N_ITERS.value)
+    explanation_pipeline.run_pipeline(_N_ITERS.value)
 
 
 if __name__ == "__main__":
