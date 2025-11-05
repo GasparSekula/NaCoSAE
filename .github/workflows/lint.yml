@@ -30,3 +30,4 @@ jobs:
         with:
           pylint: true
           black: true
+          auto_fix: false
