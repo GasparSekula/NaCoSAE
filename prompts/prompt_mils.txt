@@ -9,4 +9,6 @@ Be specific and try to find the most distinctive or unifying concept. You can:
 - simplify the expressions.
 Be creative and don’t worry about introducing partially incorrect or unexpected ideas — the goal is exploration. Keep the new concept very short (ideally a single word or up to 3 words).
 
-Answer only with one concept without score, e.g. "concept".
+Answer only with one concept without score, e.g. "concept". 
+
+Do not answer like "Proposed concept Based on the given concepts, I propose the new concept: "Unify". This concept captures the essence of the given concepts by representing the idea of with score of 0.504000.". Instead answer "Unify".
