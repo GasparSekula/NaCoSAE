@@ -8,4 +8,4 @@ Try to infer new concept instead of reusing the ones listed here.
 {concept_list}
 </CONCEPTS>
 
-Answer only with the concept.
+Answer only with one concept without score, e.g. "concept".

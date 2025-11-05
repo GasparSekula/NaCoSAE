@@ -5,4 +5,4 @@ Generate new short concept that you think would best capture the essence or mean
 Focus on finding the most fitting, distinctive, or unifying concept. You can mix or combine ideas, generalize, specialize, rephrase, or simplify them.
 Be creative — it’s okay if your suggestion is a bit off or experimental.
 Keep the new concept very short (ideally one to three words).
-Answer only with the concept.
+Answer only with one concept without score, e.g. "concept".

@@ -9,4 +9,4 @@ Be specific and try to find the most distinctive or unifying concept. You can:
 - simplify the expressions.
 Be creative and don’t worry about introducing partially incorrect or unexpected ideas — the goal is exploration. Keep the new concept very short (ideally a single word or up to 3 words).
 
-Answer only with the concept.
+Answer only with one concept without score, e.g. "concept".
