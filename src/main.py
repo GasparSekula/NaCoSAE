@@ -33,6 +33,10 @@ _METRIC = flags.DEFINE_enum_class(
     "metric", "AUC", scoring.Metric, "Metric to use to score the concepts."
 )
 
+_PROMPT_PATH = flags.DEFINE_string(
+    "prompt", "prompts/prompt_mils.txt", "Path to prompt for the LLM."
+)
+
 
 def main(argv):
     load_config = pipeline.LoadConfig(
@@ -60,6 +64,7 @@ def main(argv):
         "avgpool",  # TODO(piechotam) parameterize explained layer
         _NEURON_ID.value,
         _METRIC.value,
+        _PROMPT_PATH.value
     )
     explanation_pipeline.run_pipeline("auc", _N_ITERS.value)
 

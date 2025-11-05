@@ -1,0 +1,12 @@
+You need to provide a short concept description. I am giving you a list of short concepts and their scores. A higher score means that the concept better represents or captures the underlying idea:
+{concept_list}
+Generate new short concept description that you think would achieve the highest possible score and best capture the overall meaning behind the given concepts.
+Be specific and try to find the most distinctive or unifying concept. You can:
+- introduce new related concepts,
+- combine or merge ideas from multiple provided concepts,
+- rephrase or generalize existing ones,
+- drop weak elements, or
+- simplify the expressions.
+Be creative and don’t worry about introducing partially incorrect or unexpected ideas — the goal is exploration. Keep the new concept very short (ideally a single word or up to 3 words).
+
+Answer only with the concept.

@@ -18,9 +18,11 @@ class LanguageModel(model.Model):
         model_id: str,
         device: str,
         max_new_tokens: int,
+        prompt_path: str
     ) -> None:
         super().__init__(model_id, device)
         self._max_new_tokens = max_new_tokens
+        self.prompt_path = prompt_path
 
     def _load(self) -> None:
         pipeline = transformers.pipeline(
@@ -52,7 +54,8 @@ class LanguageModel(model.Model):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
         concept_generation_prompt = prompt_utils.generate_concept_prompt(
-            self._concept_history
+            self._concept_history,
+            self.prompt_path
         )
         # only llama for now
         message = self._pipeline.tokenizer.apply_chat_template(
