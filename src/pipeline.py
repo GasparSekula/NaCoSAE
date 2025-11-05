@@ -61,6 +61,7 @@ class Pipeline:
         control_activations_path: str,
         layer: str,
         neuron_id: int,
+        metric: scoring.Metric,
     ) -> None:
         self._load_config = load_config
         self._image_generation_config = image_generation_config
@@ -69,6 +70,7 @@ class Pipeline:
         self._model_layer_activations_path = os.path.join(
             control_activations_path, load_config.explained_model_id, layer
         )
+        self._metric = metric
 
     def _load_models(self) -> None:
         """Loads models to cpu."""
@@ -107,7 +109,7 @@ class Pipeline:
             control_activations[:, self._neuron_id],
         )
 
-    def _score_concept(self, concept: str) -> Mapping[str, float]:
+    def _score_concept(self, concept: str) -> float:
         synthetic_images = self._t2i_model.generate_images(
             self._image_generation_config.n_images,
             self._image_generation_config.prompt_text,
@@ -122,21 +124,19 @@ class Pipeline:
                 concept,
             )
         )
-        return scoring.calculate_metrics(
-            neuron_control_activations, neuron_synthetic_activations
+        return scoring.calculate_metric(
+            neuron_control_activations,
+            neuron_synthetic_activations,
+            self._metric,
         )
 
-    def _run_iteration(
-        self, metric: Literal["auc", "mad"]
-    ) -> Tuple[str, float]:
+    def _run_iteration(self) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
         new_concept = self._lang_model.generate_concept()
-        metrics = self._score_concept(
-            new_concept,
-        )
-        self._lang_model.update_concept_history(new_concept, metrics[metric])
+        score = self._score_concept(new_concept)
+        self._lang_model.update_concept_history(new_concept, score)
 
-        return new_concept, metrics[metric]
+        return new_concept, score
 
     def _initialize_concept_history(self) -> Mapping[str, float]:
         logging.info("Initializing concept history.")
@@ -148,23 +148,18 @@ class Pipeline:
         )
 
         return dict(
-            (
-                concept,
-                self._score_concept(
-                    concept,
-                )["auc"],
-            )  # TODO(piechotam) make this less dumb
+            (concept, self._score_concept(concept))
             for concept in initial_concepts
         )
 
-    def run_pipeline(self, metric: Literal["auc", "mad"], n_iters: int) -> None:
+    def run_pipeline(self, n_iters: int) -> None:
         """Runs the explanation pipeline."""
         self._load_models()
         self._lang_model.set_concept_history(self._initialize_concept_history())
 
         for iter in range(1, n_iters + 1):
             logging.info("Running iteration %s of %s." % (iter, n_iters))
-            new_concept, score = self._run_iteration(metric)
+            new_concept, score = self._run_iteration()
             logging.info(
                 "Proposed concept %s with score of %f." % (new_concept, score)
             )

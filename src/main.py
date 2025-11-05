@@ -1,6 +1,7 @@
 from absl import app
 from absl import flags
 
+import scoring
 import pipeline
 
 
@@ -28,6 +29,9 @@ _CONTROL_ACTIVATIONS_PATH = flags.DEFINE_string(
 )
 _NEURON_ID = flags.DEFINE_integer("neuron_id", 0, "ID of a neuron to explain.")
 _N_ITERS = flags.DEFINE_integer("n_iters", "10", "Number of iterations.")
+_METRIC = flags.DEFINE_enum_class(
+    "metric", "AUC", scoring.Metric, "Metric to use to score the concepts."
+)
 
 
 def main(argv):
@@ -55,6 +59,7 @@ def main(argv):
         _CONTROL_ACTIVATIONS_PATH.value,
         "avgpool",  # TODO(piechotam) parameterize explained layer
         _NEURON_ID.value,
+        _METRIC.value,
     )
     explanation_pipeline.run_pipeline("auc", _N_ITERS.value)
 

@@ -21,4 +21,4 @@ dependencies = [
 [tool.pytest.ini_options]
 pythonpath = "src"
 [tool.pylint.format]
-max-line-length = 100
+max-line-length = 80
