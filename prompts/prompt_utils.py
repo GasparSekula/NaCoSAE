@@ -20,6 +20,3 @@ def generate_concept_prompt(
     return text_prompt.format(concept_list=concept_list).strip()
 
 
-if __name__ == "__main__":
-    path = input("path: ")
-    print(generate_concept_prompt(dict(), path))
