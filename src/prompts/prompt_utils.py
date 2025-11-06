@@ -18,5 +18,3 @@ def generate_concept_prompt(
         text_prompt = prompt_file.read()
 
     return text_prompt.format(concept_list=concept_list).strip()
-
-
