@@ -49,5 +49,5 @@ def test_calculate_metric_avg_activation():
             scoring.Metric.AVG_ACTIVATION,
         ),
         0.7,
-        rel_tol=1e-6
+        rel_tol=1e-6,
     )
