@@ -24,6 +24,7 @@ class LoadConfig:
     language_model_kwargs: Mapping[str, Any]
     text_to_image_model_kwargs: Mapping[str, Any]
     explained_model_kwargs: Mapping[str, Any]
+    prompt: str
 
 
 @dataclasses.dataclass

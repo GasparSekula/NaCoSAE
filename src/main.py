@@ -34,7 +34,7 @@ _METRIC = flags.DEFINE_enum_class(
 )
 
 _PROMPT_PATH = flags.DEFINE_string(
-    "prompt", "prompts/prompt_mils.txt", "Path to prompt for the LLM."
+    "prompt", "src/prompts/templates/prompt_mils.txt", "Path to prompt for the LLM."
 )
 
 
