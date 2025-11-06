@@ -62,7 +62,6 @@ class Pipeline:
         layer: str,
         neuron_id: int,
         metric: scoring.Metric,
-        prompt_path: str,
     ) -> None:
         self._load_config = load_config
         self._image_generation_config = image_generation_config
@@ -72,7 +71,6 @@ class Pipeline:
             control_activations_path, load_config.explained_model_id, layer
         )
         self._metric = metric
-        self.prompt_path = prompt_path
 
     def _load_models(self) -> None:
         """Loads models to cpu."""
@@ -80,7 +78,7 @@ class Pipeline:
         self._lang_model = language_model.LanguageModel(
             model_id=self._load_config.language_model_id,
             device="cpu",
-            prompt_path=self.prompt_path,
+            prompt_path=self._load_config.prompt,
             **self._load_config.language_model_kwargs,
         )
         logging.info("Loading %s." % self._load_config.text_to_image_model_id)

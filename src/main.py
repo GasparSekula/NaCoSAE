@@ -43,6 +43,7 @@ def main(argv):
         _LANGUAGE_MODEL_ID.value,
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
+        _PROMPT_PATH.value,
         {
             "max_new_tokens": 30,
         },
@@ -64,7 +65,6 @@ def main(argv):
         "avgpool",  # TODO(piechotam) parameterize explained layer
         _NEURON_ID.value,
         _METRIC.value,
-        _PROMPT_PATH.value,
     )
     explanation_pipeline.run_pipeline(_N_ITERS.value)
 
