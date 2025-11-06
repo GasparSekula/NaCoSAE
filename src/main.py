@@ -64,7 +64,7 @@ def main(argv):
         "avgpool",  # TODO(piechotam) parameterize explained layer
         _NEURON_ID.value,
         _METRIC.value,
-        _PROMPT_PATH.value
+        _PROMPT_PATH.value,
     )
     explanation_pipeline.run_pipeline(_N_ITERS.value)
 
