@@ -21,6 +21,7 @@ class LanguageModel(model.Model):
     ) -> None:
         super().__init__(model_id, device)
         self._max_new_tokens = max_new_tokens
+        self.generation_history = []
 
     def _load(self) -> None:
         pipeline = transformers.pipeline(
@@ -72,5 +73,5 @@ class LanguageModel(model.Model):
             top_p=0.9,
         )
         response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
-
+        self.generation_history.append(response)
         return response
