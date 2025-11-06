@@ -6,21 +6,19 @@ import transformers
 
 from model import concept_history
 from model import model
-import prompt_utils
+import prompts.prompt_utils
 
 
-_ASSISTANT_TAG = "<|assistant|>"
+_ASSISTANT_TAG = "<|start_header_id|>assistant<|end_header_id|>"
 
 
 class LanguageModel(model.Model):
     def __init__(
-        self,
-        model_id: str,
-        device: str,
-        max_new_tokens: int,
+        self, model_id: str, device: str, max_new_tokens: int, prompt_path: str
     ) -> None:
         super().__init__(model_id, device)
         self._max_new_tokens = max_new_tokens
+        self.prompt_path = prompt_path
         self.generation_history = []
 
     def _load(self) -> None:
@@ -52,8 +50,10 @@ class LanguageModel(model.Model):
     def generate_concept(self):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
-        concept_generation_prompt = prompt_utils.generate_concept_prompt(
-            self._concept_history
+        concept_generation_prompt = (
+            prompts.prompt_utils.generate_concept_prompt(
+                self._concept_history, self.prompt_path
+            )
         )
         # only llama for now
         message = self._pipeline.tokenizer.apply_chat_template(

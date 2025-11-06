@@ -33,12 +33,19 @@ _METRIC = flags.DEFINE_enum_class(
     "metric", "AUC", scoring.Metric, "Metric to use to score the concepts."
 )
 
+_PROMPT_PATH = flags.DEFINE_string(
+    "prompt",
+    "src/prompts/templates/prompt_mils.txt",
+    "Path to prompt for the LLM.",
+)
+
 
 def main(argv):
     load_config = pipeline.LoadConfig(
         _LANGUAGE_MODEL_ID.value,
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
+        _PROMPT_PATH.value,
         {
             "max_new_tokens": 30,
         },
@@ -61,7 +68,7 @@ def main(argv):
         _NEURON_ID.value,
         _METRIC.value,
     )
-    explanation_pipeline.run_pipeline("auc", _N_ITERS.value)
+    explanation_pipeline.run_pipeline(_N_ITERS.value)
 
 
 if __name__ == "__main__":

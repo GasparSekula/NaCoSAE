@@ -6,7 +6,7 @@ import PIL
 import torch
 
 from model import model
-import prompt_utils
+import prompts.prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
     {"stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image}
@@ -41,7 +41,7 @@ class ImageModel(model.Model):
         self, n_images: int, prompt_text: str, concept: str
     ) -> Sequence[PIL.Image.Image]:
         """Generates images."""
-        text_to_image_prompt = prompt_utils.concept_image_prompt(
+        text_to_image_prompt = prompts.prompt_utils.concept_image_prompt(
             prompt_text, concept
         )
 

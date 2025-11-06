@@ -21,6 +21,7 @@ class LoadConfig:
     language_model_id: str
     text_to_image_model_id: str
     explained_model_id: str
+    prompt: str
     language_model_kwargs: Mapping[str, Any]
     text_to_image_model_kwargs: Mapping[str, Any]
     explained_model_kwargs: Mapping[str, Any]
@@ -78,6 +79,7 @@ class Pipeline:
         self._lang_model = language_model.LanguageModel(
             model_id=self._load_config.language_model_id,
             device="cpu",
+            prompt_path=self._load_config.prompt,
             **self._load_config.language_model_kwargs,
         )
         logging.info("Loading %s." % self._load_config.text_to_image_model_id)
