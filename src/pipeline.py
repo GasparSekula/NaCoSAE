@@ -21,10 +21,10 @@ class LoadConfig:
     language_model_id: str
     text_to_image_model_id: str
     explained_model_id: str
+    prompt: str
     language_model_kwargs: Mapping[str, Any]
     text_to_image_model_kwargs: Mapping[str, Any]
     explained_model_kwargs: Mapping[str, Any]
-    prompt: str
 
 
 @dataclasses.dataclass
