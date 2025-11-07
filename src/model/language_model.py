@@ -41,7 +41,7 @@ class LanguageModel(model.Model):
         self._concept_history = concept_history
 
     def get_formatted_concept_history(self) -> Sequence[str]:
-        """Returns concept history formated as a list of string concept: score"""
+        """Returns concept history formated as a list of strings concept, score."""
         return [
             f"{concept},{score}"
             for concept, score in self._concept_history.items()
