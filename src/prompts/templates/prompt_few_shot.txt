@@ -5,44 +5,44 @@ First, I will give you examples, and the you will create new concept.
 The folowing are exmaples of well generated ne concepts.
 ```
 List of concepts and their scores:
-    "lava": 0.94,
-    "eruption": 0.91,
-    "Ash": 0.88,
-    "crater": 0.84,
-    "hot magma": 0.82,
-    "remote island": 0.47,
-    "Train": 0.23,
-    "keyboard": 0.15
+    lava: 0.94,
+    eruption: 0.91,
+    Ash: 0.88,
+    crater: 0.84,
+    hot magma: 0.82,
+    remote island: 0.47,
+    Train: 0.23,
+    keyboard: 0.15
 New concept:
-    "volcano"
+    volcano
 ```
 
 ```
 List of concepts and their scores:
-    "rain": 0.93,
-    "wet": 0.89,
-    "Storm": 0.86,
-    "blowing wind": 0.83,
-    "handle": 0.77,
-    "sandwich": 0.25,
-    "rocky mountain": 0.22,
-    "television": 0.14
+    rain: 0.93,
+    wet: 0.89,
+    Storm: 0.86,
+    blowing wind: 0.83,
+    handle: 0.77,
+    sandwich: 0.25,
+    rocky mountain: 0.22,
+    television: 0.14
 New concept:
-    "umbrella"
+    umbrella
 ```
 
 ```
 List of concepts and their scores:
-    "window": 0.91,
-    "transparent": 0.88,
-    "reflection": 0.84,
-    "bottle of water": 0.79,
-    "fragile": 0.76,
-    "cactus": 0.28,
-    "engine": 0.21,
-    "cloudy sky": 0.18
+    window: 0.91,
+    transparent: 0.88,
+    reflection: 0.84,
+    bottle of water: 0.79,
+    fragile: 0.76,
+    cactus: 0.28,
+    engine: 0.21,
+    cloudy sky: 0.18
 New concept:
-    "glass"
+    glass
 ```
 
 These new concepts are relevant because:
@@ -60,6 +60,7 @@ Also note the following things:
     - Be creative and don’t worry about introducing partially incorrect or unexpected ideas — the goal is exploration. 
     - Keep the new concept very short (ideally a single word or up to 3 words).
     - Do not score new concept.
+    - Generate exactly one concept. 
 
 Here is a new example. Simply analyze the concepts and their scores and generate new cocnept.
 
