@@ -2,7 +2,7 @@ from collections.abc import Sequence
 
 import diffusers
 import immutabledict
-import PIL
+from PIL import Image
 import torch
 
 from model import model
@@ -39,7 +39,7 @@ class ImageModel(model.Model):
     @model.gpu_inference_wrapper
     def generate_images(
         self, n_images: int, prompt_text: str, concept: str
-    ) -> Sequence[PIL.Image.Image]:
+    ) -> Sequence[Image.Image]:
         """Generates images."""
         text_to_image_prompt = prompts.prompt_utils.concept_image_prompt(
             prompt_text, concept

@@ -65,7 +65,7 @@ def get_initial_concepts(
     n_random_concepts: int,
     model_layer_activations_path: str,
     neuron_id: int,
-) -> Mapping[str, Sequence[str]]:
+) -> Sequence[str]:
     """
     Gets a list of initial concepts. The list contains n_best_concepts concepts
     that activated the neuron the most and n_random_concepts random concepts.
@@ -80,7 +80,7 @@ def get_initial_concepts(
         list(average_neuron_activations.keys()), n_random_concepts
     )
 
-    return {"best_concepts": best_concepts, "random_concepts": random_concepts}
+    return (*best_concepts, *random_concepts)
 
 
 def update_concept_history(
