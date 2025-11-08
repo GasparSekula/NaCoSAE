@@ -20,9 +20,12 @@ def _get_activations(
     model_layer_activations_path: str,
 ) -> Iterator[Tuple[str, torch.Tensor]]:
     """Returns an iterator of concept names and its control activations."""
-    for concept in os.listdir(model_layer_activations_path):
-        filepath = os.path.join(model_layer_activations_path, concept)
+    for acitvations_filename in os.listdir(model_layer_activations_path):
+        filepath = os.path.join(
+            model_layer_activations_path, acitvations_filename
+        )
         activations = torch.load(filepath)
+        concept, _ = os.path.splitext(acitvations_filename)
 
         yield concept.replace("_", " "), activations
 
