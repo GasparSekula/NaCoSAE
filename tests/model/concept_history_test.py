@@ -9,6 +9,24 @@ def test_calculate_average_activation():
     assert concept_history._calculate_average_activation(activations, 1) == 2
 
 
+def test_get_activations(mocker):
+    test_concept_list = ["concept_1.pt", "concept_2.pt", "concept_3.pt"]
+    mocker.patch("os.listdir", return_value=test_concept_list)
+    test_tensor = torch.tensor([1, 2, 3])
+    mocker.patch("torch.load", return_value=test_tensor)
+
+    result = [
+        (concept, activation)
+        for concept, activation in concept_history._get_activations("fake/path")
+    ]
+    expected_result = [
+        ("concept 1", test_tensor),
+        ("concept 2", test_tensor),
+        ("concept 3", test_tensor),
+    ]
+    assert result == expected_result
+
+
 def test_create_average_activations(mocker):
     mock_get_activations = mocker.patch(
         "model.concept_history._get_activations"

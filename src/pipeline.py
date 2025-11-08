@@ -145,14 +145,17 @@ class Pipeline:
             self._metric,
         )
 
+    def _generate_images(self, concept: str) -> Sequence[Image.Image]:
+        return self._t2i_model.generate_images(
+            self._image_generation_config.n_images,
+            self._image_generation_config.prompt_text,
+            concept,
+        )
+
     def _run_iteration(self, iter_number: int) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
         new_concept = self._lang_model.generate_concept()
-        concept_synthetic_images = self._t2i_model.generate_images(
-            self._image_generation_config.n_images,
-            self._image_generation_config.prompt_text,
-            new_concept,
-        )
+        concept_synthetic_images = self._generate_images(new_concept)
 
         if self._history_managing_config.save_images:
             history_managing.save_images_from_iteration(
@@ -182,14 +185,7 @@ class Pipeline:
         return dict(
             (
                 concept,
-                self._score_concept(
-                    concept,
-                    self._t2i_model.generate_images(
-                        self._image_generation_config.n_images,
-                        self._image_generation_config.prompt_text,
-                        concept,
-                    ),
-                ),
+                self._score_concept(concept, self._generate_images(concept)),
             )
             for concept in initial_concepts
         )
