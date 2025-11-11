@@ -10,6 +10,7 @@ from absl import logging
 from PIL import Image
 import torch
 
+import activation_sampling
 import history_managing
 import image_processing
 from model import concept_history
@@ -111,6 +112,11 @@ class Pipeline:
             **self._load_config.explained_model_kwargs,
         )
 
+    def _setup(self) -> None:
+        self._load_models()
+        self._lang_model.set_concept_history(self._initialize_concept_history())
+        self._activation_sampler = activation_sampling.ActivationSampler()
+
     def _get_neuron_activations(
         self, synthetic_input_batch: torch.Tensor, concept: str
     ) -> Sequence[torch.Tensor]:
@@ -118,8 +124,8 @@ class Pipeline:
         synthetic_activations = self._expl_model.get_activations(
             synthetic_input_batch
         )
-        control_activations = _sample_control_activations(
-            concept, self._model_layer_activations_path
+        control_activations = (
+            self._activation_sampler.sample_control_activations(concept)
         )
 
         return (
@@ -207,8 +213,7 @@ class Pipeline:
 
     def run_pipeline(self, n_iters: int) -> None:
         """Runs the explanation pipeline."""
-        self._load_models()
-        self._lang_model.set_concept_history(self._initialize_concept_history())
+        self._setup()
 
         for iter_number in range(1, n_iters + 1):
             logging.info("Running iteration %s of %s." % (iter_number, n_iters))
