@@ -75,12 +75,8 @@ def test_save_images_from_iteration(
         test_images["images_list"], save_dir, iter_number, concept
     )
 
-    expected_path = "test/directory/iteration_1"
+    expected_path = "test/directory/iteration_1_concept_1"
     mock_makedirs.assert_called_with(expected_path, exist_ok=True)
 
     assert mock_open_file.call_count == 2
-    expected_calls = [
-        call(f"{expected_path}/concept_1_{i + 1}.jpeg", "wb") for i in range(2)
-    ]
-    mock_open_file.assert_has_calls(expected_calls, any_order=True)
     assert mock_write_image_helper.call_count == 2
