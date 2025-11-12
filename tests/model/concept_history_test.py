@@ -1,4 +1,5 @@
 import torch
+import pytest_mock
 
 from model import concept_history
 
@@ -9,7 +10,7 @@ def test_calculate_average_activation():
     assert concept_history._calculate_average_activation(activations, 1) == 2
 
 
-def test_get_activations(mocker):
+def test_get_activations(mocker: pytest_mock.MockerFixture):
     test_concept_list = ["concept_1.pt", "concept_2.pt", "concept_3.pt"]
     mocker.patch("os.listdir", return_value=test_concept_list)
     test_tensor = torch.tensor([1, 2, 3])
@@ -27,7 +28,7 @@ def test_get_activations(mocker):
     assert result == expected_result
 
 
-def test_create_average_activations(mocker):
+def test_create_average_activations(mocker: pytest_mock.MockerFixture):
     mock_get_activations = mocker.patch(
         "model.concept_history._get_activations"
     )
