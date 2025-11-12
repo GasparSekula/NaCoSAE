@@ -4,7 +4,7 @@ import io
 from PIL import Image
 import pytest
 import pytest_mock
-from unittest.mock import mock_open
+from unittest.mock import call, mock_open
 
 import history_managing
 
@@ -63,6 +63,7 @@ def test_save_images_from_iteration(
 ):
     save_dir = "test/directory"
     iter_number = 1
+    concept = "concept 1"
 
     mock_makedirs = mocker.patch("os.makedirs")
     mock_open_file = mocker.patch("builtins.open", new_callable=mock_open)
@@ -71,10 +72,15 @@ def test_save_images_from_iteration(
     )
 
     history_managing.save_images_from_iteration(
-        test_images["images_list"], save_dir, iter_number
+        test_images["images_list"], save_dir, iter_number, concept
     )
 
     expected_path = "test/directory/iteration_1"
     mock_makedirs.assert_called_with(expected_path, exist_ok=True)
+
     assert mock_open_file.call_count == 2
+    expected_calls = [
+        call(f"{expected_path}/concept_1_{i + 1}.jpeg", "wb") for i in range(2)
+    ]
+    mock_open_file.assert_has_calls(expected_calls, any_order=True)
     assert mock_write_image_helper.call_count == 2

@@ -1,16 +1,15 @@
 """This module integrates the models and defines the explanation pipeline."""
 
-import dataclasses
 import datetime
 import os
-import random
-from typing import Any, Mapping, Sequence, Tuple
+from typing import Mapping, Sequence, Tuple
 
 from absl import logging
 from PIL import Image
 import torch
 
 import activation_sampling
+import config
 import history_managing
 import image_processing
 from model import concept_history
@@ -20,56 +19,13 @@ from model import language_model
 import scoring
 
 
-@dataclasses.dataclass
-class LoadConfig:
-    language_model_id: str
-    text_to_image_model_id: str
-    explained_model_id: str
-    language_model_kwargs: Mapping[str, Any]
-    text_to_image_model_kwargs: Mapping[str, Any]
-    explained_model_kwargs: Mapping[str, Any]
-
-
-@dataclasses.dataclass
-class ImageGenerationConfig:
-    n_images: int
-    prompt_text: str
-
-
-@dataclasses.dataclass
-class ConceptHistoryConfig:
-    n_best_concepts: int
-    n_random_concepts: int
-
-
-@dataclasses.dataclass
-class HistoryManagingConfig:
-    save_images: bool
-    save_histories: bool
-    save_directory: str
-
-
-def _sample_control_activations(
-    concept: str,
-    model_layer_activations_path: str,
-) -> torch.Tensor:
-    """Samples control activations (temp implementation). TODO(piechotam) imp"""
-    sampled_activations = random.choice(
-        os.listdir(model_layer_activations_path)
-    )
-
-    return torch.load(
-        os.path.join(model_layer_activations_path, sampled_activations)
-    )
-
-
 class Pipeline:
     def __init__(
         self,
-        load_config: LoadConfig,
-        image_generation_config: ImageGenerationConfig,
-        concept_history_config: ConceptHistoryConfig,
-        history_managing_config: HistoryManagingConfig,
+        load_config: config.LoadConfig,
+        image_generation_config: config.ImageGenerationConfig,
+        concept_history_config: config.ConceptHistoryConfig,
+        history_managing_config: config.HistoryManagingConfig,
         control_activations_path: str,
         layer: str,
         neuron_id: int,
@@ -114,8 +70,10 @@ class Pipeline:
 
     def _setup(self) -> None:
         self._load_models()
-        self._lang_model.set_concept_history(self._initialize_concept_history())
-        self._activation_sampler = activation_sampling.ActivationSampler()
+        self._activation_sampler = activation_sampling.ActivationSampler(
+            self._model_layer_activations_path
+        )
+        self._lang_model.concept_history = self._initialize_concept_history()
 
     def _get_neuron_activations(
         self, synthetic_input_batch: torch.Tensor, concept: str
@@ -172,6 +130,7 @@ class Pipeline:
                     "images",
                 ),
                 iter_number,
+                new_concept,
             )
 
         score = self._score_concept(new_concept, concept_synthetic_images)
@@ -206,7 +165,9 @@ class Pipeline:
             "generation_history.txt",
         )
         history_managing.save_llm_history(
-            self._lang_model.get_formatted_concept_history(),
+            concept_history.format_concept_history(
+                self._lang_model.concept_history
+            ),
             save_directory,
             "final_concept_history.txt",
         )

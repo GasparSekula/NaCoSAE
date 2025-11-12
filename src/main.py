@@ -3,9 +3,9 @@ import os
 from absl import app
 from absl import flags
 
-import scoring
+import config
 import pipeline
-
+import scoring
 
 _TEXT_TO_IMAGE_MODEL_ID = flags.DEFINE_string(
     "t2i_model", "stabilityai/sd-turbo", "model_id of the text2image model."
@@ -58,7 +58,7 @@ _SAVE_DIR = flags.DEFINE_string(
 
 
 def main(argv):
-    load_config = pipeline.LoadConfig(
+    load_config = config.LoadConfig(
         _LANGUAGE_MODEL_ID.value,
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
@@ -71,11 +71,11 @@ def main(argv):
         },
         {},
     )
-    image_generation_config = pipeline.ImageGenerationConfig(
+    image_generation_config = config.ImageGenerationConfig(
         _NUM_IMAGES.value, "A realstic photo of a"
     )
-    concept_history_config = pipeline.ConceptHistoryConfig(5, 5)  # temp
-    history_managing_config = pipeline.HistoryManagingConfig(
+    concept_history_config = config.ConceptHistoryConfig(5, 5)  # temp
+    history_managing_config = config.HistoryManagingConfig(
         _SAVE_IMAGES.value, _SAVE_HISTORIES.value, _SAVE_DIR.value
     )
 
