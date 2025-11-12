@@ -52,7 +52,7 @@ class ActivationSampler:
     def _sample_concept_name(self, similarities: torch.Tensor) -> str:
         """Samples control concept name with (1 - similarities) as weights."""
         return random.choices(
-            self._control_concept_names, weights=(1 - similarities)
+            self._control_concept_names, weights=(1 - similarities[0, :])
         ).pop()
 
     def sample_control_activations(self, new_concept: str) -> torch.Tensor:

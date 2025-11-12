@@ -10,10 +10,13 @@ def concept_image_prompt(prompt_text: str, concept: str) -> str:
 def generate_concept_prompt(
     concept_history: Mapping[str, float], prompt_path: str
 ) -> str:
-    # this will require some prompt engineering (xd), temp version
-    concept_list = (
-        "; ".join(f"{k}: {v}" for k, v in concept_history.items()) + "; "
+    score_sorted_concepts = (
+        f"{k}: {v}"
+        for k, v in sorted(
+            concept_history.items(), key=lambda item: item[1], reverse=True
+        )
     )
+    concept_list = "; ".join(score_sorted_concepts) + "; "
     with open(prompt_path, "r") as prompt_file:
         text_prompt = prompt_file.read()
 
