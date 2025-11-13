@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 
+from absl import logging
 import diffusers
 import immutabledict
 from PIL import Image
@@ -45,6 +46,7 @@ class ImageModel(model.Model):
             prompt_text, concept
         )
 
+        logging.info(f"Generating %d images of %s." % (n_images, concept))
         synthetic_images = []
         for _ in range(n_images):
             synthetic_images.append(

@@ -1,6 +1,7 @@
 import abc
 from functools import wraps
 from typing import Any, Callable, Literal
+import warnings
 
 from absl import logging
 
@@ -33,11 +34,18 @@ class Model(abc.ABC):
         pass
 
     def _send_to_device(self, device: Literal["cuda", "cpu"]):
-        """Send model to device."""
+        """
+        Send model to device. CPU inference warnings are filtered as no
+        inference on the CPU is ever made.
+        """
         logging.info(
             "Sending model %s to device %s." % (self._model_id, device)
         )
-        self._model.to(device)
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore", message=r".*use another device for inference.*"
+            )
+            self._model.to(device)
 
     @property
     def model_id(self):

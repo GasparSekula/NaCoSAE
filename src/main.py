@@ -41,7 +41,7 @@ _PROMPT_PATH = flags.DEFINE_string(
 )
 _SAVE_HISTORIES = flags.DEFINE_bool(
     "save_histories",
-    True,
+    False,
     "If true, generation history and final concept history of the LLM will be"
     "saved to a file.",
 )
