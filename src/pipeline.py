@@ -79,9 +79,12 @@ class Pipeline:
         self, synthetic_input_batch: torch.Tensor, concept: str
     ) -> Sequence[torch.Tensor]:
         """Gets synthetic and control activations of selected neuron."""
+        logging.info("Collecting neuron activations of synthetic images.")
         synthetic_activations = self._expl_model.get_activations(
             synthetic_input_batch
         )
+
+        logging.info("Sampling control activations.")
         control_activations = (
             self._activation_sampler.sample_control_activations(concept)
         )
@@ -94,6 +97,7 @@ class Pipeline:
     def _score_concept(
         self, concept: str, concept_synthetic_images: Sequence[Image.Image]
     ) -> float:
+        logging.info("Scoring proposed concept.")
         synthetic_input_batch = image_processing.transform_images(
             self._expl_model.model_id, concept_synthetic_images
         )
@@ -177,16 +181,16 @@ class Pipeline:
         self._setup()
 
         for iter_number in range(1, n_iters + 1):
-            logging.info("Running iteration %s of %s." % (iter_number, n_iters))
+            logging.info("RUNNING ITERATION %s OF %s." % (iter_number, n_iters))
             new_concept, score = self._run_iteration(iter_number)
             logging.info(
-                "Proposed concept %s with score of %f." % (new_concept, score)
+                "PROPOSED CONCEPT: %s with score of %f." % (new_concept, score)
             )
 
         if self._history_managing_config.save_histories:
             self._save_histories()
 
         logging.info(
-            "Best concept found is %s with score %f."
+            "BEST CONCEPT FOUND: %s with score %f."
             % (self._lang_model.get_best_concept())
         )
