@@ -1,0 +1,13 @@
+You need to suggest new short concepts.
+Below is a list of existing concepts with scores — a higher score means the concept better represents the underlying idea:
+{concept_list}
+
+Generate new short concept that you think would best capture the essence or meaning behind the given ones.
+Focus on finding the most fitting, distinctive, or unifying concept. You can mix or combine ideas, generalize, specialize, rephrase, or simplify them.
+Be creative — it’s okay if your suggestion is a bit off or experimental.
+
+You are not allowed to use these concepts:
+{generation_history}
+
+Keep the new concept very short (ideally one to three words).
+Answer only with one concept without score or any additional text, e.g. "concept".

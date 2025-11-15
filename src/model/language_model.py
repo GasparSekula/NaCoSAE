@@ -50,7 +50,7 @@ class LanguageModel(model.Model):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
         concept_generation_prompt = prompt_utils.generate_concept_prompt(
-            self.concept_history, self._prompt_path
+            self.concept_history, self.generation_history, self._prompt_path
         )
         # only llama for now
         message = self._pipeline.tokenizer.apply_chat_template(
