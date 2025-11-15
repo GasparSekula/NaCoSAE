@@ -208,14 +208,20 @@ class Pipeline:
             save_directory,
             "final_concept_history.txt",
         )
-        
+
         os.makedirs(save_directory, exist_ok=True)
         params = {
             "run_id": self._run_id,
             "load_config": dataclasses.asdict(self._load_config),
-            "image_generation_config": dataclasses.asdict(self._image_generation_config),
-            "concept_history_config": dataclasses.asdict(self._concept_history_config),
-            "history_managing_config": dataclasses.asdict(self._history_managing_config),
+            "image_generation_config": dataclasses.asdict(
+                self._image_generation_config
+            ),
+            "concept_history_config": dataclasses.asdict(
+                self._concept_history_config
+            ),
+            "history_managing_config": dataclasses.asdict(
+                self._history_managing_config
+            ),
             "neuron_id": self._neuron_id,
             "model_layer_activations_path": self._model_layer_activations_path,
             "metric": getattr(self._metric, "name", str(self._metric)),
