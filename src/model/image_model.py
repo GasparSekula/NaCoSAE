@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 
+from absl import logging
 import diffusers
 import immutabledict
 from PIL import Image
@@ -9,7 +10,10 @@ from model import model
 import prompts.prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
-    {"stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image}
+    {
+        "stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image,
+        "stabilityai/sdxl-turbo": diffusers.AutoPipelineForText2Image,
+    }
 )
 _TORCH_DTYPE = torch.float16
 _PIPELINE_VARIANT = "fp16"
@@ -45,6 +49,7 @@ class ImageModel(model.Model):
             prompt_text, concept
         )
 
+        logging.info(f"Generating %d images of %s." % (n_images, concept))
         synthetic_images = []
         for _ in range(n_images):
             synthetic_images.append(
