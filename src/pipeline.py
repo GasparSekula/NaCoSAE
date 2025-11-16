@@ -1,15 +1,15 @@
 """This module integrates the models and defines the explanation pipeline."""
 
-import dataclasses
 import datetime
 import os
-import random
-from typing import Any, Mapping, Sequence, Tuple
+from typing import Mapping, Sequence, Tuple
 
 from absl import logging
 from PIL import Image
 import torch
 
+import activation_sampling
+import config
 import history_managing
 import image_processing
 from model import concept_history
@@ -19,56 +19,13 @@ from model import language_model
 import scoring
 
 
-@dataclasses.dataclass
-class LoadConfig:
-    language_model_id: str
-    text_to_image_model_id: str
-    explained_model_id: str
-    language_model_kwargs: Mapping[str, Any]
-    text_to_image_model_kwargs: Mapping[str, Any]
-    explained_model_kwargs: Mapping[str, Any]
-
-
-@dataclasses.dataclass
-class ImageGenerationConfig:
-    n_images: int
-    prompt_text: str
-
-
-@dataclasses.dataclass
-class ConceptHistoryConfig:
-    n_best_concepts: int
-    n_random_concepts: int
-
-
-@dataclasses.dataclass
-class HistoryManagingConfig:
-    save_images: bool
-    save_histories: bool
-    save_directory: str
-
-
-def _sample_control_activations(
-    concept: str,
-    model_layer_activations_path: str,
-) -> torch.Tensor:
-    """Samples control activations (temp implementation). TODO(piechotam) imp"""
-    sampled_activations = random.choice(
-        os.listdir(model_layer_activations_path)
-    )
-
-    return torch.load(
-        os.path.join(model_layer_activations_path, sampled_activations)
-    )
-
-
 class Pipeline:
     def __init__(
         self,
-        load_config: LoadConfig,
-        image_generation_config: ImageGenerationConfig,
-        concept_history_config: ConceptHistoryConfig,
-        history_managing_config: HistoryManagingConfig,
+        load_config: config.LoadConfig,
+        image_generation_config: config.ImageGenerationConfig,
+        concept_history_config: config.ConceptHistoryConfig,
+        history_managing_config: config.HistoryManagingConfig,
         control_activations_path: str,
         layer: str,
         neuron_id: int,
@@ -127,15 +84,25 @@ class Pipeline:
             **self._load_config.explained_model_kwargs,
         )
 
+    def _setup(self) -> None:
+        self._load_models()
+        self._activation_sampler = activation_sampling.ActivationSampler(
+            self._model_layer_activations_path
+        )
+        self._lang_model.concept_history = self._initialize_concept_history()
+
     def _get_neuron_activations(
         self, synthetic_input_batch: torch.Tensor, concept: str
     ) -> Sequence[torch.Tensor]:
         """Gets synthetic and control activations of selected neuron."""
+        logging.info("Collecting neuron activations of synthetic images.")
         synthetic_activations = self._expl_model.get_activations(
             synthetic_input_batch
         )
-        control_activations = _sample_control_activations(
-            concept, self._model_layer_activations_path
+
+        logging.info("Sampling control activations.")
+        control_activations = (
+            self._activation_sampler.sample_control_activations(concept)
         )
 
         return (
@@ -146,6 +113,7 @@ class Pipeline:
     def _score_concept(
         self, concept: str, concept_synthetic_images: Sequence[Image.Image]
     ) -> float:
+        logging.info("Scoring proposed concept.")
         synthetic_input_batch = image_processing.transform_images(
             self._expl_model.model_id, concept_synthetic_images
         )
@@ -161,14 +129,17 @@ class Pipeline:
             self._metric,
         )
 
+    def _generate_images(self, concept: str) -> Sequence[Image.Image]:
+        return self._t2i_model.generate_images(
+            self._image_generation_config.n_images,
+            self._image_generation_config.prompt_text,
+            concept,
+        )
+
     def _run_iteration(self, iter_number: int) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
         new_concept = self._lang_model.generate_concept()
-        concept_synthetic_images = self._t2i_model.generate_images(
-            self._image_generation_config.n_images,
-            self._image_generation_config.prompt_text,
-            new_concept,
-        )
+        concept_synthetic_images = self._generate_images(new_concept)
 
         if self._history_managing_config.save_images:
             history_managing.save_images_from_iteration(
@@ -179,6 +150,7 @@ class Pipeline:
                     "images",
                 ),
                 iter_number,
+                new_concept,
             )
 
         score = self._score_concept(new_concept, concept_synthetic_images)
@@ -198,14 +170,7 @@ class Pipeline:
         return dict(
             (
                 concept,
-                self._score_concept(
-                    concept,
-                    self._t2i_model.generate_images(
-                        self._image_generation_config.n_images,
-                        self._image_generation_config.prompt_text,
-                        concept,
-                    ),
-                ),
+                self._score_concept(concept, self._generate_images(concept)),
             )
             for concept in initial_concepts
         )
@@ -217,27 +182,28 @@ class Pipeline:
             "generation_history.txt",
         )
         history_managing.save_llm_history(
-            self._lang_model.get_formatted_concept_history(),
-            self._save_directory,
+            concept_history.format_concept_history(
+                self._lang_model.concept_history
+            ),
+            save_directory,
             "final_concept_history.txt",
         )
 
     def run_pipeline(self, n_iters: int) -> None:
         """Runs the explanation pipeline."""
-        self._load_models()
-        self._lang_model.set_concept_history(self._initialize_concept_history())
+        self._setup()
 
         for iter_number in range(1, n_iters + 1):
-            logging.info("Running iteration %s of %s." % (iter_number, n_iters))
+            logging.info("RUNNING ITERATION %s OF %s." % (iter_number, n_iters))
             new_concept, score = self._run_iteration(iter_number)
             logging.info(
-                "Proposed concept %s with score of %f." % (new_concept, score)
+                "PROPOSED CONCEPT: %s with score of %f." % (new_concept, score)
             )
 
         if self._history_managing_config.save_histories:
             self._save_histories()
 
         logging.info(
-            "Best concept found is %s with score %f."
+            "BEST CONCEPT FOUND: %s with score %f."
             % (self._lang_model.get_best_concept())
         )

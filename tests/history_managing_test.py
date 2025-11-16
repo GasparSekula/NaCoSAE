@@ -1,9 +1,10 @@
-from typing import Iterable
+from typing import Iterable, Mapping
 import io
 
 from PIL import Image
 import pytest
-from unittest.mock import mock_open
+import pytest_mock
+from unittest.mock import call, mock_open
 
 import history_managing
 
@@ -34,14 +35,16 @@ def test_writing_concept_history():
 
 
 @pytest.fixture
-def test_images():
+def test_images() -> Mapping[str, Image.Image]:
     img1 = Image.new("RGB", (10, 10), color="red")
     img2 = Image.new("RGB", (20, 20), color="blue")
     images_list = [img1, img2]
     return {"img1": img1, "img2": img2, "images_list": images_list}
 
 
-def test_write_image_to_stream_writes_jpeg(test_images):
+def test_write_image_to_stream_writes_jpeg(
+    test_images: Mapping[str, Image.Image],
+):
     img1 = test_images["img1"]
     buffer = io.BytesIO()
     history_managing._write_image_to_stream(buffer, img1)
@@ -55,9 +58,12 @@ def test_write_image_to_stream_writes_jpeg(test_images):
     assert data.startswith(jpeg_prefix)
 
 
-def test_save_images_from_iteration(test_images, mocker):
+def test_save_images_from_iteration(
+    test_images: Mapping[str, Image.Image], mocker: pytest_mock.MockerFixture
+):
     save_dir = "test/directory"
     iter_number = 1
+    concept = "concept 1"
 
     mock_makedirs = mocker.patch("os.makedirs")
     mock_open_file = mocker.patch("builtins.open", new_callable=mock_open)
@@ -66,10 +72,11 @@ def test_save_images_from_iteration(test_images, mocker):
     )
 
     history_managing.save_images_from_iteration(
-        test_images["images_list"], save_dir, iter_number
+        test_images["images_list"], save_dir, iter_number, concept
     )
 
-    expected_path = "test/directory/iteration_1"
+    expected_path = "test/directory/iteration_1_concept_1"
     mock_makedirs.assert_called_with(expected_path, exist_ok=True)
+
     assert mock_open_file.call_count == 2
     assert mock_write_image_helper.call_count == 2

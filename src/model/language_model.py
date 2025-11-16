@@ -20,6 +20,7 @@ class LanguageModel(model.Model):
         self._max_new_tokens = max_new_tokens
         self._prompt_path = prompt_path
         self.generation_history = []
+        self.concept_history: Mapping[str, float] = {}
 
     def _load(self) -> None:
         pipeline = transformers.pipeline(
@@ -37,21 +38,11 @@ class LanguageModel(model.Model):
         self._pipeline = pipeline
         self._model = pipeline.model
 
-    def set_concept_history(self, concept_history: Mapping[str, float]) -> None:
-        self._concept_history = concept_history
-
-    def get_formatted_concept_history(self) -> Sequence[str]:
-        """Returns concept history formated as a list of strings concept, score."""
-        return [
-            f"{concept},{score}"
-            for concept, score in self._concept_history.items()
-        ]
-
     def update_concept_history(self, new_concept: str, score: float) -> None:
         """Updates concept history with most recent concept."""
         self.generation_history.append(f"{new_concept},{score}")
-        self._concept_history = concept_history.update_concept_history(
-            self._concept_history, new_concept, score
+        self.concept_history = concept_history.update_concept_history(
+            self.concept_history, new_concept, score
         )
 
     @model.gpu_inference_wrapper
@@ -59,7 +50,7 @@ class LanguageModel(model.Model):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
         concept_generation_prompt = prompt_utils.generate_concept_prompt(
-            self._concept_history, self._prompt_path
+            self.concept_history, self.generation_history, self._prompt_path
         )
         # only llama for now
         message = self._pipeline.tokenizer.apply_chat_template(
@@ -83,7 +74,7 @@ class LanguageModel(model.Model):
 
     def get_best_concept(self) -> str:
         """Returns the best proposed concept."""
-        best_concept = max(self._concept_history, key=self._concept_history.get)
-        score = self._concept_history[best_concept]
+        best_concept = max(self.concept_history, key=self.concept_history.get)
+        score = self.concept_history[best_concept]
 
         return best_concept, score

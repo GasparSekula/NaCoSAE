@@ -37,10 +37,15 @@ def _write_image_to_stream(output_stream: BinaryIO, image: Image.Image) -> None:
 
 
 def save_images_from_iteration(
-    images: Sequence[Image.Image], save_directory: str, iter_number: int
+    images: Sequence[Image.Image],
+    save_directory: str,
+    iter_number: int,
+    concept: str,
 ) -> None:
     """Saves images from a single pipeline iteration."""
-    save_path = os.path.join(save_directory, f"iteration_{iter_number}")
+    save_path = os.path.join(
+        save_directory, f"iteration_{iter_number}_{concept.replace(" ", "_")}"
+    )
     os.makedirs(save_path, exist_ok=True)
     for image_number, image in enumerate(images, 1):
         filename = f"image_{image_number}.jpeg"
