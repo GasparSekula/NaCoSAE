@@ -185,7 +185,7 @@ class Pipeline:
             concept_history.format_concept_history(
                 self._lang_model.concept_history
             ),
-            save_directory,
+            self._save_directory,
             "final_concept_history.txt",
         )
 
