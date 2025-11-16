@@ -22,9 +22,8 @@ def generate_concept_prompt(
 
     generation_list = []
 
-    for i in range(len(generation_history)):
-        bare_concept = generation_history[i].split(",")[0]
-        generation_list.append(bare_concept)
+    bare_concept = lambda concept_score: concept_score.split(",")[0]
+    generation_list = [bare_concept(concept_score) for concept_score in generation_history]
 
     with open(prompt_path, "r") as prompt_file:
         text_prompt = prompt_file.read()
