@@ -10,7 +10,10 @@ from model import model
 import prompts.prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
-    {"stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image}
+    {
+        "stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image,
+        "stabilityai/sdxl-turbo": diffusers.AutoPipelineForText2Image,
+    }
 )
 _TORCH_DTYPE = torch.float16
 _PIPELINE_VARIANT = "fp16"

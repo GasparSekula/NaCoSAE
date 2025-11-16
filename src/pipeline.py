@@ -47,6 +47,22 @@ class Pipeline:
             f"{neuron_id}"
         )
 
+        self._save_directory = os.path.join(
+            self._history_managing_config.save_directory, self._run_id
+        )
+
+        history_managing.save_pipeline_parameters(
+            save_directory=self._save_directory,
+            run_id=self._run_id,
+            load_config=load_config,
+            image_generation_config=image_generation_config,
+            concept_history_config=concept_history_config,
+            history_managing_config=history_managing_config,
+            neuron_id=neuron_id,
+            metric=metric,
+            model_layer_activations_path=self._model_layer_activations_path,
+        )
+
     def _load_models(self) -> None:
         """Loads models to cpu."""
         logging.info("Loading %s." % self._load_config.language_model_id)
@@ -160,19 +176,16 @@ class Pipeline:
         )
 
     def _save_histories(self) -> None:
-        save_directory = os.path.join(
-            self._history_managing_config.save_directory, self._run_id
-        )
         history_managing.save_llm_history(
             self._lang_model.generation_history,
-            save_directory,
+            self._save_directory,
             "generation_history.txt",
         )
         history_managing.save_llm_history(
             concept_history.format_concept_history(
                 self._lang_model.concept_history
             ),
-            save_directory,
+            self._save_directory,
             "final_concept_history.txt",
         )
 
