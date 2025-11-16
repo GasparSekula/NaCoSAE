@@ -84,6 +84,8 @@ Also note the following things:
     - Keep the new concept very short (ideally a single word or up to 3 words).
     - Do not score new concept.
     - Generate exactly one concept. 
+    - Return only concept, with no text around it. 
+    - It is not allowed to answer like "Sledpuller is forbidden, but 'Sled puller' is not." or "Sledpuller is forbidden, so I will generate a new concept. dog".
 
 Here is a new example. Simply analyze the concepts, their scores and list of forbidden concepts and generate new cocnept.
 
