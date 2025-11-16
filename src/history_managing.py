@@ -9,13 +9,8 @@ from typing import BinaryIO, Iterable, Sequence, TextIO
 
 from PIL import Image
 
+import pipeline
 import scoring
-from pipeline import (
-    LoadConfig,
-    ImageGenerationConfig,
-    ConceptHistoryConfig,
-    HistoryManagingConfig,
-)
 
 
 def _write_iterable_to_stream(
@@ -56,10 +51,10 @@ def save_images_from_iteration(
 def save_pipeline_parameters(
     save_directory: str,
     run_id: str,
-    load_config: LoadConfig,
-    image_generation_config: ImageGenerationConfig,
-    concept_history_config: ConceptHistoryConfig,
-    history_managing_config: HistoryManagingConfig,
+    load_config: pipeline.LoadConfig,
+    image_generation_config: pipeline.ImageGenerationConfig,
+    concept_history_config: pipeline.ConceptHistoryConfig,
+    history_managing_config: pipeline.HistoryManagingConfig,
     neuron_id: int,
     metric: scoring.Metric,
     model_layer_activations_path: str,
