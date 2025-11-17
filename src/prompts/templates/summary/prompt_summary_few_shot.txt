@@ -1,0 +1,72 @@
+Your job is to look at concepts, their scores and then generate summary concept.
+The higher the score, the more important the concept.
+
+First, I will give you examples, and then you will create new concept.
+
+The folowing are exmaples of well generated summary concepts.
+```
+List of concepts and their scores:
+    lava: 0.94,
+    eruption: 0.91,
+    Ash: 0.78,
+
+Summary concept:
+    volcano
+```
+This concept is correct because:
+    - It is relevant.
+    - It is a good summary of listed concepts.
+    - It generalizes listed concepts.
+
+```
+List of concepts and their scores:
+    grass: 0.93,
+    crocodile: 0.86,
+    bushes: 0.83,
+    beach: 0.22,
+
+Summary concept:
+    green
+```
+This concept is correct because:
+    - It summarizes the listed concepts.
+    - It unifies highly scored concepts (palm tree, spurce, bushes).
+    - It generalizes the concepts.
+    - It contains a characteristics common to all high scored concepts.
+
+```
+List of concepts and their scores:
+    banana: 0.96,
+    lemon: 0.90,
+    pineapple: 0.84,
+
+Summary concept:
+    yellow fruit
+```
+This concept is correct because:
+    - It contain important information in the listed concepts.
+    - It generalizes highest scored concepts.
+    - It contains a characteristics common to all high scored concepts.
+    - It is a short, unifying concept.
+
+
+Also note the following things:
+    - Be specific and try to find the most generalizing concept. 
+    - Combine or merge ideas from multiple provided concepts.
+    - Rephrase or generalize existing ones.
+    - Simplify the expressions.
+    - Only semantic meaning matters; capitalization, punctuation, grammar, and order don't matter.
+    - Keep the summary concept very short (ideally a single word or up to 3 words).
+    - Do not score new concept.
+    - Generate exactly one concept. 
+    - Return only concept, with no text around it. 
+    - It is not allowed to answer like "Summary of listed concepts is [concept name]." or "The most generalizing concept is [concept name]".
+
+Here is a new example. Simply analyze the concepts, their scores and generate summary cocnept.
+
+List of concepts and their scores:
+{concept_list}
+
+Summary concept:
+
+Just return the generated cocnept, with no text around it.

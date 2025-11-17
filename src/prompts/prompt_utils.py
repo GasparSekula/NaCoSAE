@@ -33,3 +33,24 @@ def generate_concept_prompt(
     return text_prompt.format(
         concept_list=concept_list, generation_history=generation_list
     ).strip()
+
+
+def generate_summary_prompt(
+    concept_history: Mapping[str, float],
+    summary_prompt_path: str,
+    top_k: int = 3,
+) -> str:
+    score_sorted_concepts = (
+        f"{k}: {v}"
+        for k, v in sorted(
+            concept_history.items(), key=lambda item: item[1], reverse=True
+        )
+    )
+
+    top_concepts = list(score_sorted_concepts)[:top_k]
+    concept_list = "; ".join(top_concepts) + "; " if top_concepts else ""
+
+    with open(summary_prompt_path, "r") as prompt_file:
+        text_prompt = prompt_file.read()
+
+    return text_prompt.format(concept_list=concept_list).strip()

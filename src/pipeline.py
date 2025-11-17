@@ -136,9 +136,11 @@ class Pipeline:
             concept,
         )
 
-    def _run_iteration(self, iter_number: int) -> Tuple[str, float]:
+    def _run_iteration(
+        self, iter_number: int, summary: bool = False
+    ) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
-        new_concept = self._lang_model.generate_concept()
+        new_concept = self._lang_model.generate_concept(summary)
         concept_synthetic_images = self._generate_images(new_concept)
 
         if self._history_managing_config.save_images:
@@ -199,6 +201,13 @@ class Pipeline:
             logging.info(
                 "PROPOSED CONCEPT: %s with score of %f." % (new_concept, score)
             )
+
+        logging.info("RUNNING SUMMARY ITERATION.")
+        summary_concept, summary_score = self._run_iteration(summary=True)
+        logging.info(
+            "PROPOSED SUMMARY CONCEPT: %s with score of %f."
+            % (new_concept, score)
+        )
 
         if self._history_managing_config.save_histories:
             self._save_histories()
