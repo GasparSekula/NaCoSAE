@@ -203,7 +203,7 @@ class Pipeline:
             )
 
         logging.info("RUNNING SUMMARY ITERATION.")
-        summary_concept, summary_score = self._run_iteration(summary=True)
+        summary_concept, summary_score = self._run_iteration(iter_number=n_iters, summary=True)
         logging.info(
             "PROPOSED SUMMARY CONCEPT: %s with score of %f."
             % (new_concept, score)
