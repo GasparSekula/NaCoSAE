@@ -20,9 +20,12 @@ def _get_activations(
     model_layer_activations_path: str,
 ) -> Iterator[Tuple[str, torch.Tensor]]:
     """Returns an iterator of concept names and its control activations."""
-    for concept in os.listdir(model_layer_activations_path):
-        filepath = os.path.join(model_layer_activations_path, concept)
+    for acitvations_filename in os.listdir(model_layer_activations_path):
+        filepath = os.path.join(
+            model_layer_activations_path, acitvations_filename
+        )
         activations = torch.load(filepath)
+        concept, _ = os.path.splitext(acitvations_filename)
 
         yield concept.replace("_", " "), activations
 
@@ -65,7 +68,7 @@ def get_initial_concepts(
     n_random_concepts: int,
     model_layer_activations_path: str,
     neuron_id: int,
-) -> Mapping[str, Sequence[str]]:
+) -> Sequence[str]:
     """
     Gets a list of initial concepts. The list contains n_best_concepts concepts
     that activated the neuron the most and n_random_concepts random concepts.
@@ -80,7 +83,7 @@ def get_initial_concepts(
         list(average_neuron_activations.keys()), n_random_concepts
     )
 
-    return {"best_concepts": best_concepts, "random_concepts": random_concepts}
+    return (*best_concepts, *random_concepts)
 
 
 def update_concept_history(
@@ -101,3 +104,10 @@ def update_concept_history(
     concept_history[new_concept] = score
 
     return concept_history
+
+
+def format_concept_history(
+    concept_history: Mapping[str, float],
+) -> Sequence[str]:
+    """Returns concept history formated as a list of strings concept, score."""
+    return [f"{concept},{score}" for concept, score in concept_history.items()]

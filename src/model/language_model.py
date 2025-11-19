@@ -1,12 +1,12 @@
 from collections.abc import Mapping
-import random
+from typing import Sequence
 
 import torch
 import transformers
 
 from model import concept_history
 from model import model
-import prompts.prompt_utils
+from prompts import prompt_utils
 
 
 _ASSISTANT_TAG = "<|start_header_id|>assistant<|end_header_id|>"
@@ -18,8 +18,9 @@ class LanguageModel(model.Model):
     ) -> None:
         super().__init__(model_id, device)
         self._max_new_tokens = max_new_tokens
-        self.prompt_path = prompt_path
+        self._prompt_path = prompt_path
         self.generation_history = []
+        self.concept_history: Mapping[str, float] = {}
 
     def _load(self) -> None:
         pipeline = transformers.pipeline(
@@ -37,23 +38,19 @@ class LanguageModel(model.Model):
         self._pipeline = pipeline
         self._model = pipeline.model
 
-    def set_concept_history(self, concept_history: Mapping[str, float]) -> None:
-        self._concept_history = concept_history
-
     def update_concept_history(self, new_concept: str, score: float) -> None:
         """Updates concept history with most recent concept."""
-        self._concept_history = concept_history.update_concept_history(
-            self._concept_history, new_concept, score
+        self.generation_history.append(f"{new_concept},{score}")
+        self.concept_history = concept_history.update_concept_history(
+            self.concept_history, new_concept, score
         )
 
     @model.gpu_inference_wrapper
     def generate_concept(self):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
-        concept_generation_prompt = (
-            prompts.prompt_utils.generate_concept_prompt(
-                self._concept_history, self.prompt_path
-            )
+        concept_generation_prompt = prompt_utils.generate_concept_prompt(
+            self.concept_history, self.generation_history, self._prompt_path
         )
         # only llama for now
         message = self._pipeline.tokenizer.apply_chat_template(
@@ -73,5 +70,11 @@ class LanguageModel(model.Model):
             top_p=0.9,
         )
         response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
-        self.generation_history.append(response)
         return response
+
+    def get_best_concept(self) -> str:
+        """Returns the best proposed concept."""
+        best_concept = max(self.concept_history, key=self.concept_history.get)
+        score = self.concept_history[best_concept]
+
+        return best_concept, score

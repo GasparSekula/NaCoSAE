@@ -1,15 +1,19 @@
 from collections.abc import Sequence
 
+from absl import logging
 import diffusers
 import immutabledict
-import PIL
+from PIL import Image
 import torch
 
 from model import model
 import prompts.prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
-    {"stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image}
+    {
+        "stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image,
+        "stabilityai/sdxl-turbo": diffusers.AutoPipelineForText2Image,
+    }
 )
 _TORCH_DTYPE = torch.float16
 _PIPELINE_VARIANT = "fp16"
@@ -39,12 +43,13 @@ class ImageModel(model.Model):
     @model.gpu_inference_wrapper
     def generate_images(
         self, n_images: int, prompt_text: str, concept: str
-    ) -> Sequence[PIL.Image.Image]:
+    ) -> Sequence[Image.Image]:
         """Generates images."""
         text_to_image_prompt = prompts.prompt_utils.concept_image_prompt(
             prompt_text, concept
         )
 
+        logging.info(f"Generating %d images of %s." % (n_images, concept))
         synthetic_images = []
         for _ in range(n_images):
             synthetic_images.append(

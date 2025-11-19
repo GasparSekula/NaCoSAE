@@ -1,6 +1,6 @@
 """Functions for prompt creation."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 
 def concept_image_prompt(prompt_text: str, concept: str) -> str:
@@ -8,13 +8,28 @@ def concept_image_prompt(prompt_text: str, concept: str) -> str:
 
 
 def generate_concept_prompt(
-    concept_history: Mapping[str, float], prompt_path: str
+    concept_history: Mapping[str, float],
+    generation_history: Sequence[str],
+    prompt_path: str,
 ) -> str:
-    # this will require some prompt engineering (xd), temp version
-    concept_list = (
-        "; ".join(f"{k}: {v}" for k, v in concept_history.items()) + "; "
+    score_sorted_concepts = (
+        f"{k}: {v}"
+        for k, v in sorted(
+            concept_history.items(), key=lambda item: item[1], reverse=True
+        )
     )
+    concept_list = "; ".join(score_sorted_concepts) + "; "
+
+    generation_list = []
+
+    bare_concept = lambda concept_score: concept_score.split(",")[0]
+    generation_list = [
+        bare_concept(concept_score) for concept_score in generation_history
+    ]
+
     with open(prompt_path, "r") as prompt_file:
         text_prompt = prompt_file.read()
 
-    return text_prompt.format(concept_list=concept_list).strip()
+    return text_prompt.format(
+        concept_list=concept_list, generation_history=generation_list
+    ).strip()
