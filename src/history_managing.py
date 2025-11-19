@@ -76,6 +76,7 @@ def save_pipeline_parameters(
         "metric": getattr(metric, "name", str(metric)),
     }
     params_path = os.path.join(save_directory, "params.txt")
-    with open(params_path, "w") as f:
-        for key, val in params.items():
-            f.write(f"{key}: {val}\n")
+    with open(params_path, "w") as save_file:
+        _write_iterable_to_stream(
+            save_file, (f"{param}: {value}" for param, value in params.items())
+        )

@@ -34,6 +34,16 @@ def test_writing_concept_history():
     assert output == expected
 
 
+def test_writing_params():
+    params = {"run_id": "test-run-id", "neuron_id": 0, "metric": "AUC"}
+    output = _get_output(
+        (f"{param}: {value}") for param, value in params.items()
+    )
+    expected = "run_id: test-run-id\nneuron_id: 0\nmetric: AUC"
+
+    assert output == expected
+
+
 @pytest.fixture
 def test_images() -> Mapping[str, Image.Image]:
     img1 = Image.new("RGB", (10, 10), color="red")
