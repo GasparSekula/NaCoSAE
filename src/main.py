@@ -29,6 +29,9 @@ _CONTROL_ACTIVATIONS_PATH = flags.DEFINE_string(
     "control_activations",
     "Path to directory with control images.",
 )
+_LAYER = flags.DEFINE_string(
+    "layer", "avgpool", "Name of the layer to explain."
+)
 _NEURON_ID = flags.DEFINE_integer("neuron_id", 0, "ID of a neuron to explain.")
 _N_ITERS = flags.DEFINE_integer("n_iters", "10", "Number of iterations.")
 _METRIC = flags.DEFINE_enum_class(
@@ -69,7 +72,7 @@ def main(argv):
         {
             "num_inference_steps": _NUM_INFERENCE_STEPS.value,
         },
-        {},
+        {"layer": _LAYER.value},
     )
     image_generation_config = config.ImageGenerationConfig(
         _NUM_IMAGES.value, "A realstic photo of a"
@@ -85,7 +88,7 @@ def main(argv):
         concept_history_config,
         history_managing_config,
         _CONTROL_ACTIVATIONS_PATH.value,
-        "avgpool",  # TODO(piechotam) parameterize explained layer
+        _LAYER.value,
         _NEURON_ID.value,
         _METRIC.value,
     )

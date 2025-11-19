@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from typing import Sequence
 
 import torch
 import transformers
@@ -35,8 +34,8 @@ class LanguageModel(model.Model):
                 pipeline.model.config.eos_token_id[0]
             )
 
-        self._pipeline = pipeline
-        self._model = pipeline.model
+        self._pipeline = pipeline  # TODO(piechotam) refactor this assignment
+        return pipeline.model
 
     def update_concept_history(self, new_concept: str, score: float) -> None:
         """Updates concept history with most recent concept."""

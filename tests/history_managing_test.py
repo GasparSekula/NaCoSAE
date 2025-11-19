@@ -4,7 +4,7 @@ import io
 from PIL import Image
 import pytest
 import pytest_mock
-from unittest.mock import call, mock_open
+from unittest.mock import mock_open
 
 import history_managing
 
