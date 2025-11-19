@@ -52,16 +52,16 @@ class LanguageModel(model.Model):
         )
 
     @model.gpu_inference_wrapper
-    def generate_concept(self, summary: bool = False):
+    def generate_concept(self, top_k: int | None = None):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
 
-        if summary:
-            generation_prompt = prompt_utils.generate_summary_prompt(
+        if top_k > 0:
+            generation_prompt = prompt_utils.generate_prompt(
                 self.concept_history, self._summary_prompt_path
             )
         else:
-            generation_prompt = prompt_utils.generate_concept_prompt(
+            generation_prompt = prompt_utils.generate_prompt(
                 self.concept_history, self.generation_history, self._prompt_path
             )
 

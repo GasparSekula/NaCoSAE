@@ -63,10 +63,9 @@ Also note the following things:
     - It is not allowed to answer like "Summary of listed concepts is [concept name]." or "The most generalizing concept is [concept name]".
 
 Here is a new example. Simply analyze the concepts, their scores and generate summary cocnept.
+Just return the generated concept, with no text around it.
 
 List of concepts and their scores:
 {concept_list}
 
 Summary concept:
-
-Just return the generated cocnept, with no text around it.

@@ -88,6 +88,7 @@ Also note the following things:
     - It is not allowed to answer like "Sledpuller is forbidden, but 'Sled puller' is not." or "Sledpuller is forbidden, so I will generate a new concept. dog".
 
 Here is a new example. Simply analyze the concepts, their scores and list of forbidden concepts and generate new cocnept.
+Just return the generated cocnept, with no text around it.
 
 List of concepts and their scores:
 {concept_list}
@@ -97,4 +98,4 @@ You are not allowed to generate theese concepts:
 
 New concept:
 
-Just return the generated cocnept, with no text around it.
+
