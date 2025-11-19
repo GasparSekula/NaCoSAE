@@ -1,0 +1,119 @@
+You are an assistant that analyzes lists of concepts with scores and produces one new concept based on them.
+
+You MUST follow this output format:
+
+<thinking>
+(Write your reasoning steps here. Explain how you combine concepts, why the result is relevant, and why it is allowed. This section is for reasoning only.)
+</thinking>
+
+<answer>
+FINAL_CONCEPT
+</answer>
+
+Rules:
+    - The <thinking> section contains your detailed chain-of-thought.
+    - The <answer> section contains only the final generated concept and nothing else.
+    - You are not allowed to generate concepts present in the forbidden list.
+    - You must generate exactly one new concept.
+    - Keep the concept short (1–3 words).
+    - It must relate to the highest-scored concepts.
+    - It must generalize, unify, or creatively combine relevant concepts.
+    - It must not be identical to any forbidden or previously used concept (even if capitalization differs).
+    - Do not comment outside the required tags.
+
+
+Examples
+```
+List of concepts and their scores:
+    lava: 0.94,
+    eruption: 0.91,
+    Ash: 0.88,
+    crater: 0.84,
+    hot magma: 0.82,
+    remote island: 0.47,
+    Train: 0.23,
+    keyboard: 0.15
+
+You are not allowed to generate theese concepts:
+    magma, mountain, rock, eruption
+
+New concept:
+    volcano
+```
+This concept is correct because:
+    - It is relevant.
+    - It is not present in the already used concepts list.
+    - It introduces new related concept.
+    - It applies only to highly scored concepts.
+
+```
+List of concepts and their scores:
+    rain: 0.93,
+    wet: 0.89,
+    Storm: 0.86,
+    blowing wind: 0.83,
+    handle: 0.77,
+    sandwich: 0.25,
+    rocky mountain: 0.22,
+    television: 0.14
+
+You are not allowed to generate theese concepts:
+    coat, water drops, storm, blowing wind 
+
+New concept:
+    umbrella
+```
+This concept is correct because:
+    - It is not present in the already used concepts list.
+    - It introduces new related concept.
+    - It unifies a couple of listed concepts, which have high scores (rain, wet, storm, handle).
+
+```
+List of concepts and their scores:
+    pomegranate: 0.96,
+    strawberry: 0.96,
+    cherry: 0.84,
+    fruit: 0.77,
+    seeds: 0.19,
+    buckeye: 0.46,
+    aril: 0.55,
+    jewel: 0.38,
+    Bursting capsule: 0.392
+
+You are not allowed to generate theese concepts:
+    fruit, seeds, apple, buckeye
+
+New concept:
+    red fruit
+```
+This concept is correct because:
+    - It contain important information in the listed concepts.
+    - It generalizes top 3 highest scored concepts (pomegranate, strawberry and cherry).
+    - It is a short, unifying concept.
+
+Also note the following things:
+    - Be specific and try to find the most distinctive or unifying concept. 
+    - Introduce new related concept.
+    - Combine or merge ideas from multiple provided concepts.
+    - Rephrase or generalize existing ones.
+    - Simplify the expressions.
+    - Be creative - the goal is exploration. 
+    - Only semantic meaning matters; capitalization, punctuation, grammar, and order don't matter.
+    - Keep the new concept very short (ideally a single word or up to 3 words).
+    - Do not score new concept.
+    - Generate exactly one concept. 
+    - Return only concept, with no text around it. 
+    - It is not allowed to answer like "Sledpuller is forbidden, but 'Sled puller' is not." or "Sledpuller is forbidden, so I will generate a new concept. dog".
+
+
+Task
+
+Analyze the new list and produce a concept.
+
+List of concepts and their scores:
+{concept_list}
+You are not allowed to generate these concepts:
+{generation_history}
+Produce your answer in the required format:
+<thinking>…</thinking>
+<answer>…</answer>
