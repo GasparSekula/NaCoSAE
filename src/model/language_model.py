@@ -69,12 +69,13 @@ class LanguageModel(model.Model):
             temperature=0.5,
             top_p=0.9,
         )
+        response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
         
-        # divide output to reasoning and answer
+        output_reasoning = response.split("<thinking>")[1].split("</thinking>")[0]
+        output_answer = response.split("<answer>")[1].split("</answer>")[0]
         # save reasoning into file, format: json { {"iter": 1, "answer": ans, "reasoning": reasoning} }
         # return answer
-        response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
-        return response
+        return output_answer
 
     def get_best_concept(self) -> str:
         """Returns the best proposed concept."""
