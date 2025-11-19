@@ -6,7 +6,7 @@ def main():
         model_id="meta-llama/Llama-3.1-8B-Instruct",
         device="cuda",
         max_new_tokens=30,
-        prompt_path="/src/prompts/templates/cot/prompt_cot_few_shot.txt",
+        prompt_path="src/prompts/templates/cot/prompt_cot_few_shot.txt",
     )
 
     concepts = {
@@ -23,7 +23,7 @@ def main():
     for concept, score in concepts.items():
         lm.update_concept_history(new_concept=concept, score=score)
 
-    print(f"\n Concept history:\n {lm._concept_history}")
+    print(f"\n Concept history:\n {lm.concept_history}")
 
     print("\n\n Starting concept generation loop")
 

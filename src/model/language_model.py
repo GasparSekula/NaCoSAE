@@ -69,6 +69,10 @@ class LanguageModel(model.Model):
             temperature=0.5,
             top_p=0.9,
         )
+        
+        # divide output to reasoning and answer
+        # save reasoning into file, format: json { {"iter": 1, "answer": ans, "reasoning": reasoning} }
+        # return answer
         response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
         return response
 
