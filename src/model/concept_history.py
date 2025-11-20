@@ -95,9 +95,10 @@ def update_concept_history(
     if score > concept_history[worst_score_concept]:
         concept_to_remove = worst_score_concept
     else:
+        max_score = max(concept_history.values())
         concept_to_remove = random.choices(
             list(concept_history.keys()),
-            weights=[1 - score for score in concept_history.values()],
+            weights=[max_score - score for score in concept_history.values()],
         ).pop()
 
     del concept_history[concept_to_remove]
