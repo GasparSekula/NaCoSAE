@@ -159,13 +159,13 @@ class Pipeline:
         self._lang_model.update_concept_history(new_concept, score)
 
         best_concept, best_score = self._lang_model.get_best_concept()
-        self._best_concepts.append[
+        self._best_concepts.append(
             {
                 "iteration": iter_number,
                 "best_concept": best_concept,
                 "best_score": best_score,
             }
-        ]
+        )
 
         return new_concept, score
 
