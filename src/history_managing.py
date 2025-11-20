@@ -88,8 +88,8 @@ def format_as_json_string(
 ) -> Sequence[str]:
     """Returns best concepts history as a list of JSON-formatted strings."""
     return [json.dumps(line) for line in dictionaries_list]
-  
-  
+
+
 def format_best_concepts_history(
     best_concept_history: Sequence[Mapping[str, Any]],
 ) -> Sequence[str]:

@@ -238,7 +238,7 @@ class Pipeline:
             self._save_directory,
             "reasoning.txt",
         )
-        
+
         logging.info("SAVING BEST CONCEPTS.")
         history_managing.save_llm_history(
             history_managing.format_best_concepts_history(self._best_concepts),
