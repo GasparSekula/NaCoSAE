@@ -47,6 +47,8 @@ class Pipeline:
             f"{neuron_id}"
         )
 
+        self._best_concepts = []
+        
         self._save_directory = os.path.join(
             self._history_managing_config.save_directory, self._run_id
         )
@@ -155,6 +157,9 @@ class Pipeline:
 
         score = self._score_concept(new_concept, concept_synthetic_images)
         self._lang_model.update_concept_history(new_concept, score)
+        
+        best_concept, best_score = self._lang_model.get_best_concept()
+        self._best_concepts.append[{"iteration": iter_number, "best_concept": best_concept, "best_score": best_score}]
 
         return new_concept, score
 
