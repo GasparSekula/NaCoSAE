@@ -7,10 +7,11 @@ def concept_image_prompt(prompt_text: str, concept: str) -> str:
     return " ".join([prompt_text, concept])
 
 
-def generate_concept_prompt(
+def generate_prompt(
     concept_history: Mapping[str, float],
     generation_history: Sequence[str],
     prompt_path: str,
+    top_k: int | None = None,
 ) -> str:
     score_sorted_concepts = (
         f"{k}: {v}"
@@ -18,8 +19,13 @@ def generate_concept_prompt(
             concept_history.items(), key=lambda item: item[1], reverse=True
         )
     )
-    concept_list = "; ".join(score_sorted_concepts) + "; "
+    score_sorted_concepts = list(score_sorted_concepts)
+    if top_k is not None and top_k > 0:
+        score_sorted_concepts = score_sorted_concepts[
+            : min(len(score_sorted_concepts), top_k)
+        ]
 
+    concept_list = "; ".join(score_sorted_concepts) + "; "
     generation_list = []
 
     bare_concept = lambda concept_score: concept_score.split(",")[0]

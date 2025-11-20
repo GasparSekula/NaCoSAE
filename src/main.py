@@ -42,6 +42,11 @@ _PROMPT_PATH = flags.DEFINE_string(
     "src/prompts/templates/prompt_mils.txt",
     "Path to prompt for the LLM.",
 )
+_SUMMARY_PROMPT_PATH = flags.DEFINE_string(
+    "summary_prompt",
+    "src/prompts/templates/summary/prompt_summary_few_shot.txt",
+    "Path to summary prompt for the LLM.",
+)
 _SAVE_HISTORIES = flags.DEFINE_bool(
     "save_histories",
     False,
@@ -68,6 +73,7 @@ def main(argv):
         {
             "max_new_tokens": 30,
             "prompt_path": _PROMPT_PATH.value,
+            "summary_prompt_path": _SUMMARY_PROMPT_PATH.value,
         },
         {
             "num_inference_steps": _NUM_INFERENCE_STEPS.value,
