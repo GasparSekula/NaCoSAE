@@ -20,7 +20,7 @@ Rules:
     - It must generalize, unify, or creatively combine relevant concepts.
     - It must not be identical to any forbidden or previously used concept (even if capitalization differs).
     - Do not comment outside the required tags.
-    - The <thinking> section should not exceed 200 words.
+    - The <thinking> section cannot exceed 200 words. The <thinking> section must be short.
 
 
 Examples
@@ -115,6 +115,6 @@ List of concepts and their scores:
 {concept_list}
 You are not allowed to generate these concepts:
 {generation_history}
-Produce your answer in the required format. Use no more than 200 words in <thinking> section.
+Produce your answer in the required format. The <thinking> section must be short.
 <thinking>…</thinking>
 <answer>…</answer>
