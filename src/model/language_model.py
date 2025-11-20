@@ -72,8 +72,7 @@ class LanguageModel(model.Model):
         
         reasoning = response.split("<thinking>")[1].split("</thinking>")[0]
         answer = response.split("<answer>")[1].split("</answer>")[0]
-        # save reasoning into file, format: json { {"iter": 1, "answer": ans, "reasoning": reasoning} }
-        # return answer
+        
         return answer, reasoning
 
     def get_best_concept(self) -> str:
