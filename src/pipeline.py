@@ -47,6 +47,8 @@ class Pipeline:
             f"{neuron_id}"
         )
 
+        self._reasoning = []
+
         self._save_directory = os.path.join(
             self._history_managing_config.save_directory, self._run_id
         )
@@ -138,7 +140,7 @@ class Pipeline:
 
     def _run_iteration(self, iter_number: int) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
-        new_concept = self._lang_model.generate_concept()
+        new_concept, reasoning = self._lang_model.generate_concept()
         concept_synthetic_images = self._generate_images(new_concept)
 
         if self._history_managing_config.save_images:
@@ -155,6 +157,7 @@ class Pipeline:
 
         score = self._score_concept(new_concept, concept_synthetic_images)
         self._lang_model.update_concept_history(new_concept, score)
+        self._reasoning.append({"concept": new_concept, "reasoning": reasoning})
 
         return new_concept, score
 
@@ -206,4 +209,9 @@ class Pipeline:
         logging.info(
             "BEST CONCEPT FOUND: %s with score %f."
             % (self._lang_model.get_best_concept())
+        )
+
+        logging.info("SAVING REASONING HISTORY TO FILE.")
+        history_managing.save_llm_history(
+            self._reasoning, self._save_directory, "reasoning.txt"
         )
