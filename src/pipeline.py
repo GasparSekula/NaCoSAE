@@ -48,7 +48,7 @@ class Pipeline:
         )
 
         self._best_concepts = []
-        
+
         self._save_directory = os.path.join(
             self._history_managing_config.save_directory, self._run_id
         )
@@ -157,9 +157,15 @@ class Pipeline:
 
         score = self._score_concept(new_concept, concept_synthetic_images)
         self._lang_model.update_concept_history(new_concept, score)
-        
+
         best_concept, best_score = self._lang_model.get_best_concept()
-        self._best_concepts.append[{"iteration": iter_number, "best_concept": best_concept, "best_score": best_score}]
+        self._best_concepts.append[
+            {
+                "iteration": iter_number,
+                "best_concept": best_concept,
+                "best_score": best_score,
+            }
+        ]
 
         return new_concept, score
 
@@ -211,4 +217,11 @@ class Pipeline:
         logging.info(
             "BEST CONCEPT FOUND: %s with score %f."
             % (self._lang_model.get_best_concept())
+        )
+
+        logging.info("SAVING BEST CONCEPTS.")
+        history_managing.save_llm_history(
+            history_managing.format_best_concepts_history(self._best_concepts),
+            self._save_directory,
+            "best_cocnepts.txt",
         )
