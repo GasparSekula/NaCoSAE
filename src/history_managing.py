@@ -88,4 +88,3 @@ def format_best_concepts_history(
 ) -> Sequence[str]:
     """Returns best concepts history as a list of JSON-formatted strings."""
     return [json.dumps(line) for line in best_concept_history]
-    
