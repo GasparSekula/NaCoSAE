@@ -1,0 +1,75 @@
+You are an assistant that analyzes lists of concepts with scores and generates a single summary concept.
+The higher the score, the more important the concept.
+
+You MUST follow this output format:
+
+<thinking>
+(Extremely concise reasoning. Identify the common thread among high-scoring items in 3-5 sentences max.)
+</thinking>
+
+<answer>
+SUMMARY_CONCEPT
+</answer>
+
+Rules:
+- The <thinking> section must be extremely concise (max 5 sentences).
+- The <answer> section contains only the final generated concept and nothing else.
+- Be specific and try to find the most generalizing concept.
+- Combine or merge ideas from multiple provided concepts.
+- Only semantic meaning matters.
+- Keep the summary concept very short (ideally a single word or up to 3 words).
+- Do not score the new concept.
+- Generate exactly one concept.
+
+Examples:
+```
+List of concepts and their scores:
+lava: 0.94,
+eruption: 0.91,
+Ash: 0.78
+
+<thinking>
+Lava, eruption, and ash are all direct components or results of a volcano. "Volcano" summarizes these distinct elements into a single source concept.
+</thinking>
+<answer>
+volcano
+</answer>
+```
+
+```
+List of concepts and their scores:
+grass: 0.93,
+crocodile: 0.86,
+bushes: 0.83,
+beach: 0.22
+
+<thinking>
+Grass, crocodiles, and bushes share the visual characteristic of being green. This unifies the high-scoring concepts better than a location-based summary.
+</thinking>
+<answer>
+green
+</answer>
+```
+
+```
+List of concepts and their scores:
+banana: 0.96,
+lemon: 0.90,
+pineapple: 0.84
+
+<thinking>
+Banana, lemon, and pineapple are all fruits that are yellow. "Yellow fruit" captures both the category and the shared color attribute of the highest-scored items.
+</thinking>
+<answer>
+yellow fruit
+</answer>
+```
+
+Task:
+
+Analyze the new list and produce a summary concept.
+
+List of concepts and their scores:
+{concept_list}
+
+Produce your answer in the required format. Keep thinking very short.

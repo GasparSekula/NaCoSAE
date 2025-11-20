@@ -44,7 +44,7 @@ _PROMPT_PATH = flags.DEFINE_string(
 )
 _SUMMARY_PROMPT_PATH = flags.DEFINE_string(
     "summary_prompt",
-    "src/prompts/templates/summary/prompt_summary_few_shot.txt",
+    "src/prompts/templates/summary/prompt_summary_cot.txt",
     "Path to summary prompt for the LLM.",
 )
 _SAVE_HISTORIES = flags.DEFINE_bool(
