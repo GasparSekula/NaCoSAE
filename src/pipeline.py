@@ -193,7 +193,7 @@ class Pipeline:
             "generation_history.txt",
         )
         history_managing.save_llm_history(
-            concept_history.format_concept_history(
+            history_managing.format_concept_history(
                 self._lang_model.concept_history
             ),
             self._save_directory,
@@ -223,5 +223,5 @@ class Pipeline:
         history_managing.save_llm_history(
             history_managing.format_best_concepts_history(self._best_concepts),
             self._save_directory,
-            "best_cocnepts.txt",
+            "best_concepts.txt",
         )
