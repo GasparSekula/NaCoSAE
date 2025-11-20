@@ -115,6 +115,6 @@ List of concepts and their scores:
 {concept_list}
 You are not allowed to generate these concepts:
 {generation_history}
-Produce your answer in the required format:
+Produce your answer in the required format. Use no more than 200 words in <thinking> section.
 <thinking>…</thinking>
 <answer>…</answer>
