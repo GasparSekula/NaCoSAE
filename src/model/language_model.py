@@ -56,9 +56,12 @@ class LanguageModel(model.Model):
         """Generates new concept based on concept history."""
         self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
 
-        if top_k > 0:
+        if top_k is not None:
             generation_prompt = prompt_utils.generate_prompt(
-                self.concept_history, self._summary_prompt_path
+                self.concept_history,
+                self.generation_history,
+                self._summary_prompt_path,
+                top_k,
             )
         else:
             generation_prompt = prompt_utils.generate_prompt(
