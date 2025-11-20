@@ -25,8 +25,7 @@ class Model(abc.ABC):
     def __init__(self, model_id: str, device: str) -> None:
         self._model_id = model_id
         self._device = device
-        self._model = None
-        self._load()
+        self._model = self._load()
 
     @abc.abstractmethod
     def _load(self):
