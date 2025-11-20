@@ -213,5 +213,7 @@ class Pipeline:
 
         logging.info("SAVING REASONING HISTORY TO FILE.")
         history_managing.save_llm_history(
-            self._reasoning, self._save_directory, "reasoning.txt"
+            history_managing.format_as_json_string(self._reasoning),
+            self._save_directory,
+            "reasoning.txt",
         )
