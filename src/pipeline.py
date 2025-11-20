@@ -143,7 +143,7 @@ class Pipeline:
         self, iter_number: int, top_k: int | None = None
     ) -> Tuple[str, float]:
         """Runs single iteration of the explanation pipeline."""
-        new_concept = self._lang_model.generate_concept(top_k)
+        new_concept, reasoning = self._lang_model.generate_concept(top_k)
         concept_synthetic_images = self._generate_images(new_concept)
 
         if self._history_managing_config.save_images:
