@@ -4,7 +4,7 @@ import io
 from PIL import Image
 import pytest
 import pytest_mock
-from unittest.mock import call, mock_open
+from unittest.mock import mock_open
 
 import history_managing
 
@@ -30,6 +30,16 @@ def test_writing_concept_history():
         [f"{concept},{score}" for concept, score in concept_history.items()]
     )
     expected = "concept_1,0.31\nconcept_2,0.13\nconcept_3,0.78"
+
+    assert output == expected
+
+
+def test_writing_params():
+    params = {"run_id": "test-run-id", "neuron_id": 0, "metric": "AUC"}
+    output = _get_output(
+        (f"{param}: {value}") for param, value in params.items()
+    )
+    expected = "run_id: test-run-id\nneuron_id: 0\nmetric: AUC"
 
     assert output == expected
 

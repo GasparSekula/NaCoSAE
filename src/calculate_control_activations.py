@@ -100,7 +100,7 @@ def _save_concept_activations(
 def main(argv):
     logging.info("Loading model with model_id=%s." % _EXPLAINED_MODEL_ID.value)
     expl_model = explained_model.ExplainedModel(
-        _EXPLAINED_MODEL_ID.value, _DEVICE.value
+        _EXPLAINED_MODEL_ID.value, _LAYER.value, _DEVICE.value
     )
     model_save_path = _create_activations_save_path(
         _SAVE_PATH.value, _EXPLAINED_MODEL_ID.value, _LAYER.value

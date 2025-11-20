@@ -7,7 +7,7 @@ from PIL import Image
 import torch
 
 from model import model
-import prompts.prompt_utils
+from prompts import prompt_utils
 
 _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
     {
@@ -38,14 +38,14 @@ class ImageModel(model.Model):
             .to(self._device)
         )
 
-        self._model = model
+        return model
 
     @model.gpu_inference_wrapper
     def generate_images(
         self, n_images: int, prompt_text: str, concept: str
     ) -> Sequence[Image.Image]:
         """Generates images."""
-        text_to_image_prompt = prompts.prompt_utils.concept_image_prompt(
+        text_to_image_prompt = prompt_utils.concept_image_prompt(
             prompt_text, concept
         )
 
