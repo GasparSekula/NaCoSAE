@@ -105,10 +105,3 @@ def update_concept_history(
     concept_history[new_concept] = score
 
     return concept_history
-
-
-def format_concept_history(
-    concept_history: Mapping[str, float],
-) -> Sequence[str]:
-    """Returns concept history formated as a list of strings concept, score."""
-    return [f"{concept},{score}" for concept, score in concept_history.items()]
