@@ -47,6 +47,7 @@ class Pipeline:
             f"{neuron_id}"
         )
 
+        self._reasoning = []
         self._best_concepts = []
 
         self._save_directory = os.path.join(
@@ -159,6 +160,7 @@ class Pipeline:
 
         score = self._score_concept(new_concept, concept_synthetic_images)
         self._lang_model.update_concept_history(new_concept, score)
+        self._reasoning.append({"concept": new_concept, "reasoning": reasoning})
 
         best_concept, best_score = self._lang_model.get_best_concept()
         self._best_concepts.append(
@@ -230,6 +232,13 @@ class Pipeline:
             % (self._lang_model.get_best_concept())
         )
 
+        logging.info("SAVING REASONING HISTORY TO FILE.")
+        history_managing.save_llm_history(
+            history_managing.format_as_json_string(self._reasoning),
+            self._save_directory,
+            "reasoning.txt",
+        )
+        
         logging.info("SAVING BEST CONCEPTS.")
         history_managing.save_llm_history(
             history_managing.format_best_concepts_history(self._best_concepts),

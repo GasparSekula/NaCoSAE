@@ -71,7 +71,7 @@ def main(argv):
         _TEXT_TO_IMAGE_MODEL_ID.value,
         _EXPLAINED_MODEL_ID.value,
         {
-            "max_new_tokens": 30,
+            "max_new_tokens": 3000,
             "prompt_path": _PROMPT_PATH.value,
             "summary_prompt_path": _SUMMARY_PROMPT_PATH.value,
         },
