@@ -82,10 +82,9 @@ def save_pipeline_parameters(
             save_file, (f"{param}: {value}" for param, value in params.items())
         )
 
+
 def format_as_json_string(
     dictionaries_list: Sequence[Mapping[str, Any]],
 ) -> Sequence[str]:
     """Returns best concepts history as a list of JSON-formatted strings."""
     return [json.dumps(line) for line in dictionaries_list]
-    
-    

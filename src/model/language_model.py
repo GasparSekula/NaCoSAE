@@ -85,10 +85,12 @@ class LanguageModel(model.Model):
             top_p=0.9,
         )
         response = output[0]["generated_text"].split(_ASSISTANT_TAG)[1].strip()
-        
-        reasoning = response.split("<thinking>")[1].split("</thinking>")[0].strip()
+
+        reasoning = (
+            response.split("<thinking>")[1].split("</thinking>")[0].strip()
+        )
         answer = response.split("<answer>")[1].split("</answer>")[0].strip()
-        
+
         return answer, reasoning
 
     def get_best_concept(self) -> str:
