@@ -24,7 +24,6 @@ class ImageModel(model.Model):
         self, model_id: str, device: str, num_inference_steps: int
     ) -> None:
         super().__init__(model_id, device)
-        self._generator = torch.Generator(device).manual_seed(0)
         self._num_inference_steps = num_inference_steps
 
     def _load(self) -> None:
@@ -51,11 +50,12 @@ class ImageModel(model.Model):
 
         logging.info(f"Generating %d images of %s." % (n_images, concept))
         synthetic_images = []
-        for _ in range(n_images):
+        for i in range(n_images):
+            generator = torch.manual_seed(i)
             synthetic_images.append(
                 self._model(
                     text_to_image_prompt,
-                    generator=self._generator,
+                    generator=generator,
                     num_inference_steps=self._num_inference_steps,
                 ).images[0]
             )
