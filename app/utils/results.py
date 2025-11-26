@@ -9,6 +9,7 @@ _FINAL_CONCEPT_HISTORY_FILE = "final_concept_history.txt"
 _PARAMS_FILE = "params.txt"
 RESULTS_STATE_KEY = "experiment_results"
 
+
 @dataclasses.dataclass
 class ExperimentResults:
     images: Mapping[str, Sequence[bytes]]
