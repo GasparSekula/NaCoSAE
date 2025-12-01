@@ -7,13 +7,31 @@ from model import model
 _WEIGHTS = immutabledict.immutabledict(
     {
         "resnet18": torchvision.models.ResNet18_Weights.IMAGENET1K_V1,
+        "resnet50": None,  # ResNet50 will use Places365 weights which are not available in torchvision
+        "vit_b_16": torchvision.models.ViT_B_16_Weights.IMAGENET1K_V1,
     }
 )
-_CONSTRUCTORS = immutabledict.immutabledict(
-    {
-        "resnet18": torchvision.models.resnet18,
-    }
+
+_OPTIONAL_KWARGS = immutabledict.immutabledict(
+    {"resnet50": {"num_classes": 365}}
 )
+
+_PLACES_365_MODELS = ("resnet50",)
+_PLACES_365_WEIGHTS_URL = (
+    "http://places2.csail.mit.edu/models_places365/{model_id}_places365.pth.tar"
+)
+
+
+def _load_places_365_state_dict(model_id: str):
+    checkpoint = torch.hub.load_state_dict_from_url(
+        _PLACES_365_WEIGHTS_URL.format(model_id=model_id)
+    )
+    state_dict = checkpoint["state_dict"]
+    new_state_dict = {
+        k.replace("module.", ""): v for k, v in state_dict.items()
+    }
+
+    return new_state_dict
 
 
 def _convert_input(input_batch: torch.Tensor) -> torch.Tensor:
@@ -27,7 +45,15 @@ class ExplainedModel(model.Model):
 
     def _load(self):
         weights = _WEIGHTS[self._model_id]
-        model = _CONSTRUCTORS[self._model_id](weights=weights)
+        model = torchvision.models.get_model(
+            self._model_id,
+            weights=weights,
+            **_OPTIONAL_KWARGS.get(self._model_id, dict()),
+        )
+
+        if self._model_id in _PLACES_365_MODELS:
+            state_dict = _load_places_365_state_dict(self._model_id)
+            model.load_state_dict(state_dict)
 
         return model.to(self._device).eval()
 
