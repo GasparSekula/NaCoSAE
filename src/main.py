@@ -21,6 +21,9 @@ _LANGUAGE_MODEL_ID = flags.DEFINE_string(
 _NUM_INFERENCE_STEPS = flags.DEFINE_integer(
     "num_inf_steps", "25", "Number of inference steps in diffusion."
 )
+_GUIDANCE_SCALE = flags.DEFINE_integer(
+    "guidance_scale", "5", "Guidance scale for stable diffusion."
+)
 _NUM_IMAGES = flags.DEFINE_integer(
     "num_img", "5", "Number of images to generate per iteration."
 )
@@ -77,6 +80,7 @@ def main(argv):
         },
         {
             "num_inference_steps": _NUM_INFERENCE_STEPS.value,
+            "guidance_scale": _GUIDANCE_SCALE.value,
         },
         {"layer": _LAYER.value},
     )

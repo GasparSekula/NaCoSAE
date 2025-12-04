@@ -78,7 +78,9 @@ class ExplainedModel(model.Model):
             torch.cuda.empty_cache()
             _ = self._model(_convert_input(input_batch))
 
-        if self._activations.ndim == 4:
+        if self._activations.ndim == 4:  # CNN
             self._activations = self._activations.mean(dim=[2, 3])
+        elif self._activations.ndim == 3:  # ViT
+            self._activations = self._activations[:, 0]
 
         return self._activations.data
