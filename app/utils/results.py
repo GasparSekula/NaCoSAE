@@ -1,12 +1,16 @@
 import dataclasses
 import os
 from typing import Any, Mapping, Sequence, Tuple
+import json
+import ast
 
 
 _IMAGES_DIRECTORY = "images"
 _GENERATION_HISTORY_FILE = "generation_history.txt"
 _FINAL_CONCEPT_HISTORY_FILE = "final_concept_history.txt"
 _PARAMS_FILE = "params.txt"
+_BEST_CONCEPTS_FILE = "best_concepts.txt"
+_REASONING_FILE = "reasoning.txt"
 RESULTS_STATE_KEY = "experiment_results"
 
 
@@ -16,6 +20,9 @@ class ExperimentResults:
     generation_history: Sequence[Tuple[str, float]]
     final_concept_history: Sequence[Tuple[str, float]]
     pipeline_params: Mapping[str, Any]
+    best_concepts: Sequence[Tuple[str, float]]
+    reasoning: Sequence[Tuple[str, str]]
+    run_params: Mapping[str, Any]
 
 
 def get_experiment_directories(results_path: str) -> Sequence[str]:
@@ -55,7 +62,43 @@ def _process_images_directory(
 
 
 def _process_params_file(params_filepath: str):
-    pass
+    params = {}
+    with open(params_filepath, "r") as params_file:
+        for line in params_file:
+            line = line.strip()
+            if not line or ":" not in line:
+                continue
+            key, value = line.split(":", 1)
+            params[key.strip()] = value.strip()
+
+    params["load_config"] = json.loads(params["load_config"].replace("'", '"'))
+    return params
+
+
+def _process_best_concepts_file(best_concepts_filepath: str):
+    best_concepts = []
+    with open(best_concepts_filepath, "r") as best_concepts_file:
+        for line in best_concepts_file:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            best_concepts.append(
+                (obj["best_concept"], round(obj["best_score"], 2))
+            )
+    return best_concepts
+
+
+def _process_reasoning_file(reasoning_filepath: str):
+    reasoning = []
+    with open(reasoning_filepath, "r") as reasoning_file:
+        for line in reasoning_file:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            reasoning.append((obj["concept"], obj["reasoning"]))
+    return reasoning
 
 
 def load_experiment_results(
@@ -74,7 +117,11 @@ def load_experiment_results(
         elif result == _IMAGES_DIRECTORY:
             images = _process_images_directory(result_path)
         elif result == _PARAMS_FILE:
-            params = _process_params_file(results_path)
+            params = _process_params_file(result_path)
+        elif result == _BEST_CONCEPTS_FILE:
+            best_concepts = _process_best_concepts_file(result_path)
+        elif result == _REASONING_FILE:
+            reasoning = _process_reasoning_file(result_path)
         elif result.startswith("."):
             continue
         else:
@@ -85,4 +132,7 @@ def load_experiment_results(
         generation_history=generation_history,
         final_concept_history=final_concept_history,
         pipeline_params=params,
+        best_concepts=best_concepts,
+        reasoning=reasoning,
+        run_params=params,
     )
