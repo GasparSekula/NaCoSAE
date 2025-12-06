@@ -1,4 +1,5 @@
 import os
+import random
 
 from absl import app
 from absl import flags
@@ -6,6 +7,8 @@ from absl import flags
 import config
 import pipeline
 import scoring
+
+_SEED = 42
 
 _TEXT_TO_IMAGE_MODEL_ID = flags.DEFINE_string(
     "t2i_model", "stabilityai/sd-turbo", "model_id of the text2image model."
@@ -69,6 +72,8 @@ _SAVE_DIR = flags.DEFINE_string(
 
 
 def main(argv):
+    random.seed(_SEED)
+
     load_config = config.LoadConfig(
         _LANGUAGE_MODEL_ID.value,
         _TEXT_TO_IMAGE_MODEL_ID.value,
