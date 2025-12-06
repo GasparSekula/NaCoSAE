@@ -16,11 +16,12 @@ class LanguageModel(model.Model):
         self,
         model_id: str,
         device: str,
+        model_swapping: bool,
         max_new_tokens: int,
         prompt_path: str,
         summary_prompt_path: str,
     ) -> None:
-        super().__init__(model_id, device)
+        super().__init__(model_id, device, model_swapping)
         self._max_new_tokens = max_new_tokens
         self._prompt_path = prompt_path
         self._summary_prompt_path = summary_prompt_path
