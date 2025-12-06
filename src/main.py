@@ -1,4 +1,5 @@
 import os
+import random
 
 from absl import app
 from absl import flags
@@ -6,6 +7,8 @@ from absl import flags
 import config
 import pipeline
 import scoring
+
+_SEED = 42
 
 _TEXT_TO_IMAGE_MODEL_ID = flags.DEFINE_string(
     "t2i_model", "stabilityai/sd-turbo", "model_id of the text2image model."
@@ -20,6 +23,9 @@ _LANGUAGE_MODEL_ID = flags.DEFINE_string(
 )
 _NUM_INFERENCE_STEPS = flags.DEFINE_integer(
     "num_inf_steps", "25", "Number of inference steps in diffusion."
+)
+_GUIDANCE_SCALE = flags.DEFINE_integer(
+    "guidance_scale", "5", "Guidance scale for stable diffusion."
 )
 _NUM_IMAGES = flags.DEFINE_integer(
     "num_img", "5", "Number of images to generate per iteration."
@@ -66,6 +72,8 @@ _SAVE_DIR = flags.DEFINE_string(
 
 
 def main(argv):
+    random.seed(_SEED)
+
     load_config = config.LoadConfig(
         _LANGUAGE_MODEL_ID.value,
         _TEXT_TO_IMAGE_MODEL_ID.value,
@@ -77,6 +85,7 @@ def main(argv):
         },
         {
             "num_inference_steps": _NUM_INFERENCE_STEPS.value,
+            "guidance_scale": _GUIDANCE_SCALE.value,
         },
         {"layer": _LAYER.value},
     )

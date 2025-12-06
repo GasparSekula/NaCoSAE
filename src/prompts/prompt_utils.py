@@ -1,10 +1,25 @@
 """Functions for prompt creation."""
 
 from collections.abc import Mapping, Sequence
+import random
+from typing import Iterator
+
+_ANGLES = ("extreme close-up", "wide angle shot", "aerial view", "low angle")
+_LIGHTNING = ("cinematic lighting", "natural sunlight", "studio lighting")
+_AVAILABLE_DESCRIPTIONS = (_ANGLES, _LIGHTNING)
+
+
+def _get_random_visual_descriptions() -> Iterator[str]:
+    return (
+        random.choice(descriptions) for descriptions in _AVAILABLE_DESCRIPTIONS
+    )
 
 
 def concept_image_prompt(prompt_text: str, concept: str) -> str:
-    return " ".join([prompt_text, concept])
+    text_to_image_prompt = " ".join([prompt_text, concept])
+    random_visual_descriptions = _get_random_visual_descriptions()
+
+    return ", ".join((text_to_image_prompt, *random_visual_descriptions))
 
 
 def generate_prompt(
