@@ -39,8 +39,10 @@ def _convert_input(input_batch: torch.Tensor) -> torch.Tensor:
 
 
 class ExplainedModel(model.Model):
-    def __init__(self, model_id: str, layer: str, device: str) -> None:
-        super().__init__(model_id, device)
+    def __init__(
+        self, model_id: str, layer: str, device: str, model_swapping: bool
+    ) -> None:
+        super().__init__(model_id, device, model_swapping)
         self._register_forward_hook(layer)
 
     def _load(self):

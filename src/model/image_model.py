@@ -25,21 +25,23 @@ class ImageModel(model.Model):
         self,
         model_id: str,
         device: str,
+        model_swapping: str,
         num_inference_steps: int,
         guidance_scale: int,
     ) -> None:
-        super().__init__(model_id, device)
-        self._guidance_scale = guidance_scale
+        super().__init__(
+            model_id, device, model_swapping, guidance_scale=guidance_scale
+        )
         self._num_inference_steps = num_inference_steps
 
-    def _load(self) -> diffusers.DiffusionPipeline:
+    def _load(self, guidance_scale: int) -> diffusers.DiffusionPipeline:
         model = (
             _TEXT_TO_IMAGE_MODELS[self._model_id]
             .from_pretrained(
                 self._model_id,
                 torch_dtype=_TORCH_DTYPE,
                 variant=_PIPELINE_VARIANT,
-                guidance_scale=self._guidance_scale,
+                guidance_scale=guidance_scale,
             )
             .to(self._device)
         )

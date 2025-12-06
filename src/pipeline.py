@@ -67,23 +67,32 @@ class Pipeline:
         )
 
     def _load_models(self) -> None:
-        """Loads models to cpu."""
+        """
+        Loads the models. If `LoadConfig.model_swapping` is `True` then all the
+        will be loaded to CPU and send to GPU only for inference. Otherwise, all
+        models are loaded GPU.
+        """
+        initial_device = "cpu" if self._load_config.model_swapping else "cuda"
+
         logging.info("Loading %s." % self._load_config.language_model_id)
         self._lang_model = language_model.LanguageModel(
             model_id=self._load_config.language_model_id,
-            device="cpu",
+            device=initial_device,
+            model_swapping=self._load_config.model_swapping,
             **self._load_config.language_model_kwargs,
         )
         logging.info("Loading %s." % self._load_config.text_to_image_model_id)
         self._t2i_model = image_model.ImageModel(
             model_id=self._load_config.text_to_image_model_id,
-            device="cpu",
+            device=initial_device,
+            model_swapping=self._load_config.model_swapping,
             **self._load_config.text_to_image_model_kwargs,
         )
         logging.info("Loading %s." % self._load_config.explained_model_id)
         self._expl_model = explained_model.ExplainedModel(
             model_id=self._load_config.explained_model_id,
-            device="cpu",
+            device=initial_device,
+            model_swapping=self._load_config.model_swapping,
             **self._load_config.explained_model_kwargs,
         )
 
@@ -118,7 +127,7 @@ class Pipeline:
     ) -> float:
         logging.info("Scoring proposed concept.")
         synthetic_input_batch = image_processing.transform_images(
-            self._expl_model.model_id, concept_synthetic_images
+            concept_synthetic_images
         )
         neuron_synthetic_activations, neuron_control_activations = (
             self._get_neuron_activations(

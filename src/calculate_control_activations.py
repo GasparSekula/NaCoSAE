@@ -9,6 +9,7 @@ from absl import flags
 from absl import logging
 from PIL import Image
 import torch
+from tqdm import tqdm
 
 import image_processing
 from model import explained_model
@@ -42,15 +43,13 @@ flags.register_validator(
 
 def _get_concept_directories_and_names(
     control_images_directory: str,
-) -> Iterator[Tuple[str]]:
+) -> Iterator[Tuple[str, str]]:
     for concept_name in os.listdir(control_images_directory):
         concept_directory = os.path.join(control_images_directory, concept_name)
         yield concept_directory, concept_name
 
 
-def _transform_concept_images(
-    concept_directory: str, explained_model_id: str
-) -> torch.Tensor:
+def _transform_concept_images(concept_directory: str) -> torch.Tensor:
     """
     Loads and transforms control images.
     """
@@ -60,16 +59,13 @@ def _transform_concept_images(
         image_path = os.path.join(concept_directory, image_filename)
         with Image.open(image_path) as pil_image:
             control_images.append(pil_image.copy())
-    input_batch = image_processing.transform_images(
-        explained_model_id, control_images
-    )
+    input_batch = image_processing.transform_images(control_images)
     return input_batch
 
 
 def _calculate_concept_activations(
     explained_model: explained_model.ExplainedModel, input_batch: torch.Tensor
 ) -> torch.Tensor:
-    logging.info("Calculating activations.")
     return explained_model.get_activations(input_batch)
 
 
@@ -93,22 +89,24 @@ def _save_concept_activations(
     save_path: str, concept_name: str, activations: torch.Tensor
 ) -> None:
     save_filepath = os.path.join(save_path, f"{concept_name}.pt")
-    logging.info("Saving activations to %s." % save_filepath)
     torch.save(activations, save_filepath)
 
 
 def main(argv):
     logging.info("Loading model with model_id=%s." % _EXPLAINED_MODEL_ID.value)
     expl_model = explained_model.ExplainedModel(
-        _EXPLAINED_MODEL_ID.value, _LAYER.value, _DEVICE.value
+        _EXPLAINED_MODEL_ID.value,
+        _LAYER.value,
+        _DEVICE.value,
+        model_swapping=False,
     )
     model_save_path = _create_activations_save_path(
         _SAVE_PATH.value, _EXPLAINED_MODEL_ID.value, _LAYER.value
     )
-    for concept_directory, concept_name in _get_concept_directories_and_names(
-        _CONTROL_IMAGES_DIRECTORY.value
+    # TODO(piechotam) parallelise?
+    for concept_directory, concept_name in tqdm(
+        _get_concept_directories_and_names(_CONTROL_IMAGES_DIRECTORY.value)
     ):
-        logging.info("Processing concept %s." % concept_name)
         input_batch = _transform_concept_images(
             concept_directory, _EXPLAINED_MODEL_ID.value
         )

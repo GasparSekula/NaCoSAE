@@ -21,6 +21,13 @@ _LANGUAGE_MODEL_ID = flags.DEFINE_string(
     "meta-llama/Llama-3.2-1B-Instruct",
     "model_id of the language model.",
 )
+_MODEL_SWAPPING = flags.DEFINE_bool(
+    "model_swapping",
+    False,
+    "If true, the models used will be send to CPU while not performing inference"
+    " and send to GPU only for inference. Useful when the models don't fit into"
+    " the VRAM all at once.",
+)
 _NUM_INFERENCE_STEPS = flags.DEFINE_integer(
     "num_inf_steps", "25", "Number of inference steps in diffusion."
 )
@@ -88,6 +95,7 @@ def main(argv):
             "guidance_scale": _GUIDANCE_SCALE.value,
         },
         {"layer": _LAYER.value},
+        _MODEL_SWAPPING.value,
     )
     image_generation_config = config.ImageGenerationConfig(
         _NUM_IMAGES.value, "A realstic photo of a"
