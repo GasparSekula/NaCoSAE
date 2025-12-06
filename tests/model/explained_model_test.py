@@ -41,7 +41,7 @@ def expl_model(
     )
     mocker.patch("model.model.Model._send_to_device")
     return explained_model.ExplainedModel(
-        "test-model-id", "conv", "test-device"
+        "test-model-id", "conv", "test-device", False
     )
 
 

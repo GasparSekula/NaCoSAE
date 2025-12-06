@@ -2,7 +2,6 @@
 
 from collections.abc import Sequence
 
-import immutabledict
 from PIL import Image
 import torch
 import torchvision
@@ -25,30 +24,22 @@ class ConditionalNormalize(object):
             return torch.concat((tensor, tensor, tensor), 0)
 
 
-_TRANSFORMS = immutabledict.immutabledict(
-    {
-        "resnet18": torchvision.transforms.Compose(
-            [
-                torchvision.transforms.Resize(224),
-                torchvision.transforms.CenterCrop((224, 224)),
-                torchvision.transforms.ToTensor(),
-                ConditionalNormalize(_MEAN, _STD),
-            ]
-        )
-    }
+_TRANSFORM = torchvision.transforms.Compose(
+    [
+        torchvision.transforms.Resize(224),
+        torchvision.transforms.CenterCrop((224, 224)),
+        torchvision.transforms.ToTensor(),
+        ConditionalNormalize(_MEAN, _STD),
+    ]
 )
 
 
-def transform_images(
-    model_id: str,
-    images: Sequence[Image.Image],
-) -> torch.Tensor:
+def transform_images(images: Sequence[Image.Image]) -> torch.Tensor:
     """Transforms images and return input batch for explained model."""
     image_tensors = []
-    transform = _TRANSFORMS[model_id]
 
     for image in images:
-        image_tensors.append(transform(image).unsqueeze(0))
+        image_tensors.append(_TRANSFORM(image).unsqueeze(0))
 
     batch = torch.concat(tuple(image_tensors), 0)
     return batch
