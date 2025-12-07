@@ -30,7 +30,7 @@ class Model(abc.ABC):
         self._model_id = model_id
         self._device = device
         self._model_swapping = model_swapping
-        self._model = self._load(load_kwargs)
+        self._model = self._load(**load_kwargs)
 
     @abc.abstractmethod
     def _load(self, **kwargs):

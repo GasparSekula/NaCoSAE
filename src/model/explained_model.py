@@ -45,7 +45,7 @@ class ExplainedModel(model.Model):
         super().__init__(model_id, device, model_swapping)
         self._register_forward_hook(layer)
 
-    def _load(self):
+    def _load(self, **kwargs):
         weights = _WEIGHTS[self._model_id]
         model = torchvision.models.get_model(
             self._model_id,

@@ -28,7 +28,7 @@ class LanguageModel(model.Model):
         self.generation_history = []
         self.concept_history: Mapping[str, float] = {}
 
-    def _load(self) -> None:
+    def _load(self, **kwargs) -> None:
         pipeline = transformers.pipeline(
             task="text-generation",
             model=self._model_id,
