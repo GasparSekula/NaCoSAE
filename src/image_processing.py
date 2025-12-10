@@ -20,7 +20,7 @@ class ConditionalNormalize(object):
         """
         if tensor.shape[0] == 1:
             tensor = torch.concat((tensor, tensor, tensor), 0)
-        
+
         return self.normalize(tensor)
 
 
@@ -38,7 +38,7 @@ def transform_images(images: Sequence[Image.Image]) -> torch.Tensor:
     """Transforms images and return input batch for explained model."""
     if images is None or len(images) == 0:
         raise ValueError(f"Expected non-empty sequence of images.")
-    
+
     image_tensors = []
 
     for image in images:
