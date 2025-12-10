@@ -124,6 +124,12 @@ def load_experiment_results(
         )
         
     existing_files = set(os.listdir(experiment_directory_path))
+    
+    missing_files = _REQUIRED_FILES - existing_files
+    if missing_files:
+        raise FileNotFoundError(
+            f"Missing required files in {experiment_directory_path}: {missing_files}"
+        )
 
     images = {}
     generation_history = []

@@ -19,37 +19,42 @@ if results_path:
             st.warning(
                 "The specified folder does not contain any subfolders with results."
             )
-        experiment_directory = st.selectbox(
-            "Select experiment directory.", options=directories, index=None
-        )
-        
-    if experiment_directory:
-        try:
-            experiment_results = results.load_experiment_results(
-                results_path, experiment_directory
-            )
-            st.session_state[results.RESULTS_STATE_KEY] = experiment_results
-
-            experiment_results: results.ExperimentResults = st.session_state.get(
-                results.RESULTS_STATE_KEY
-            )
-            generation_history_scores = history_processing.get_scores_from_history(
-                experiment_results.generation_history
+        else:
+            experiment_directory = st.selectbox(
+                "Select experiment directory.", options=directories, index=None
             )
 
-            st.write("# Analyze model output")
+        if experiment_directory:
+            try:
+                experiment_results = results.load_experiment_results(
+                    results_path, experiment_directory
+                )
+                st.session_state[results.RESULTS_STATE_KEY] = experiment_results
 
-            dashboard_utils.write_parameters(experiment_results=experiment_results)
-            dashboard_utils.write_generated_concepts(
-                experiment_results=experiment_results
-            )
-            dashboard_utils.write_final_concept_set(
-                experiment_results=experiment_results
-            )
-            dashboard_utils.generate_plots(
-                generation_history_scores=generation_history_scores
-            )
-        except exceptions.CorruptedExperimentError as e:
-            st.error(f"Experiment data error: {e}")
-        except Exception as e:
-            st.error(f"Unexpected error while loading data: {e}")
+                experiment_results: results.ExperimentResults = (
+                    st.session_state.get(results.RESULTS_STATE_KEY)
+                )
+                generation_history_scores = (
+                    history_processing.get_scores_from_history(
+                        experiment_results.generation_history
+                    )
+                )
+
+                st.write("# Analyze model output")
+
+                dashboard_utils.write_parameters(
+                    experiment_results=experiment_results
+                )
+                dashboard_utils.write_generated_concepts(
+                    experiment_results=experiment_results
+                )
+                dashboard_utils.write_final_concept_set(
+                    experiment_results=experiment_results
+                )
+                dashboard_utils.generate_plots(
+                    generation_history_scores=generation_history_scores
+                )
+            except exceptions.CorruptedExperimentError as e:
+                st.error(f"Experiment data error: {e}")
+            except Exception as e:
+                st.error(f"Unexpected error while loading data: {e}")
