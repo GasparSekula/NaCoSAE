@@ -14,14 +14,14 @@ class ConditionalNormalize(object):
     def __init__(self, mean, std):
         self.normalize = torchvision.transforms.Normalize(mean=mean, std=std)
 
-    def __call__(self, tensor):
+    def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
         """
-        Skip normalization if called on greyscale image and enforce 3 channels.
+        Enforce 3 channels (in case of greyscale images) and normalize.
         """
-        if tensor.shape[0] == 3:
-            return self.normalize(tensor)
-        else:
-            return torch.concat((tensor, tensor, tensor), 0)
+        if tensor.shape[0] == 1:
+            tensor = torch.concat((tensor, tensor, tensor), 0)
+        
+        return self.normalize(tensor)
 
 
 _TRANSFORM = torchvision.transforms.Compose(
@@ -36,6 +36,9 @@ _TRANSFORM = torchvision.transforms.Compose(
 
 def transform_images(images: Sequence[Image.Image]) -> torch.Tensor:
     """Transforms images and return input batch for explained model."""
+    if images is None or len(images) == 0:
+        raise ValueError(f"Expected non-empty sequence of images.")
+    
     image_tensors = []
 
     for image in images:
