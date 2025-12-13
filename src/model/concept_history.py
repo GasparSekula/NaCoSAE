@@ -24,7 +24,9 @@ def _get_activations(
         filepath = os.path.join(
             model_layer_activations_path, acitvations_filename
         )
-        activations = torch.load(filepath)
+        data = torch.load(filepath)
+        activations = data["activations"]
+        
         concept, _ = os.path.splitext(acitvations_filename)
 
         yield concept.replace("_", " "), activations
