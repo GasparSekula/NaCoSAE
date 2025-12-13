@@ -45,15 +45,19 @@ def expl_model(
     )
 
 
-def test_get_activations(
-    expl_model: ExplainedModelFixture,
-    mocker: pytest_mock.MockerFixture,
-):
+def _mock_cuda_logic(mocker: pytest_mock.MockerFixture):
     mocker.patch("torch.cuda.empty_cache")
     mocker.patch(
         "model.explained_model._convert_input",
         lambda input_batch: input_batch,
     )
+
+
+def test_get_activations(
+    expl_model: ExplainedModelFixture,
+    mocker: pytest_mock.MockerFixture,
+):
+    _mock_cuda_logic(mocker)
     n_images = 2
     n_channels = 3
     fake_image_tensors = tuple(
@@ -67,3 +71,12 @@ def test_get_activations(
     assert torch.equal(
         doubled_activations, 8 * n_channels * torch.ones((n_images, 2))
     )
+
+
+def test_get_activations_incorrect_input_batch(
+    expl_model: ExplainedModelFixture,
+    mocker: pytest_mock.MockerFixture,
+):
+    _mock_cuda_logic(mocker)
+    with pytest.raises(ValueError):
+        expl_model.get_activations(torch.ones((2, 2)))
