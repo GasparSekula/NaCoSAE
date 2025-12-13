@@ -2,7 +2,7 @@
 
 from collections.abc import Iterator
 import os
-from typing import Tuple
+from typing import Tuple, Sequence
 
 from absl import app
 from absl import flags
@@ -55,12 +55,16 @@ def _transform_concept_images(concept_directory: str) -> torch.Tensor:
     """
     logging.info("Transforming images.")
     control_images = []
-    for image_filename in os.listdir(concept_directory):
+
+    images_filenames = sorted(os.listdir(concept_directory))
+
+    for image_filename in images_filenames:
         image_path = os.path.join(concept_directory, image_filename)
         with Image.open(image_path) as pil_image:
             control_images.append(pil_image.copy())
     input_batch = image_processing.transform_images(control_images)
-    return input_batch
+
+    return input_batch, images_filenames
 
 
 def _calculate_concept_activations(
@@ -86,10 +90,16 @@ def _create_activations_save_path(
 
 
 def _save_concept_activations(
-    save_path: str, concept_name: str, activations: torch.Tensor
+    save_path: str,
+    concept_name: str,
+    activations: torch.Tensor,
+    images_names: Sequence[str],
 ) -> None:
     save_filepath = os.path.join(save_path, f"{concept_name}.pt")
-    torch.save(activations, save_filepath)
+
+    data_to_save = {"activations": activations, "images_names": images_names}
+
+    torch.save(data_to_save, save_filepath)
 
 
 def main(argv):
@@ -107,11 +117,11 @@ def main(argv):
     for concept_directory, concept_name in tqdm(
         _get_concept_directories_and_names(_CONTROL_IMAGES_DIRECTORY.value)
     ):
-        input_batch = _transform_concept_images(
-            concept_directory, _EXPLAINED_MODEL_ID.value
+        input_batch, images_names = _transform_concept_images(
+            concept_directory,
         )
         activations = _calculate_concept_activations(expl_model, input_batch)
-        _save_concept_activations(model_save_path, concept_name, activations)
+        _save_concept_activations(model_save_path, concept_name, activations, images_names)
 
 
 if __name__ == "__main__":
