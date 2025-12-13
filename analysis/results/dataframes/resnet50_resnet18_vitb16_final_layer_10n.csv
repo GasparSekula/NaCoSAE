@@ -1,0 +1,57 @@
+,model,layer,neuron,concept,metric,concept_type
+0,vit_b_16,heads,9,ostrich,AVG_ACTIVATION,predefined
+1,resnet50,fc,9,anemone fish,AUC,predefined
+2,vit_b_16,heads,51,triceratops,AUC,predefined
+3,resnet18,fc,9,ostrich,AVG_ACTIVATION,predefined
+4,resnet50,fc,45,washbasin,AUC,predefined
+5,resnet50,fc,45,tub,AVG_ACTIVATION,predefined
+6,vit_b_16,heads,141,redshank bird,AVG_ACTIVATION,generated
+7,resnet18,fc,146,albatross,AUC,predefined
+8,resnet18,fc,141,redshank,AVG_ACTIVATION,predefined
+9,vit_b_16,heads,111,roundworm relative,AVG_ACTIVATION,generated
+10,resnet50,fc,235,theater curtain,AUC,predefined
+11,resnet18,fc,9,ostrich,AUC,predefined
+12,resnet50,fc,111,ski,AUC,predefined
+13,vit_b_16,heads,45,gila monster,AUC,predefined
+14,resnet18,fc,45,gila monster,AUC,predefined
+15,resnet50,fc,141,jeep,AVG_ACTIVATION,predefined
+16,vit_b_16,heads,340,zebra,AVG_ACTIVATION,predefined
+17,resnet18,fc,146,seabird,AVG_ACTIVATION,generated
+18,vit_b_16,heads,235,german shepherd,AUC,predefined
+19,vit_b_16,heads,258,samoyed,AVG_ACTIVATION,predefined
+20,vit_b_16,heads,340,zebra,AUC,predefined
+21,resnet50,fc,340,stone wall,AVG_ACTIVATION,predefined
+22,resnet18,fc,111,centipede,AUC,predefined
+23,resnet50,fc,51,four-poster,AUC,predefined
+24,vit_b_16,heads,48,komodo dragon species,AVG_ACTIVATION,generated
+25,resnet18,fc,45,gila monster,AVG_ACTIVATION,predefined
+26,resnet18,fc,235,german shepherd,AUC,predefined
+27,vit_b_16,heads,48,komodo dragon,AUC,predefined
+28,vit_b_16,heads,235,german shepherd,AVG_ACTIVATION,predefined
+29,resnet50,fc,340,stone wall,AUC,predefined
+30,vit_b_16,heads,111,nematode,AUC,predefined
+31,resnet18,fc,48,komodo dragon,AUC,predefined
+32,vit_b_16,heads,51,triceratops,AVG_ACTIVATION,predefined
+33,resnet50,fc,9,tropical fish,AVG_ACTIVATION,generated
+34,resnet50,fc,258,hartebeest,AUC,predefined
+35,resnet50,fc,48,sandbar,AVG_ACTIVATION,predefined
+36,resnet50,fc,235,theater space,AVG_ACTIVATION,generated
+37,vit_b_16,heads,45,gila monster,AVG_ACTIVATION,predefined
+38,resnet50,fc,146,sweet vendor,AVG_ACTIVATION,generated
+39,resnet18,fc,51,triceratops,AVG_ACTIVATION,predefined
+40,vit_b_16,heads,141,redshank,AUC,predefined
+41,resnet50,fc,141,jeep,AUC,predefined
+42,vit_b_16,heads,146,albatross,AVG_ACTIVATION,predefined
+43,vit_b_16,heads,146,albatross,AUC,predefined
+44,resnet18,fc,141,redshank,AUC,predefined
+45,resnet18,fc,340,zebra,AVG_ACTIVATION,predefined
+46,resnet50,fc,258,hartebeest,AVG_ACTIVATION,predefined
+47,vit_b_16,heads,258,samoyed,AUC,predefined
+48,resnet18,fc,48,lizard species,AVG_ACTIVATION,generated
+49,resnet50,fc,111,ski,AVG_ACTIVATION,predefined
+50,resnet18,fc,258,samoyed,AVG_ACTIVATION,predefined
+51,vit_b_16,heads,9,ostrich,AUC,predefined
+52,resnet50,fc,51,four-poster,AVG_ACTIVATION,predefined
+53,resnet18,fc,258,samoyed,AUC,predefined
+54,resnet50,fc,146,grocery store,AUC,predefined
+55,resnet18,fc,111,nematode,AVG_ACTIVATION,predefined

@@ -1,0 +1,101 @@
+,model,layer,neuron,concept,metric,concept_type
+0,resnet50,avgpool,410,hoopskirt,AVG_ACTIVATION,predefined
+1,resnet50,avgpool,442,racing car,AVG_ACTIVATION,generated
+2,resnet50,avgpool,281,orange glow,AVG_ACTIVATION,generated
+3,resnet50,avgpool,211,reef,AVG_ACTIVATION,generated
+4,resnet50,avgpool,273,gondola,AVG_ACTIVATION,predefined
+5,resnet50,avgpool,139,red-breasted merganser,AVG_ACTIVATION,predefined
+6,resnet50,avgpool,323,indri,AVG_ACTIVATION,predefined
+7,resnet50,avgpool,280,espresso,AVG_ACTIVATION,predefined
+8,resnet50,avgpool,418,suspension bridge,AVG_ACTIVATION,predefined
+9,resnet50,avgpool,100,red food,AVG_ACTIVATION,generated
+10,resnet50,avgpool,158,odometer,AVG_ACTIVATION,predefined
+11,resnet50,avgpool,322,sea anemone,AVG_ACTIVATION,predefined
+12,resnet50,avgpool,245,bannister,AVG_ACTIVATION,predefined
+13,resnet50,avgpool,63,luxury kennel,AVG_ACTIVATION,generated
+14,resnet50,avgpool,489,ice cream,AVG_ACTIVATION,predefined
+15,resnet50,avgpool,219,scoreboard,AVG_ACTIVATION,predefined
+16,resnet50,avgpool,108,gas pump,AVG_ACTIVATION,predefined
+17,resnet50,avgpool,157,dung beetle,AVG_ACTIVATION,predefined
+18,resnet50,avgpool,324,office,AVG_ACTIVATION,generated
+19,resnet50,avgpool,338,sealyham terrier,AVG_ACTIVATION,predefined
+20,resnet50,avgpool,332,snow machine,AVG_ACTIVATION,generated
+21,resnet50,avgpool,32,mountain,AVG_ACTIVATION,generated
+22,resnet50,avgpool,470,covered structure,AVG_ACTIVATION,generated
+23,resnet50,avgpool,373,poolside,AVG_ACTIVATION,generated
+24,resnet50,avgpool,446,red apple,AVG_ACTIVATION,generated
+25,resnet50,avgpool,106,steam locomotive,AVG_ACTIVATION,predefined
+26,resnet50,avgpool,471,snow vehicle,AVG_ACTIVATION,generated
+27,resnet50,avgpool,447,grassland,AVG_ACTIVATION,generated
+28,resnet50,avgpool,403,carousel,AVG_ACTIVATION,predefined
+29,resnet50,avgpool,176,computer keyboard,AVG_ACTIVATION,predefined
+30,resnet50,avgpool,43,racing vehicle,AVG_ACTIVATION,generated
+31,resnet50,avgpool,318,hard disc,AVG_ACTIVATION,predefined
+32,resnet50,avgpool,19,necklace,AVG_ACTIVATION,predefined
+33,resnet50,avgpool,265,bookshelf,AVG_ACTIVATION,generated
+34,resnet50,avgpool,17,street sign,AVG_ACTIVATION,predefined
+35,resnet50,avgpool,127,harbor,AVG_ACTIVATION,generated
+36,resnet50,avgpool,75,vending machine,AVG_ACTIVATION,predefined
+37,resnet50,avgpool,72,culinary,AVG_ACTIVATION,generated
+38,resnet50,avgpool,355,aircraft,AVG_ACTIVATION,generated
+39,resnet50,avgpool,190,circular mechanism,AVG_ACTIVATION,generated
+40,resnet50,avgpool,130,trolleybus,AVG_ACTIVATION,predefined
+41,resnet50,avgpool,250,beer bottle,AVG_ACTIVATION,predefined
+42,resnet50,avgpool,330,volcano,AVG_ACTIVATION,predefined
+43,resnet50,avgpool,213,patio room,AVG_ACTIVATION,generated
+44,resnet50,avgpool,20,desk,AVG_ACTIVATION,predefined
+45,resnet50,avgpool,198,great white shark,AVG_ACTIVATION,predefined
+46,resnet50,avgpool,359,monastery,AVG_ACTIVATION,predefined
+47,resnet50,avgpool,34,four-poster,AVG_ACTIVATION,predefined
+48,resnet50,avgpool,286,bathware,AVG_ACTIVATION,generated
+49,resnet50,avgpool,414,green veggie alternative,AVG_ACTIVATION,generated
+50,resnet50,avgpool,411,birdhouse,AVG_ACTIVATION,predefined
+51,resnet50,avgpool,310,soft fur,AVG_ACTIVATION,generated
+52,resnet50,avgpool,320,horned viper,AVG_ACTIVATION,predefined
+53,resnet50,avgpool,202,carousel,AVG_ACTIVATION,predefined
+54,resnet50,avgpool,77,carousel,AVG_ACTIVATION,predefined
+55,resnet50,avgpool,424,frame tent,AVG_ACTIVATION,generated
+56,resnet50,avgpool,33,airliner,AVG_ACTIVATION,predefined
+57,resnet50,avgpool,342,bath towel,AVG_ACTIVATION,predefined
+58,resnet50,avgpool,371,water tower,AVG_ACTIVATION,predefined
+59,resnet50,avgpool,406,ballplayer,AVG_ACTIVATION,predefined
+60,resnet50,avgpool,49,lab coat,AVG_ACTIVATION,predefined
+61,resnet50,avgpool,224,triumphal arch,AVG_ACTIVATION,predefined
+62,resnet50,avgpool,164,stupa,AVG_ACTIVATION,predefined
+63,resnet50,avgpool,50,granny smith,AVG_ACTIVATION,predefined
+64,resnet50,avgpool,309,barn,AVG_ACTIVATION,predefined
+65,resnet50,avgpool,290,palace,AVG_ACTIVATION,predefined
+66,resnet50,avgpool,237,sliding door,AVG_ACTIVATION,predefined
+67,resnet50,avgpool,377,shoe shop,AVG_ACTIVATION,predefined
+68,resnet50,avgpool,409,bookcase,AVG_ACTIVATION,predefined
+69,resnet50,avgpool,95,snowplow,AVG_ACTIVATION,predefined
+70,resnet50,avgpool,484,jailhouse,AVG_ACTIVATION,generated
+71,resnet50,avgpool,225,granny smith apple variant,AVG_ACTIVATION,generated
+72,resnet50,avgpool,41,ballplayer,AVG_ACTIVATION,predefined
+73,resnet50,avgpool,167,steel arch bridge,AVG_ACTIVATION,predefined
+74,resnet50,avgpool,142,altar,AVG_ACTIVATION,predefined
+75,resnet50,avgpool,272,spiny plant,AVG_ACTIVATION,generated
+76,resnet50,avgpool,168,necklace,AVG_ACTIVATION,predefined
+77,resnet50,avgpool,468,organ,AVG_ACTIVATION,predefined
+78,resnet50,avgpool,386,mountain hut,AVG_ACTIVATION,generated
+79,resnet50,avgpool,370,window shade,AVG_ACTIVATION,predefined
+80,resnet50,avgpool,52,elevated road,AVG_ACTIVATION,generated
+81,resnet50,avgpool,146,outpost,AVG_ACTIVATION,generated
+82,resnet50,avgpool,140,ballplayer,AVG_ACTIVATION,predefined
+83,resnet50,avgpool,15,four-poster,AVG_ACTIVATION,predefined
+84,resnet50,avgpool,125,dwelling,AVG_ACTIVATION,generated
+85,resnet50,avgpool,48,espresso,AVG_ACTIVATION,predefined
+86,resnet50,avgpool,85,swimwear alternative,AVG_ACTIVATION,generated
+87,resnet50,avgpool,98,patio garden,AVG_ACTIVATION,generated
+88,resnet50,avgpool,74,desktop,AVG_ACTIVATION,generated
+89,resnet50,avgpool,78,bookshop,AVG_ACTIVATION,predefined
+90,resnet50,avgpool,212,workspace,AVG_ACTIVATION,generated
+91,resnet50,avgpool,257,bullfrog,AVG_ACTIVATION,predefined
+92,resnet50,avgpool,477,sink,AVG_ACTIVATION,generated
+93,resnet50,avgpool,490,parachute,AVG_ACTIVATION,predefined
+94,resnet50,avgpool,200,atm,AVG_ACTIVATION,generated
+95,resnet50,avgpool,240,cave temple,AVG_ACTIVATION,generated
+96,resnet50,avgpool,350,china cabinet,AVG_ACTIVATION,predefined
+97,resnet50,avgpool,134,snow toy,AVG_ACTIVATION,generated
+98,resnet50,avgpool,425,coral reef,AVG_ACTIVATION,predefined
+99,resnet50,avgpool,111,harvester,AVG_ACTIVATION,predefined

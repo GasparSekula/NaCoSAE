@@ -1,0 +1,95 @@
+,model,layer,neuron,concept,metric,concept_type
+0,resnet18,avgpool,63,thimble,AVG_ACTIVATION,predefined
+1,resnet18,avgpool,274,appenzeller,AVG_ACTIVATION,predefined
+2,resnet18,avgpool,308,box turtle,AVG_ACTIVATION,predefined
+3,resnet18,avgpool,235,strawberry,AVG_ACTIVATION,predefined
+4,resnet18,avgpool,414,bighorn,AVG_ACTIVATION,predefined
+5,resnet18,avgpool,282,miniature pinscher,AVG_ACTIVATION,predefined
+6,resnet18,avgpool,3,tiger shark,AVG_ACTIVATION,predefined
+7,resnet18,avgpool,346,impala,AVG_ACTIVATION,predefined
+8,resnet18,avgpool,437,bath area,AVG_ACTIVATION,generated
+9,resnet18,avgpool,279,sunglasses,AVG_ACTIVATION,predefined
+10,resnet18,avgpool,214,starfish shape,AVG_ACTIVATION,generated
+11,resnet18,avgpool,12,african elephant,AVG_ACTIVATION,predefined
+12,resnet18,avgpool,301,zebra,AVG_ACTIVATION,predefined
+13,resnet18,avgpool,135,rhinoceros beetle,AVG_ACTIVATION,predefined
+14,resnet18,avgpool,98,basset,AVG_ACTIVATION,predefined
+15,resnet18,avgpool,101,grey whale,AVG_ACTIVATION,predefined
+16,resnet18,avgpool,119,hoopskirt,AVG_ACTIVATION,predefined
+17,resnet18,avgpool,155,electric fan,AVG_ACTIVATION,predefined
+18,resnet18,avgpool,116,studio couch,AVG_ACTIVATION,predefined
+19,resnet18,avgpool,80,meat market,AVG_ACTIVATION,generated
+20,resnet18,avgpool,15,triumphal arch,AVG_ACTIVATION,predefined
+21,resnet18,avgpool,279,sunglasses,AVG_ACTIVATION,predefined
+22,resnet18,avgpool,441,killer whale,AVG_ACTIVATION,predefined
+23,resnet18,avgpool,456,electric train,AVG_ACTIVATION,generated
+24,resnet18,avgpool,174,black stork,AVG_ACTIVATION,predefined
+25,resnet18,avgpool,49,american alligator,AVG_ACTIVATION,predefined
+26,resnet18,avgpool,490,broccoli,AVG_ACTIVATION,predefined
+27,resnet18,avgpool,366,standard schnauzer,AVG_ACTIVATION,predefined
+28,resnet18,avgpool,379,indigo bird,AVG_ACTIVATION,generated
+29,resnet18,avgpool,193,great white shark,AVG_ACTIVATION,predefined
+30,resnet18,avgpool,443,primate,AVG_ACTIVATION,generated
+31,resnet18,avgpool,57,hamster,AVG_ACTIVATION,predefined
+32,resnet18,avgpool,35,english setter,AVG_ACTIVATION,predefined
+33,resnet18,avgpool,424,tusker,AVG_ACTIVATION,predefined
+34,resnet18,avgpool,445,macaque,AVG_ACTIVATION,predefined
+35,resnet18,avgpool,51,snow leopard,AVG_ACTIVATION,predefined
+36,resnet18,avgpool,81,go-kart,AVG_ACTIVATION,predefined
+37,resnet18,avgpool,395,pinwheel,AVG_ACTIVATION,predefined
+38,resnet18,avgpool,359,custard apple,AVG_ACTIVATION,predefined
+39,resnet18,avgpool,47,table lamp,AVG_ACTIVATION,predefined
+40,resnet18,avgpool,379,indigo bird,AVG_ACTIVATION,generated
+41,resnet18,avgpool,119,hoopskirt,AVG_ACTIVATION,predefined
+42,resnet18,avgpool,148,english setter,AVG_ACTIVATION,predefined
+43,resnet18,avgpool,142,mongoose,AVG_ACTIVATION,predefined
+44,resnet18,avgpool,316,ibex,AVG_ACTIVATION,predefined
+45,resnet18,avgpool,453,ostrich,AVG_ACTIVATION,predefined
+46,resnet18,avgpool,110,giant panda,AVG_ACTIVATION,predefined
+47,resnet18,avgpool,52,golf ball,AVG_ACTIVATION,predefined
+48,resnet18,avgpool,377,crock pot,AVG_ACTIVATION,predefined
+49,resnet18,avgpool,111,trifle,AVG_ACTIVATION,predefined
+50,resnet18,avgpool,16,hot pot,AVG_ACTIVATION,predefined
+51,resnet18,avgpool,360,revolver,AVG_ACTIVATION,predefined
+52,resnet18,avgpool,309,american staffordshire terrier,AVG_ACTIVATION,predefined
+53,resnet18,avgpool,321,hummingbird,AVG_ACTIVATION,predefined
+54,resnet18,avgpool,183,prayer rug,AVG_ACTIVATION,predefined
+55,resnet18,avgpool,23,hard disc,AVG_ACTIVATION,predefined
+56,resnet18,avgpool,125,siamese cat,AVG_ACTIVATION,predefined
+57,resnet18,avgpool,40,hourglass form,AVG_ACTIVATION,generated
+58,resnet18,avgpool,71,pop bottle,AVG_ACTIVATION,predefined
+59,resnet18,avgpool,44,gasmask,AVG_ACTIVATION,predefined
+60,resnet18,avgpool,327,padlock,AVG_ACTIVATION,predefined
+61,resnet18,avgpool,22,tripod,AVG_ACTIVATION,predefined
+62,resnet18,avgpool,194,rocking chair,AVG_ACTIVATION,predefined
+63,resnet18,avgpool,472,hourglass,AVG_ACTIVATION,predefined
+64,resnet18,avgpool,302,italian greyhound,AVG_ACTIVATION,predefined
+65,resnet18,avgpool,433,tank,AVG_ACTIVATION,predefined
+66,resnet18,avgpool,185,mitten,AVG_ACTIVATION,predefined
+67,resnet18,avgpool,114,potter's wheel,AVG_ACTIVATION,predefined
+68,resnet18,avgpool,390,horned snakes,AVG_ACTIVATION,generated
+69,resnet18,avgpool,287,forklift,AVG_ACTIVATION,predefined
+70,resnet18,avgpool,150,prayer rug,AVG_ACTIVATION,predefined
+71,resnet18,avgpool,332,sax,AVG_ACTIVATION,predefined
+72,resnet18,avgpool,13,snowplow,AVG_ACTIVATION,predefined
+73,resnet18,avgpool,459,tusked,AVG_ACTIVATION,generated
+74,resnet18,avgpool,140,chiffonier,AVG_ACTIVATION,predefined
+75,resnet18,avgpool,498,king crab,AVG_ACTIVATION,predefined
+76,resnet18,avgpool,172,bagel,AVG_ACTIVATION,predefined
+77,resnet18,avgpool,142,mongoose,AVG_ACTIVATION,predefined
+78,resnet18,avgpool,232,african hunting dog,AVG_ACTIVATION,predefined
+79,resnet18,avgpool,229,herniated shoe,AVG_ACTIVATION,generated
+80,resnet18,avgpool,295,birdhouse,AVG_ACTIVATION,predefined
+81,resnet18,avgpool,413,cheeseburger,AVG_ACTIVATION,predefined
+82,resnet18,avgpool,373,computer keyboard,AVG_ACTIVATION,predefined
+83,resnet18,avgpool,388,lumbermill,AVG_ACTIVATION,predefined
+84,resnet18,avgpool,357,cabbage,AVG_ACTIVATION,generated
+85,resnet18,avgpool,338,cup,AVG_ACTIVATION,predefined
+86,resnet18,avgpool,176,plane,AVG_ACTIVATION,predefined
+87,resnet18,avgpool,112,ocarina,AVG_ACTIVATION,predefined
+88,resnet18,avgpool,221,green apple variant,AVG_ACTIVATION,generated
+89,resnet18,avgpool,79,dishwasher,AVG_ACTIVATION,predefined
+90,resnet18,avgpool,194,rocking chair,AVG_ACTIVATION,predefined
+91,resnet18,avgpool,260,polaroid camera,AVG_ACTIVATION,predefined
+92,resnet18,avgpool,258,teapot,AVG_ACTIVATION,predefined
+93,resnet18,avgpool,412,barrel,AVG_ACTIVATION,predefined
