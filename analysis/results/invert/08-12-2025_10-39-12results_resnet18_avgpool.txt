@@ -1,0 +1,5 @@
+155: (~n01756291 & (n01752165 | n03447721), '~sidewinder.n.01 & (viper.n.01 | gong.n.01)')
+221: (n02274259 | n07742313 | n11879895, 'butterfly.n.01 | granny_smith.n.01 | rapeseed.n.01')
+260: (~n07717070 & (n07697313 | n07715561), '~winter_squash.n.02 & (cheeseburger.n.01 | squash.n.02)')
+459: (~n02395406 & (n02395003 | n02503517), '~hog.n.03 & (swine.n.01 | elephant.n.01)')
+80: (~n01883070 & (n01874434 | n07768694), '~wombat.n.01 & (marsupial.n.01 | pomegranate.n.02)')
