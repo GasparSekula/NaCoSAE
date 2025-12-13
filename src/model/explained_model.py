@@ -76,6 +76,12 @@ class ExplainedModel(model.Model):
     @model.gpu_inference_wrapper
     def get_activations(self, input_batch: torch.Tensor) -> torch.Tensor:
         """Passes the input batch through the model and collects activations."""
+        if input_batch.ndim != 4:
+            raise ValueError(
+                f"input_batch must be of shape (N, C, H, W)."
+                "Provided input_batch has {input_batch.ndim} dimensions."
+            )
+
         with torch.no_grad():
             torch.cuda.empty_cache()
             _ = self._model(_convert_input(input_batch))
@@ -84,5 +90,10 @@ class ExplainedModel(model.Model):
             self._activations = self._activations.mean(dim=[2, 3])
         elif self._activations.ndim == 3:  # ViT
             self._activations = self._activations[:, 0]
+        elif self._activations.ndim != 2:
+            raise ValueError(
+                f"Explained Model generated activations of unexpected ndim: "
+                "{self._activations.ndim}. Expected ndim to be 2, 3 or 4."
+            )
 
         return self._activations.data

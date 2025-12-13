@@ -22,6 +22,12 @@ def concept_image_prompt(prompt_text: str, concept: str) -> str:
     return ", ".join((text_to_image_prompt, *random_visual_descriptions))
 
 
+def _read_prompt_template(prompt_path: str) -> str:
+    with open(prompt_path, "r") as prompt_file:
+        prompt_template = prompt_file.read()
+    return prompt_template
+
+
 def generate_prompt(
     concept_history: Mapping[str, float],
     generation_history: Sequence[str],
@@ -40,7 +46,7 @@ def generate_prompt(
             : min(len(score_sorted_concepts), top_k)
         ]
 
-    concept_list = "; ".join(score_sorted_concepts) + "; "
+    concept_list = "; ".join(score_sorted_concepts) + ";"
     generation_list = []
 
     bare_concept = lambda concept_score: concept_score.split(",")[0]
@@ -48,9 +54,8 @@ def generate_prompt(
         bare_concept(concept_score) for concept_score in generation_history
     ]
 
-    with open(prompt_path, "r") as prompt_file:
-        text_prompt = prompt_file.read()
+    prompt_template = _read_prompt_template(prompt_path)
 
-    return text_prompt.format(
-        concept_list=concept_list, generation_history=generation_list
+    return prompt_template.format(
+        concept_list=concept_list, generation_history=", ".join(generation_list)
     ).strip()
