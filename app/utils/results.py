@@ -5,13 +5,22 @@ import json
 import ast
 
 
+RESULTS_STATE_KEY = "experiment_results"
+
 _IMAGES_DIRECTORY = "images"
 _GENERATION_HISTORY_FILE = "generation_history.txt"
 _FINAL_CONCEPT_HISTORY_FILE = "final_concept_history.txt"
 _PARAMS_FILE = "params.txt"
 _BEST_CONCEPTS_FILE = "best_concepts.txt"
 _REASONING_FILE = "reasoning.txt"
-RESULTS_STATE_KEY = "experiment_results"
+_REQUIRED_FILES = {
+    _PARAMS_FILE,
+    _BEST_CONCEPTS_FILE,
+    _REASONING_FILE,
+    _FINAL_CONCEPT_HISTORY_FILE,
+    _GENERATION_HISTORY_FILE,
+    _IMAGES_DIRECTORY,
+}
 
 
 @dataclasses.dataclass
@@ -71,7 +80,8 @@ def _process_params_file(params_filepath: str):
             key, value = line.split(":", 1)
             params[key.strip()] = value.strip()
 
-    params["load_config"] = json.loads(params["load_config"].replace("'", '"'))
+        parsed = ast.literal_eval(params["load_config"])
+        params["load_config"] = parsed
     return params
 
 
@@ -108,24 +118,55 @@ def load_experiment_results(
     images = generation_history = final_concept_history = params = None
     experiment_directory_path = os.path.join(results_path, experiment_directory)
 
-    for result in os.listdir(experiment_directory_path):
-        result_path = os.path.join(experiment_directory_path, result)
-        if result == _GENERATION_HISTORY_FILE:
-            generation_history = _process_history_file(result_path)
-        elif result == _FINAL_CONCEPT_HISTORY_FILE:
-            final_concept_history = _process_history_file(result_path)
-        elif result == _IMAGES_DIRECTORY:
-            images = _process_images_directory(result_path)
-        elif result == _PARAMS_FILE:
-            params = _process_params_file(result_path)
-        elif result == _BEST_CONCEPTS_FILE:
-            best_concepts = _process_best_concepts_file(result_path)
-        elif result == _REASONING_FILE:
-            reasoning = _process_reasoning_file(result_path)
-        elif result.startswith("."):
-            continue
-        else:
-            raise ValueError(f"Unexpected result found: {result}.")
+    if not os.path.exists(experiment_directory_path):
+        raise FileNotFoundError(
+            f"Directory not found: {experiment_directory_path}"
+        )
+
+    existing_files = set(os.listdir(experiment_directory_path))
+
+    missing_files = _REQUIRED_FILES - existing_files
+    if missing_files:
+        raise FileNotFoundError(
+            f"Missing required files in {experiment_directory_path}: {missing_files}"
+        )
+
+    images = {}
+    generation_history = []
+    final_concept_history = []
+    params = {}
+    best_concepts = []
+    reasoning = []
+
+    if _GENERATION_HISTORY_FILE in existing_files:
+        generation_history = _process_history_file(
+            os.path.join(experiment_directory_path, _GENERATION_HISTORY_FILE)
+        )
+
+    if _FINAL_CONCEPT_HISTORY_FILE in existing_files:
+        final_concept_history = _process_history_file(
+            os.path.join(experiment_directory_path, _FINAL_CONCEPT_HISTORY_FILE)
+        )
+
+    if _IMAGES_DIRECTORY in existing_files:
+        images = _process_images_directory(
+            os.path.join(experiment_directory_path, _IMAGES_DIRECTORY)
+        )
+
+    if _PARAMS_FILE in existing_files:
+        params = _process_params_file(
+            os.path.join(experiment_directory_path, _PARAMS_FILE)
+        )
+
+    if _BEST_CONCEPTS_FILE in existing_files:
+        best_concepts = _process_best_concepts_file(
+            os.path.join(experiment_directory_path, _BEST_CONCEPTS_FILE)
+        )
+
+    if _REASONING_FILE in existing_files:
+        reasoning = _process_reasoning_file(
+            os.path.join(experiment_directory_path, _REASONING_FILE)
+        )
 
     return ExperimentResults(
         images=images,
