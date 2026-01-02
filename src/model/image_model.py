@@ -13,6 +13,7 @@ _TEXT_TO_IMAGE_MODELS = immutabledict.immutabledict(
     {
         "stabilityai/sd-turbo": diffusers.AutoPipelineForText2Image,
         "stabilityai/sdxl-turbo": diffusers.AutoPipelineForText2Image,
+        "stabilityai/stable-diffusion-xl-base-1.0": diffusers.DiffusionPipeline,
     }
 )
 _TORCH_DTYPE = torch.float16
@@ -21,18 +22,26 @@ _PIPELINE_VARIANT = "fp16"
 
 class ImageModel(model.Model):
     def __init__(
-        self, model_id: str, device: str, num_inference_steps: int
+        self,
+        model_id: str,
+        device: str,
+        model_swapping: str,
+        num_inference_steps: int,
+        guidance_scale: int,
     ) -> None:
-        super().__init__(model_id, device)
+        super().__init__(
+            model_id, device, model_swapping, guidance_scale=guidance_scale
+        )
         self._num_inference_steps = num_inference_steps
 
-    def _load(self) -> None:
+    def _load(self, guidance_scale: int) -> diffusers.DiffusionPipeline:
         model = (
             _TEXT_TO_IMAGE_MODELS[self._model_id]
             .from_pretrained(
                 self._model_id,
                 torch_dtype=_TORCH_DTYPE,
                 variant=_PIPELINE_VARIANT,
+                guidance_scale=guidance_scale,
             )
             .to(self._device)
         )
