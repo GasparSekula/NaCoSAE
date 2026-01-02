@@ -40,7 +40,11 @@ if results_path:
                     )
                 )
 
-                st.write("# Analyze model output")
+                dashboard_utils.write_final_concept(
+                    experiment_results=experiment_results
+                )
+
+                st.write("## Analyze results")
 
                 dashboard_utils.write_parameters(
                     experiment_results=experiment_results

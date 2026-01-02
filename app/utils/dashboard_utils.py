@@ -6,8 +6,15 @@ from components import plots
 from utils import results
 
 
+def write_final_concept(experiment_results: results.ExperimentResults) -> None:
+    concept_history = experiment_results.final_concept_history
+    best_concept = max(concept_history, key=lambda x: x[1])[0]
+    
+    st.write(f"### Proposed concept: {best_concept}")
+
+
 def write_parameters(experiment_results: results.ExperimentResults) -> None:
-    st.write("## Parameters")
+    st.write("### Parameters")
     st.write(
         f"**Explained model:** {str(experiment_results.run_params["load_config"]["explained_model_id"])}"
     )
@@ -24,17 +31,27 @@ def write_parameters(experiment_results: results.ExperimentResults) -> None:
     st.write(
         f"**Number of iterations:** {len(experiment_results.generation_history) - 1} + 1 summary run"
     )
+    st.write(
+        f"**Metric:** {str(experiment_results.run_params["metric"])}"
+    )
 
 
 def write_generated_concepts(
     experiment_results: results.ExperimentResults,
 ) -> None:
-    st.write("## Generated concepts")
-    st.dataframe(
+    st.markdown("""
+        <style>
+        thead tr th:first-child {display:none}
+        tbody th {display:none}
+        </style>
+    """, unsafe_allow_html=True)
+    st.write("### Generated concepts")
+    
+    iters = [i for i in range(1, len(experiment_results.generation_history) + 1)]
+    iters[-1] = "Summary"
+    st.table(
         {
-            "Iteration": range(
-                1, len(experiment_results.generation_history) + 1
-            ),
+            "Iteration": iters,
             "Generated Concept": [
                 concept[0] for concept in experiment_results.generation_history
             ],
@@ -42,22 +59,19 @@ def write_generated_concepts(
                 round(float(concept[1]), 2)
                 for concept in experiment_results.generation_history
             ],
-        },
-        hide_index=True,
+        }
+        # hide_index=True,
     )
 
 
 def write_final_concept_set(
     experiment_results: results.ExperimentResults,
 ) -> None:
-    st.write("## Final concepts set")
-    st.write("Includes best concepts among initial ones and generated ones.")
-    st.dataframe(
+    st.write("### Final concepts set")
+    st.write("Includes best concepts among initial and generated ones.")
+    st.table(
         {
-            "Iteration": range(
-                1, len(experiment_results.final_concept_history) + 1
-            ),
-            "Generated Concept": [
+            "Concept": [
                 concept[0]
                 for concept in experiment_results.final_concept_history
             ],
@@ -66,9 +80,8 @@ def write_final_concept_set(
                 for concept in experiment_results.final_concept_history
             ],
         },
-        hide_index=True,
+        # hide_index=True,
     )
-
 
 def generate_plots(generation_history_scores: Sequence[float]) -> None:
     st.write(" ")

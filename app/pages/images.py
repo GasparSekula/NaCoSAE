@@ -43,7 +43,7 @@ else:
         images = iter_data["images"]
 
         if iter != "Summary":
-            st.subheader(f"Iteration {iter} — {concept}")
+            st.subheader(f"Iteration {iter} - {concept}")
 
             ncols = max(min(5, len(images)), 1)
             cols = st.columns(ncols)
@@ -68,7 +68,7 @@ else:
         else:
             summary_concept = concept
 
-    st.subheader(f"Summary iteration — {summary_concept}")
+    st.subheader(f"Summary iteration - {summary_concept}")
     images = formatted_images_list[-1]["images"]
     ncols = max(min(5, len(images)), 1)
     cols = st.columns(ncols)
