@@ -90,14 +90,12 @@ def _save_image_activations(
     activations: torch.Tensor,
 ) -> None:
     """Save activations for a single image."""
-    # Create concept subdirectory
     concept_save_path = os.path.join(save_path, concept_name)
     try:
         os.makedirs(concept_save_path)
     except FileExistsError:
         pass
     
-    # Remove extension from filename for cleaner save names
     image_name = os.path.splitext(image_filename)[0]
     save_filepath = os.path.join(concept_save_path, f"{image_name}.pt")
     
