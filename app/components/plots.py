@@ -1,18 +1,21 @@
+from enum import Enum
 from typing import Sequence, Tuple
 
-import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
+import numpy as np
 
-COLOR = "#1a5e9a"
+
+class ColorPalette(str, Enum):
+    MAIN = "#1a5e9a"
+    SECONDARY_LIGHT = "#e6e6e6"
+    SECONDARY = "#ced4da"
+    SECONDARY_DARK = "#495057"
 
 
 def plot_design_setup() -> None:
     plt.rcParams["font.family"] = "serif"
     plt.rcParams["font.size"] = 14
-
-    navy_color = "#1a5e9a"
-    grid_color = "#e6e6e6"
 
     plt.rcParams["figure.figsize"] = (12, 6)
     plt.rcParams["figure.facecolor"] = "none"
@@ -20,19 +23,19 @@ def plot_design_setup() -> None:
     plt.rcParams["savefig.facecolor"] = "none"
 
     plt.rcParams["text.color"] = "#212529"
-    plt.rcParams["axes.labelcolor"] = navy_color
-    plt.rcParams["axes.titlecolor"] = navy_color
-    plt.rcParams["xtick.color"] = "#495057"
-    plt.rcParams["ytick.color"] = "#495057"
+    plt.rcParams["axes.labelcolor"] = ColorPalette.MAIN.value
+    plt.rcParams["axes.titlecolor"] = ColorPalette.MAIN.value
+    plt.rcParams["xtick.color"] = ColorPalette.SECONDARY_DARK.value
+    plt.rcParams["ytick.color"] = ColorPalette.SECONDARY_DARK.value
 
     plt.rcParams["axes.spines.top"] = False
     plt.rcParams["axes.spines.right"] = False
     plt.rcParams["axes.spines.left"] = True
     plt.rcParams["axes.spines.bottom"] = True
-    plt.rcParams["axes.edgecolor"] = "#ced4da"
+    plt.rcParams["axes.edgecolor"] = ColorPalette.SECONDARY.value
 
     plt.rcParams["axes.grid"] = True
-    plt.rcParams["grid.color"] = grid_color
+    plt.rcParams["grid.color"] = ColorPalette.SECONDARY_LIGHT.value
     plt.rcParams["grid.linestyle"] = "--"
     plt.rcParams["grid.linewidth"] = 0.5
 
@@ -45,7 +48,7 @@ def plot_score_vs_iteration(
 
     fig, ax = plt.subplots()
     ax.set_title("Score vs iteration")
-    ax.plot(x_ticks, scores_array, color=COLOR)
+    ax.plot(x_ticks, scores_array, color=ColorPalette.MAIN.value)
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Score")
     ax.set_ylim(
@@ -67,7 +70,7 @@ def plot_relative_score_over_iteration(
 
     fig, ax = plt.subplots()
     ax.set_title("Relative score vs iteration")
-    ax.plot(x_ticks, relative_scores_array, color=COLOR)
+    ax.plot(x_ticks, relative_scores_array, color=ColorPalette.MAIN.value)
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Relative score")
     ax.set_ylim(
@@ -90,7 +93,7 @@ def plot_best_score_over_iteration(
 
     fig, ax = plt.subplots()
     ax.set_title("Cumulative best score vs iteration")
-    ax.plot(x_ticks, cumulative_best_score, color=COLOR)
+    ax.plot(x_ticks, cumulative_best_score, color=ColorPalette.MAIN.value)
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Relative score")
     ax.set_ylim(

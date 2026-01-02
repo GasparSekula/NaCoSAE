@@ -3,6 +3,24 @@ import streamlit as st
 from utils import results
 
 
+def _show_images_row(images: list, cols: list, ncols: int) -> None:
+    for idx, img_file in enumerate(images):
+        img_bytes = None
+        with open(img_file.name, "rb") as f:
+            img_bytes = f.read()
+
+        if not img_bytes:
+            st.warning(f"Skipping image {idx+1} because it could not be read.")
+            continue
+
+        col = cols[idx % ncols]
+        col.image(
+            img_bytes,
+            caption=f"Image {idx+1}",
+            width="stretch",
+        )
+
+
 def show_images(experiment_results: results.ExperimentResults) -> None:
     st.markdown("# Generated images")
 
@@ -51,23 +69,7 @@ def show_images(experiment_results: results.ExperimentResults) -> None:
                 ncols = max(min(5, len(images)), 1)
                 cols = st.columns(ncols)
 
-                for idx, img_file in enumerate(images):
-                    img_bytes = None
-                    with open(img_file.name, "rb") as f:
-                        img_bytes = f.read()
-
-                    if not img_bytes:
-                        st.warning(
-                            f"Skipping image {idx+1} because it could not be read."
-                        )
-                        continue
-
-                    col = cols[idx % ncols]
-                    col.image(
-                        img_bytes,
-                        caption=f"Image {idx+1}",
-                        width="stretch",
-                    )
+                _show_images_row(images=images, cols=cols, ncols=ncols)
             else:
                 summary_concept = concept
 
@@ -76,20 +78,4 @@ def show_images(experiment_results: results.ExperimentResults) -> None:
         ncols = max(min(5, len(images)), 1)
         cols = st.columns(ncols)
 
-        for idx, img_file in enumerate(images):
-            img_bytes = None
-            with open(img_file.name, "rb") as f:
-                img_bytes = f.read()
-
-            if not img_bytes:
-                st.warning(
-                    f"Skipping image {idx+1} because it could not be read."
-                )
-                continue
-
-            col = cols[idx % ncols]
-            col.image(
-                img_bytes,
-                caption=f"Image {idx+1}",
-                width="stretch",
-            )
+        _show_images_row(images=images, cols=cols, ncols=ncols)
