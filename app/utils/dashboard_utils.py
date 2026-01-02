@@ -9,7 +9,7 @@ from utils import results
 def write_final_concept(experiment_results: results.ExperimentResults) -> None:
     concept_history = experiment_results.final_concept_history
     best_concept = max(concept_history, key=lambda x: x[1])[0]
-    
+
     st.write(f"### Proposed concept: {best_concept}")
 
 
@@ -31,23 +31,26 @@ def write_parameters(experiment_results: results.ExperimentResults) -> None:
     st.write(
         f"**Number of iterations:** {len(experiment_results.generation_history) - 1} + 1 summary run"
     )
-    st.write(
-        f"**Metric:** {str(experiment_results.run_params["metric"])}"
-    )
+    st.write(f"**Metric:** {str(experiment_results.run_params["metric"])}")
 
 
 def write_generated_concepts(
     experiment_results: results.ExperimentResults,
 ) -> None:
-    st.markdown("""
+    st.markdown(
+        """
         <style>
         thead tr th:first-child {display:none}
         tbody th {display:none}
         </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
     st.write("### Generated concepts")
-    
-    iters = [i for i in range(1, len(experiment_results.generation_history) + 1)]
+
+    iters = [
+        i for i in range(1, len(experiment_results.generation_history) + 1)
+    ]
     iters[-1] = "Summary"
     st.table(
         {
@@ -82,6 +85,7 @@ def write_final_concept_set(
         },
         # hide_index=True,
     )
+
 
 def generate_plots(generation_history_scores: Sequence[float]) -> None:
     st.write(" ")

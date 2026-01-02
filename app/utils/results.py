@@ -122,9 +122,9 @@ def load_experiment_results(
         raise FileNotFoundError(
             f"Directory not found: {experiment_directory_path}"
         )
-        
+
     existing_files = set(os.listdir(experiment_directory_path))
-    
+
     missing_files = _REQUIRED_FILES - existing_files
     if missing_files:
         raise FileNotFoundError(
@@ -138,24 +138,35 @@ def load_experiment_results(
     best_concepts = []
     reasoning = []
 
-    
     if _GENERATION_HISTORY_FILE in existing_files:
-        generation_history = _process_history_file(os.path.join(experiment_directory_path, _GENERATION_HISTORY_FILE))
-    
+        generation_history = _process_history_file(
+            os.path.join(experiment_directory_path, _GENERATION_HISTORY_FILE)
+        )
+
     if _FINAL_CONCEPT_HISTORY_FILE in existing_files:
-        final_concept_history = _process_history_file(os.path.join(experiment_directory_path, _FINAL_CONCEPT_HISTORY_FILE))
-        
+        final_concept_history = _process_history_file(
+            os.path.join(experiment_directory_path, _FINAL_CONCEPT_HISTORY_FILE)
+        )
+
     if _IMAGES_DIRECTORY in existing_files:
-        images = _process_images_directory(os.path.join(experiment_directory_path, _IMAGES_DIRECTORY))
-        
+        images = _process_images_directory(
+            os.path.join(experiment_directory_path, _IMAGES_DIRECTORY)
+        )
+
     if _PARAMS_FILE in existing_files:
-        params = _process_params_file(os.path.join(experiment_directory_path, _PARAMS_FILE))
-        
+        params = _process_params_file(
+            os.path.join(experiment_directory_path, _PARAMS_FILE)
+        )
+
     if _BEST_CONCEPTS_FILE in existing_files:
-        best_concepts = _process_best_concepts_file(os.path.join(experiment_directory_path, _BEST_CONCEPTS_FILE))
-        
+        best_concepts = _process_best_concepts_file(
+            os.path.join(experiment_directory_path, _BEST_CONCEPTS_FILE)
+        )
+
     if _REASONING_FILE in existing_files:
-        reasoning = _process_reasoning_file(os.path.join(experiment_directory_path, _REASONING_FILE))
+        reasoning = _process_reasoning_file(
+            os.path.join(experiment_directory_path, _REASONING_FILE)
+        )
 
     return ExperimentResults(
         images=images,
@@ -166,4 +177,3 @@ def load_experiment_results(
         reasoning=reasoning,
         run_params=params,
     )
-    
