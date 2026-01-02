@@ -39,11 +39,13 @@ def _convert_input(input_batch: torch.Tensor) -> torch.Tensor:
 
 
 class ExplainedModel(model.Model):
-    def __init__(self, model_id: str, layer: str, device: str) -> None:
-        super().__init__(model_id, device)
+    def __init__(
+        self, model_id: str, layer: str, device: str, model_swapping: bool
+    ) -> None:
+        super().__init__(model_id, device, model_swapping)
         self._register_forward_hook(layer)
 
-    def _load(self):
+    def _load(self, **kwargs):
         weights = _WEIGHTS[self._model_id]
         model = torchvision.models.get_model(
             self._model_id,
@@ -74,11 +76,24 @@ class ExplainedModel(model.Model):
     @model.gpu_inference_wrapper
     def get_activations(self, input_batch: torch.Tensor) -> torch.Tensor:
         """Passes the input batch through the model and collects activations."""
+        if input_batch.ndim != 4:
+            raise ValueError(
+                f"input_batch must be of shape (N, C, H, W)."
+                "Provided input_batch has {input_batch.ndim} dimensions."
+            )
+
         with torch.no_grad():
             torch.cuda.empty_cache()
             _ = self._model(_convert_input(input_batch))
 
-        if self._activations.ndim == 4:
+        if self._activations.ndim == 4:  # CNN
             self._activations = self._activations.mean(dim=[2, 3])
+        elif self._activations.ndim == 3:  # ViT
+            self._activations = self._activations[:, 0]
+        elif self._activations.ndim != 2:
+            raise ValueError(
+                f"Explained Model generated activations of unexpected ndim: "
+                "{self._activations.ndim}. Expected ndim to be 2, 3 or 4."
+            )
 
         return self._activations.data

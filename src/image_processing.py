@@ -2,7 +2,6 @@
 
 from collections.abc import Sequence
 
-import immutabledict
 from PIL import Image
 import torch
 import torchvision
@@ -15,40 +14,35 @@ class ConditionalNormalize(object):
     def __init__(self, mean, std):
         self.normalize = torchvision.transforms.Normalize(mean=mean, std=std)
 
-    def __call__(self, tensor):
+    def __call__(self, tensor: torch.Tensor) -> torch.Tensor:
         """
-        Skip normalization if called on greyscale image and enforce 3 channels.
+        Enforce 3 channels (in case of greyscale images) and normalize.
         """
-        if tensor.shape[0] == 3:
-            return self.normalize(tensor)
-        else:
-            return torch.concat((tensor, tensor, tensor), 0)
+        if tensor.shape[0] == 1:
+            tensor = torch.concat((tensor, tensor, tensor), 0)
+
+        return self.normalize(tensor)
 
 
-_TRANSFORMS = immutabledict.immutabledict(
-    {
-        "resnet18": torchvision.transforms.Compose(
-            [
-                torchvision.transforms.Resize(224),
-                torchvision.transforms.CenterCrop((224, 224)),
-                torchvision.transforms.ToTensor(),
-                ConditionalNormalize(_MEAN, _STD),
-            ]
-        )
-    }
+_TRANSFORM = torchvision.transforms.Compose(
+    [
+        torchvision.transforms.Resize(224),
+        torchvision.transforms.CenterCrop((224, 224)),
+        torchvision.transforms.ToTensor(),
+        ConditionalNormalize(_MEAN, _STD),
+    ]
 )
 
 
-def transform_images(
-    model_id: str,
-    images: Sequence[Image.Image],
-) -> torch.Tensor:
+def transform_images(images: Sequence[Image.Image]) -> torch.Tensor:
     """Transforms images and return input batch for explained model."""
+    if images is None or len(images) == 0:
+        raise ValueError(f"Expected non-empty sequence of images.")
+
     image_tensors = []
-    transform = _TRANSFORMS[model_id]
 
     for image in images:
-        image_tensors.append(transform(image).unsqueeze(0))
+        image_tensors.append(_TRANSFORM(image).unsqueeze(0))
 
     batch = torch.concat(tuple(image_tensors), 0)
     return batch

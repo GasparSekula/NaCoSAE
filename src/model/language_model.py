@@ -16,18 +16,19 @@ class LanguageModel(model.Model):
         self,
         model_id: str,
         device: str,
+        model_swapping: bool,
         max_new_tokens: int,
         prompt_path: str,
         summary_prompt_path: str,
     ) -> None:
-        super().__init__(model_id, device)
+        super().__init__(model_id, device, model_swapping)
         self._max_new_tokens = max_new_tokens
         self._prompt_path = prompt_path
         self._summary_prompt_path = summary_prompt_path
         self.generation_history = []
         self.concept_history: Mapping[str, float] = {}
 
-    def _load(self) -> None:
+    def _load(self, **kwargs) -> torch.nn.Module:
         pipeline = transformers.pipeline(
             task="text-generation",
             model=self._model_id,
@@ -53,7 +54,7 @@ class LanguageModel(model.Model):
     @model.gpu_inference_wrapper
     def generate_concept(self, top_k: int | None = None):
         """Generates new concept based on concept history."""
-        self._pipeline.device = torch.device("cuda")  # TODO(piechotam) inv
+        self._pipeline.device = torch.device("cuda")
 
         if top_k is not None:
             generation_prompt = prompt_utils.generate_prompt(

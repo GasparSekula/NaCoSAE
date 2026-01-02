@@ -11,24 +11,29 @@ def gpu_inference_wrapper(inference_func: Callable[[Any], Any]):
 
     @wraps(inference_func)
     def wrapper(self: Model, *args, **kwargs):
-        self._send_to_device("cuda")
-        try:
+        if self._model_swapping:
+            self._send_to_device("cuda")
             result = inference_func(self, *args, **kwargs)
-        finally:
             self._send_to_device("cpu")
+        else:
+            result = inference_func(self, *args, **kwargs)
+
         return result
 
     return wrapper
 
 
 class Model(abc.ABC):
-    def __init__(self, model_id: str, device: str) -> None:
+    def __init__(
+        self, model_id: str, device: str, model_swapping: bool, **load_kwargs
+    ) -> None:
         self._model_id = model_id
         self._device = device
-        self._model = self._load()
+        self._model_swapping = model_swapping
+        self._model = self._load(**load_kwargs)
 
     @abc.abstractmethod
-    def _load(self):
+    def _load(self, **kwargs):
         """Loads the model resources."""
         pass
 
