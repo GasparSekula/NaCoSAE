@@ -200,11 +200,9 @@ def visualize_top_activating_images(
     if len(control_files) < N:
         control_files += [None] * (N - len(control_files))
 
-    def _resize_to_height(pil_image: Image.Image, height: int) -> Image.Image:
-        """Resize image to target height while maintaining aspect ratio."""
-        ratio = height / pil_image.height
-        new_width = int(pil_image.width * ratio)
-        return pil_image.resize((new_width, height), Image.LANCZOS)
+    def _resize_image(pil_image: Image.Image, height: int) -> Image.Image:
+        """Resize image to 224x224."""
+        return pil_image.resize((height, height), Image.LANCZOS)
 
     fig, axes = plt.subplots(2, N, figsize=(min(6 + 2*N, 3*N), 6))
     if N == 1:
@@ -220,7 +218,7 @@ def visualize_top_activating_images(
         ax.axis("off")
         try:
             with Image.open(our_files[idx]) as im:
-                im_resized = _resize_to_height(im.copy(), image_height)
+                im_resized = _resize_image(im.copy(), image_height)
                 ax.imshow(im_resized)
         except Exception as e:
             logging.error("Failed to load our image %s: %s", our_files[idx], e)
@@ -237,7 +235,7 @@ def visualize_top_activating_images(
             continue
         try:
             with Image.open(p) as im:
-                im_resized = _resize_to_height(im.copy(), image_height)
+                im_resized = _resize_image(im.copy(), image_height)
                 ax.imshow(im_resized)
         except Exception as e:
             logging.error("Failed to load control image %s: %s", p, e)
@@ -246,6 +244,8 @@ def visualize_top_activating_images(
 
     plt.tight_layout()
     plt.show()
+    
+    # plt.savefig('figure.svg', format='svg', bbox_inches='tight')
 
 
 
