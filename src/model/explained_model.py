@@ -48,9 +48,13 @@ class ExplainedModel(model.Model):
 
     def _load(self, **kwargs):
         weights = _WEIGHTS[self._model_id]
-        
-        arch_name = "resnet50" if self._model_id == "resnet50_imagenet" else self._model_id
-        
+
+        arch_name = (
+            "resnet50"
+            if self._model_id == "resnet50_imagenet"
+            else self._model_id
+        )
+
         model = torchvision.models.get_model(
             arch_name,
             weights=weights,
