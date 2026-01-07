@@ -7,7 +7,8 @@ from model import model
 _WEIGHTS = immutabledict.immutabledict(
     {
         "resnet18": torchvision.models.ResNet18_Weights.IMAGENET1K_V1,
-        "resnet50": None,  # ResNet50 will use Places365 weights which are not available in torchvision
+        "resnet50_imagenet": torchvision.models.ResNet50_Weights.IMAGENET1K_V1,
+        "resnet50": None,  # ResNet50 will also use Places365 weights which are not available in torchvision
         "vit_b_16": torchvision.models.ViT_B_16_Weights.IMAGENET1K_V1,
     }
 )
@@ -47,8 +48,15 @@ class ExplainedModel(model.Model):
 
     def _load(self, **kwargs):
         weights = _WEIGHTS[self._model_id]
+
+        arch_name = (
+            "resnet50"
+            if self._model_id == "resnet50_imagenet"
+            else self._model_id
+        )
+
         model = torchvision.models.get_model(
-            self._model_id,
+            arch_name,
             weights=weights,
             **_OPTIONAL_KWARGS.get(self._model_id, dict()),
         )

@@ -108,7 +108,7 @@ def main(argv):
         _get_concept_directories_and_names(_CONTROL_IMAGES_DIRECTORY.value)
     ):
         input_batch = _transform_concept_images(
-            concept_directory, _EXPLAINED_MODEL_ID.value
+            concept_directory,
         )
         activations = _calculate_concept_activations(expl_model, input_batch)
         _save_concept_activations(model_save_path, concept_name, activations)
