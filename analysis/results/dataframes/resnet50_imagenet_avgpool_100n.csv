@@ -1,0 +1,101 @@
+model,layer,neuron,concept,metric,concept_type
+resnet50_imagenet,avgpool,504,snow leopard,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1345,chain mail,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,679,abacus,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,236,simian,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1343,minivan,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1411,sewing machine,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,560,butcher shop,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1754,basset,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,886,garden spider,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,240,mosque,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1688,hornbill,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,850,band aid,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1559,dandie dinmont,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1270,butternut squash,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1961,white stork,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1606,bighorn,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1558,single wheel,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,339,stupa,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1005,stupa,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,111,ox,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1623,hand blower,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1256,barrel,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1986,christmas stocking,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,894,espresso maker,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,2000,teddy,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,273,polaroid camera,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1059,toucan,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1115,pirate ship,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,784,backpack,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1911,lemon,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,326,bow tie,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1524,soap dispenser,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,602,capuchin,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1000,barn,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,422,cello,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,760,pizza,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,594,bib,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1839,rear mirror,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,229,pomeranian,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1020,bullfrog,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,502,small holes,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,299,italian greyhound,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,581,sighthound-like,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1607,plastic bag,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,519,pool table,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,802,zebroid,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,621,chain,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,349,china cabinet,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1447,barber chair,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1172,hard disc,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,631,military equipment,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,807,chainlink,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1808,basset,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,510,padlock,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,864,feather boa,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,384,pineapple,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1707,crossword puzzle,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1166,starfish,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,264,apiary,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,263,puzzle page,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,471,china cabinet,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1924,bicycle-built-for-two,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1823,irish terrier,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1073,macaw,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1044,ballgame,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1989,bulletproof vest,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,152,peacock,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,683,otterhound,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,124,custom car,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1780,potter's wheel,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1725,toilet fixture,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,137,lab coat,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1390,hermit crab,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,329,goldfish,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1803,volcano,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1315,crawlers,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,616,potter's wheel,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1136,box turtle,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1120,rottweiler,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1586,harvester,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,852,chainmail,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1694,holster,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1119,picket fence,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1697,dogsled,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1645,macaw,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,392,bikini,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,407,black bear,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,260,window screen,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,166,sea lion,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1490,komondor,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,583,indian cobra,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,2021,mailbox,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,2044,staffordshire bullterrier,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1903,slot,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,257,corn plant,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1407,wallet,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1792,crocodilianoid,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,1601,ringneck snake,AVG_ACTIVATION,predefined
+resnet50_imagenet,avgpool,1079,drumstick handle,AVG_ACTIVATION,generated
+resnet50_imagenet,avgpool,267,bald eagle,AVG_ACTIVATION,predefined
