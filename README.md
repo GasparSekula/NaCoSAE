@@ -16,8 +16,6 @@ TBA
 
 ---
 
----
-
 ## 💻 System Requirements
 
 ### ⚡ Hardware
