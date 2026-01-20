@@ -2,7 +2,7 @@
 Thesis Project - DS Bachelor Engineering Programme at WUT.
 
 ## Developers
-[Michał](https://github.com/piechotam) & [Gaspar](https://github.com/GasparSekula)
+[Michał](https://github.com/piechotam) & [Gaspar](https://gasparsekula.com)
 
 ---
 
