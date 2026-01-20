@@ -1,7 +1,7 @@
 # name TBA
 Thesis Project - DS Bachelor Engineering Programme at WUT.
 
-## Contriubutors
+## Developers
 [Michał](https://github.com/piechotam) & [Gaspar](https://github.com/GasparSekula)
 
 ---
