@@ -146,10 +146,6 @@ Open `http://localhost:8501` in your browser.
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
 ## 🔗 Links
 
 * **Repository:** [https://github.com/GasparSekula/NaCoSAE](https://github.com/GasparSekula/NaCoSAE)
