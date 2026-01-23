@@ -1,4 +1,9 @@
-"""This module integrates the models and defines the explanation pipeline."""
+"""Neuron concept attribution explanation pipeline.
+
+Integrates language models, image generation models, and image classification
+models to iteratively generate and refine concept descriptions that explain
+individual neuron behavior.
+"""
 
 import datetime
 import os
@@ -20,6 +25,12 @@ import scoring
 
 
 class Pipeline:
+    """Explanation pipeline for neuron concept attribution.
+
+    Orchestrates an iterative process of generating concepts, creating images,
+    and scoring concepts based on their ability to activate target neurons.
+    """
+
     def __init__(
         self,
         load_config: config.LoadConfig,
@@ -31,6 +42,18 @@ class Pipeline:
         neuron_id: int,
         metric: scoring.Metric,
     ) -> None:
+        """Initialize the explanation pipeline.
+
+        Args:
+            load_config: Configuration for model loading.
+            image_generation_config: Configuration for image generation.
+            concept_history_config: Configuration for initial concept selection.
+            history_managing_config: Configuration for saving results.
+            control_activations_path: Path to control concept activations.
+            layer: Layer name of the model to explain.
+            neuron_id: Index of the neuron to explain.
+            metric: Metric for scoring concepts.
+        """
         self._load_config = load_config
         self._image_generation_config = image_generation_config
         self._concept_history_config = concept_history_config
@@ -67,10 +90,12 @@ class Pipeline:
         )
 
     def _load_models(self) -> None:
-        """
-        Loads the models. If `LoadConfig.model_swapping` is `True` then all the
-        will be loaded to CPU and send to GPU only for inference. Otherwise, all
-        models are loaded GPU.
+        """Load all required models with appropriate device placement.
+
+        Loads the language model, text-to-image model, and image classification
+        model. If model swapping is enabled, models are loaded to CPU and moved
+        to GPU only during inference. Otherwise, all models are loaded directly
+        to GPU.
         """
         initial_device = "cpu" if self._load_config.model_swapping else "cuda"
 
@@ -97,6 +122,11 @@ class Pipeline:
         )
 
     def _setup(self) -> None:
+        """Initialize pipeline components for the explanation process.
+
+        Loads all models, creates the activation sampler, and initializes
+        the concept history with best and random control concepts.
+        """
         self._load_models()
         self._activation_sampler = activation_sampling.ActivationSampler(
             self._model_layer_activations_path
@@ -106,7 +136,18 @@ class Pipeline:
     def _get_neuron_activations(
         self, synthetic_input_batch: torch.Tensor, concept: str
     ) -> Sequence[torch.Tensor]:
-        """Gets synthetic and control activations of selected neuron."""
+        """Get target neuron activations from synthetic and control images.
+
+        Computes activations from images generated for a concept and samples
+        activations from similar control concepts to compare against.
+
+        Args:
+            synthetic_input_batch: Batch of synthetic images generated for the concept.
+            concept: Concept name for finding similar control concepts.
+
+        Returns:
+            Tuple of (synthetic_activations, control_activations) for the target neuron.
+        """
         logging.info("Collecting neuron activations of synthetic images.")
         synthetic_activations = self._expl_model.get_activations(
             synthetic_input_batch
@@ -125,6 +166,18 @@ class Pipeline:
     def _score_concept(
         self, concept: str, concept_synthetic_images: Sequence[Image.Image]
     ) -> float:
+        """Score a concept based on neuron activation differences.
+
+        Generates images for a concept, computes neuron activations, and
+        compares them to control activations using the specified metric.
+
+        Args:
+            concept: Concept name to score.
+            concept_synthetic_images: Images generated for the concept.
+
+        Returns:
+            Score value computed by the metric.
+        """
         logging.info("Scoring proposed concept.")
         synthetic_input_batch = image_processing.transform_images(
             concept_synthetic_images
@@ -142,6 +195,14 @@ class Pipeline:
         )
 
     def _generate_images(self, concept: str) -> Sequence[Image.Image]:
+        """Generate images for a given concept.
+
+        Args:
+            concept: Concept name to generate images for.
+
+        Returns:
+            Sequence of generated PIL Image objects.
+        """
         return self._t2i_model.generate_images(
             self._image_generation_config.n_images,
             self._image_generation_config.prompt_text,
@@ -151,6 +212,20 @@ class Pipeline:
     def _run_iteration(
         self, iter_number: int, top_k: int | None = None
     ) -> Tuple[str, float]:
+        """Run a single iteration of the explanation pipeline.
+
+        Generates a new concept, creates images for it, scores the concept,
+        and updates the concept history. Optionally saves images and stores
+        reasoning and best concepts.
+
+        Args:
+            iter_number: Current iteration number.
+            top_k: Optional number of top concepts to use for concept generation.
+                   If None, uses all concepts in history.
+
+        Returns:
+            Tuple of (new_concept, score) for the generated concept.
+        """
         """Runs single iteration of the explanation pipeline."""
         new_concept, reasoning = self._lang_model.generate_concept(top_k)
         concept_synthetic_images = self._generate_images(new_concept)
@@ -183,6 +258,14 @@ class Pipeline:
         return new_concept, score
 
     def _initialize_concept_history(self) -> Mapping[str, float]:
+        """Initialize concept history with control concepts.
+
+        Scores both the best-activating control concepts and random control
+        concepts, returning a dictionary mapping concept names to their scores.
+
+        Returns:
+            Dictionary mapping concept names to their initial scores.
+        """
         logging.info("Initializing concept history.")
         initial_concepts = concept_history.get_initial_concepts(
             self._concept_history_config.n_best_concepts,
@@ -200,6 +283,11 @@ class Pipeline:
         )
 
     def _save_histories(self) -> None:
+        """Save generation history and final concept history to disk.
+
+        Saves the generation history from the language model and the final
+        concept history (all concepts with their final scores) to text files.
+        """
         history_managing.save_llm_history(
             self._lang_model.generation_history,
             self._save_directory,
@@ -214,6 +302,15 @@ class Pipeline:
         )
 
     def run_pipeline(self, n_iters: int) -> None:
+        """Run the complete neuron explanation pipeline.
+
+        Initializes components, runs the specified number of concept generation
+        and scoring iterations, then a final summary iteration. Saves all
+        artifacts including images, reasoning, and best concepts.
+
+        Args:
+            n_iters: Number of main iterations to run before the summary iteration.
+        """
         """Runs the explanation pipeline."""
         self._setup()
 

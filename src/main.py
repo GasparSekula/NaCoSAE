@@ -1,3 +1,10 @@
+"""Main entry point for the NaCoSAE pipeline.
+
+This module orchestrates the neuron concept attribution pipeline, which explains
+the behavior of individual neurons by generating and refining concept descriptions
+using language and image generation models.
+"""
+
 import os
 import random
 
@@ -79,6 +86,15 @@ _SAVE_DIR = flags.DEFINE_string(
 
 
 def main(argv):
+    """Run the neuron concept attribution pipeline.
+
+    Initializes all configuration objects, creates the explanation pipeline,
+    and runs it for the specified number of iterations to generate and refine
+    concept descriptions for a target neuron.
+
+    Args:
+        argv: Command-line arguments (provided by absl).
+    """
     random.seed(_SEED)
 
     load_config = config.LoadConfig(
