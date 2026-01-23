@@ -1,6 +1,8 @@
-"""
-This script downloads parquet files from imagenet, processes them and saves
-images. Images are grouped into subdirectories based on their class.
+"""Download and organize ImageNet images from Hugging Face.
+
+This script downloads ImageNet validation parquet files from Hugging Face,
+processes them, and saves images organized into subdirectories by class label.
+The label names are processed to create valid directory names.
 """
 
 from collections.abc import Hashable
@@ -41,7 +43,11 @@ _LABEL_NAMES_SPECIAL_CASES = immutabledict.immutabledict(
 
 
 def _download_parquet_files() -> None:
-    """Downloads parquet files from huggingface."""
+    """Download parquet files from Hugging Face using the HF_TOKEN environment variable.
+
+    Creates the download directory if it doesn't exist and downloads validation
+    parquet files for ImageNet-1k dataset.
+    """
     os.makedirs(_DOWNLOAD_DIR.value, exist_ok=True)
     hf_token = os.environ["HF_TOKEN"]
 
@@ -59,14 +65,28 @@ def _download_parquet_files() -> None:
 
 
 def _process_label_name(label_name: str) -> str:
-    """Processes label name by taking the first synonym, replacing spaces and converting to lower case."""
+    """Process ImageNet label name into a valid directory name.
+
+    Takes the first synonym from the label, replaces spaces with underscores,
+    and converts to lowercase. Handles special cases with multiple similar labels.
+
+    Args:
+        label_name: The original ImageNet label name.
+
+    Returns:
+        Processed label name suitable for use as a directory name.
+    """
     if label_name in _LABEL_NAMES_SPECIAL_CASES:
         return _LABEL_NAMES_SPECIAL_CASES[label_name]
     return label_name.split(",")[0].replace(" ", "_").lower()
 
 
 def _create_class_subdirectories() -> None:
-    """Creates subdirectories for each class."""
+    """Create subdirectories for each ImageNet class.
+
+    Creates the output directory and a subdirectory for each of the 1000
+    ImageNet classes with processed label names.
+    """
     logging.info("Creating class subdirectories.")
     os.mkdir(_OUTPUT_DIR.value)
     for label_name in classes.IMAGENET2012_CLASSES.values():
@@ -80,7 +100,15 @@ def _create_class_subdirectories() -> None:
 def _save_images(
     labels_list: Sequence[str], rows: Iterable[tuple[Hashable, pd.Series]]
 ) -> None:
-    """Saves images from rows of image DataFrame to corresponding class directory."""
+    """Save images from DataFrame rows to their corresponding class directories.
+
+    Iterates through image rows, extracts image bytes and filenames, and
+    writes them to the appropriate class subdirectory.
+
+    Args:
+        labels_list: Sequence of class label names indexed by class ID.
+        rows: Iterable of tuples containing image data and label index.
+    """
     for _, (image, label) in rows:
         label_name = labels_list[label]
         dir_name = _process_label_name(label_name)
@@ -91,7 +119,12 @@ def _save_images(
 
 
 def _process_parquet_files() -> None:
-    """Reads parquet files and saves images from image DataFrames."""
+    """Read parquet files and save images to class directories.
+
+    Iterates through all parquet files in the download directory, reads each
+    one as a DataFrame, and saves the images to their corresponding class
+    subdirectories.
+    """
     dir_path = f"{_DOWNLOAD_DIR.value}/data"
     labels_list = list(classes.IMAGENET2012_CLASSES.values())
 
@@ -104,7 +137,11 @@ def _process_parquet_files() -> None:
 
 
 def _cleanup() -> None:
-    """Deleting parquet files and temp directory."""
+    """Delete downloaded parquet files and temporary download directory.
+
+    Removes all validation parquet files and deletes the entire temporary
+    download directory to free up disk space.
+    """
     logging.info("Deleting parquet files.")
     for validation_parquet_file in _VALIDATION_PARQUET_FILES:
         os.system(f"rm {_DOWNLOAD_DIR.value}/{validation_parquet_file}")
