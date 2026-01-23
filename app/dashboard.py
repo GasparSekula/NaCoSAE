@@ -1,3 +1,9 @@
+"""Experiment results dashboard application.
+
+This module implements a Streamlit dashboard for viewing and analyzing
+experiment results, including generated concepts, images, and LLM reasoning.
+"""
+
 import os
 
 import streamlit as st

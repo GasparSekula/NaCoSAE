@@ -1,3 +1,10 @@
+"""Reasoning page for displaying LLM's reasoning process.
+
+This module renders the reasoning page of the Streamlit dashboard,
+displaying the large language model's step-by-step reasoning and explanations
+from the experiment results.
+"""
+
 import streamlit as st
 import pandas as pd
 

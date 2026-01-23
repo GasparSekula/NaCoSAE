@@ -1,9 +1,25 @@
+"""Utility functions for displaying generated images in the dashboard.
+
+This module provides helper functions to render and display images from
+experiment results in a formatted grid layout.
+"""
+
 import streamlit as st
 
 from utils import results
 
 
 def _show_images_row(images: list, cols: list, ncols: int) -> None:
+    """Display a row of images in specified columns.
+
+    Loads and displays images from file paths in the given columns,
+    handling errors gracefully if an image cannot be read.
+
+    Args:
+        images: List of image file objects with a name attribute.
+        cols: List of Streamlit column objects to display images in.
+        ncols: Number of columns available for image layout.
+    """
     for idx, img_file in enumerate(images):
         img_bytes = None
         with open(img_file.name, "rb") as f:
@@ -22,6 +38,14 @@ def _show_images_row(images: list, cols: list, ncols: int) -> None:
 
 
 def show_images(experiment_results: results.ExperimentResults) -> None:
+    """Display all generated images from experiment results.
+
+    Organizes and displays images by iteration and concept, with the summary
+    iteration highlighted at the end. Images are arranged in a responsive grid.
+
+    Args:
+        experiment_results: The experiment results containing generated images.
+    """
     st.markdown("# Generated images")
 
     images_list = experiment_results.images
