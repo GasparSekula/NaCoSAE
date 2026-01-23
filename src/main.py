@@ -52,12 +52,12 @@ _METRIC = flags.DEFINE_enum_class(
 )
 _PROMPT_PATH = flags.DEFINE_string(
     "prompt",
-    "src/prompts/templates/prompt_mils.txt",
+    "src/prompts/templates/prompt_main.txt",
     "Path to prompt for the LLM.",
 )
 _SUMMARY_PROMPT_PATH = flags.DEFINE_string(
     "summary_prompt",
-    "src/prompts/templates/summary/prompt_summary_cot.txt",
+    "src/prompts/templates/prompt_summary.txt",
     "Path to summary prompt for the LLM.",
 )
 _SAVE_HISTORIES = flags.DEFINE_bool(
