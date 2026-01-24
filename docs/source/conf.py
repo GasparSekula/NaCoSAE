@@ -26,7 +26,11 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    'sphinx.ext.githubpages',
 ]
+
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
 
 templates_path = ["_templates"]
 exclude_patterns = []
@@ -34,6 +38,8 @@ exclude_patterns = []
 autodoc_mock_imports = [
     "transformers",
     "torch",
+    "torchvision",
+    "immutabledict",
     "pytest",
     "pytest_mock",
     "dotenv",
