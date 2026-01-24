@@ -9,11 +9,11 @@
 import os
 import sys
 
-root_path = os.path.abspath('../../')
+root_path = os.path.abspath("../../")
 sys.path.insert(0, root_path)
-sys.path.insert(0, os.path.join(root_path, 'src'))
-sys.path.insert(0, os.path.join(root_path, 'app'))
-sys.path.insert(0, os.path.join(root_path, 'scripts'))
+sys.path.insert(0, os.path.join(root_path, "src"))
+sys.path.insert(0, os.path.join(root_path, "app"))
+sys.path.insert(0, os.path.join(root_path, "scripts"))
 
 project = "LINE"
 copyright = "2026, Gaspar Sekula, Michał Piechota"
@@ -26,7 +26,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    'sphinx.ext.githubpages',
+    "sphinx.ext.githubpages",
 ]
 
 napoleon_google_docstring = True
@@ -44,6 +44,7 @@ autodoc_mock_imports = [
     "pytest_mock",
     "dotenv",
     "PIL",
+    "absl",
 ]
 
 # -- Options for HTML output -------------------------------------------------
