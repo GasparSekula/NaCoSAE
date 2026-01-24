@@ -145,7 +145,7 @@ Open `http://localhost:8501` in your browser.
 
 **Example dashboard results**
 
-Main page:
+Main page (run parameters, generated concepts):
 
 <img title="a title" alt="Alt text" src="images/db1.png" width=70%>
 
@@ -157,7 +157,7 @@ Images page:
 
 <img title="a title" alt="Alt text" src="images/im1.png" width=70%>
 
-Reasoning page:
+Reasoning page (Chain-of-Thought analysis):
 
 <img title="a title" alt="Alt text" src="images/re1.png" width=70%>
 
