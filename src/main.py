@@ -80,7 +80,7 @@ _SAVE_IMAGES = flags.DEFINE_bool(
 )
 _SAVE_DIR = flags.DEFINE_string(
     "save_dir",
-    os.environ["SAVE_DIR"],
+    os.getenv("SAVE_DIR", "default_path_for_docs"),
     "Path where pipeline artifacts will be stored.",
 )
 
