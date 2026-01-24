@@ -39,7 +39,6 @@ jobs:
           if [ -f pyproject.toml ]; then uv pip install -e .; fi
 
       - name: Auto-generate RST files (apidoc)
-        # To magiczny krok, który sam skanuje Twoje foldery i tworzy pliki dokumentacji
         run: |
           sphinx-apidoc -o docs/source/app ./app -f
           sphinx-apidoc -o docs/source/scripts ./scripts -f
