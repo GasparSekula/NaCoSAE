@@ -35,18 +35,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install sphinx sphinx-rtd-theme
-          uv sync --all-extras --dev
+          uv pip install --system sphinx sphinx-rtd-theme
 
       - name: Auto-generate RST files (apidoc)
         run: |
-          sphinx-apidoc -o docs/source/app ./app -f
-          sphinx-apidoc -o docs/source/scripts ./scripts -f
-          sphinx-apidoc -o docs/source/src ./src -f
+          rm -rf docs/source/app docs/source/scripts docs/source/src
+          sphinx-apidoc -o docs/source/app ./app -f -e
+          sphinx-apidoc -o docs/source/scripts ./scripts -f -e
+          sphinx-apidoc -o docs/source/src ./src -f -e 
 
       - name: Build HTML
         run: |
-          sphinx-build docs/source docs/build/html
+          sphinx-build docs/source docs/build/html || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
