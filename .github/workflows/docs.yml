@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install sphinx sphinx-rtd-theme
-          if [ -f pyproject.toml ]; then uv pip install -e .; fi
+          uv sync --all-extras --dev
 
       - name: Auto-generate RST files (apidoc)
         run: |
