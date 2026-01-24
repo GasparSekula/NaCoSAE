@@ -1,6 +1,8 @@
 # LLM-based Iterative Neuron Explanation
 
+
 <img title="a title" alt="Alt text" src="images/schema.svg" width=100%>
+
 
 ### Developers
 [Michał](https://github.com/piechotam) & [Gaspar](https://gasparsekula.com)
@@ -147,6 +149,7 @@ Open `http://localhost:8501` in your browser.
 
 Main page (run parameters, generated concepts):
 
+
 <img title="a title" alt="Alt text" src="images/db1.png" width=100%>
 
 Main page (score over iterations):
@@ -160,6 +163,7 @@ Images page:
 Reasoning page (Chain-of-Thought analysis):
 
 <img title="a title" alt="Alt text" src="images/re1.png" width=100%>
+
 
 
 ---
