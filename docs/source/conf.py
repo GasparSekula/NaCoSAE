@@ -52,6 +52,7 @@ autodoc_mock_imports = [
     "tqdm",
     "sklearn",
     "diffusers",
+    "numpy",
 ]
 
 # -- Options for HTML output -------------------------------------------------
