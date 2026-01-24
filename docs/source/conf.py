@@ -45,6 +45,13 @@ autodoc_mock_imports = [
     "dotenv",
     "PIL",
     "absl",
+    "matplotlib",
+    "streamlit",
+    "pandas",
+    "sentence_transformers",
+    "tqdm",
+    "sklearn",
+    "diffusers",
 ]
 
 # -- Options for HTML output -------------------------------------------------
