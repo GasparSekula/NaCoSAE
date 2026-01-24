@@ -11,7 +11,15 @@ import torch
 def _calculate_average_activation(
     activations: torch.tensor, neuron_id: int
 ) -> float:
-    """Calculates average activation for selected neuron."""
+    """Calculate average activation for a selected neuron.
+
+    Args:
+        activations: Tensor of activations across samples.
+        neuron_id: Index of the neuron to compute average activation for.
+
+    Returns:
+        Average activation value for the specified neuron.
+    """
     neuron_activations = activations[:, neuron_id]
     return torch.mean(neuron_activations).item()
 
@@ -19,7 +27,17 @@ def _calculate_average_activation(
 def _get_activations(
     model_layer_activations_path: str,
 ) -> Iterator[Tuple[str, torch.Tensor]]:
-    """Returns an iterator of concept names and its control activations."""
+    """Load and iterate over control concept activations from disk.
+
+    Reads activation files from the specified directory and yields concept
+    names paired with their corresponding activation tensors.
+
+    Args:
+        model_layer_activations_path: Path to directory containing activation files.
+
+    Yields:
+        Tuples of concept names and activation tensors.
+    """
     for acitvations_filename in os.listdir(model_layer_activations_path):
         filepath = os.path.join(
             model_layer_activations_path, acitvations_filename
@@ -33,9 +51,17 @@ def _get_activations(
 def _create_average_activations(
     model_layer_activations_path: str, neuron_id: int
 ) -> Mapping[str, float]:
-    """
-    Creates dictionary with average activation of every control concept for
-    selected neuron.
+    """Create a mapping of concepts to average neuron activations.
+
+    Calculates the average activation value for a specific neuron across all
+    control concepts.
+
+    Args:
+        model_layer_activations_path: Path to directory containing activation files.
+        neuron_id: Index of the neuron to compute activations for.
+
+    Returns:
+        Dictionary mapping concept names to their average activation values.
     """
     average_activations = dict()
 
@@ -50,9 +76,17 @@ def _create_average_activations(
 def _select_best_concepts(
     average_neuron_activations: Mapping[str, float], n_best_concepts: int
 ) -> Mapping[str, float]:
-    """
-    Filters average activations by selecting n_best_concepts concepts with
-    the highest average activation.
+    """Select the top concepts by average activation.
+
+    Sorts concepts by their average activation values and returns the
+    top n_best_concepts with the highest activations.
+
+    Args:
+        average_neuron_activations: Dictionary mapping concepts to activation values.
+        n_best_concepts: Number of top concepts to select.
+
+    Returns:
+        List of the top concept names sorted by activation (highest first).
     """
     sorted_concepts = sorted(
         average_neuron_activations,
@@ -69,9 +103,20 @@ def get_initial_concepts(
     model_layer_activations_path: str,
     neuron_id: int,
 ) -> Sequence[str]:
-    """
-    Gets a list of initial concepts. The list contains n_best_concepts concepts
-    that activated the neuron the most and n_random_concepts random concepts.
+    """Get initial concepts combining best and random selections.
+
+    Returns a sequence of initial concepts consisting of the top n_best_concepts
+    that most strongly activate the neuron, plus n_random_concepts randomly
+    selected from all available control concepts.
+
+    Args:
+        n_best_concepts: Number of top-activating concepts to include.
+        n_random_concepts: Number of random concepts to include.
+        model_layer_activations_path: Path to directory containing activation files.
+        neuron_id: Index of the neuron to select concepts for.
+
+    Returns:
+        Sequence of initial concept names combining best and random selections.
     """
     average_neuron_activations = _create_average_activations(
         model_layer_activations_path, neuron_id
@@ -89,7 +134,20 @@ def get_initial_concepts(
 def update_concept_history(
     concept_history: Mapping[str, float], new_concept: str, score: float
 ) -> Mapping[str, float]:
-    """Updates the concept history with a new concept."""
+    """Update concept history by replacing the worst or randomly selected concept.
+
+    If the new concept's score is better than the worst existing concept, replaces
+    the worst one. Otherwise, randomly removes a concept with probability weighted
+    by its distance from the max score.
+
+    Args:
+        concept_history: Dictionary mapping concept names to their scores.
+        new_concept: Name of the new concept to add.
+        score: Score of the new concept.
+
+    Returns:
+        Updated concept history dictionary with the new concept added.
+    """
     worst_score_concept = min(concept_history, key=concept_history.get)
 
     if score > concept_history[worst_score_concept]:

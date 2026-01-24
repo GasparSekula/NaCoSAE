@@ -7,6 +7,15 @@ import numpy as np
 
 
 class ColorPalette(str, Enum):
+    """Color palette for plot styling.
+
+    Attributes:
+        MAIN: Primary color for main plot elements.
+        SECONDARY_LIGHT: Light secondary color for backgrounds.
+        SECONDARY: Standard secondary color.
+        SECONDARY_DARK: Dark secondary color for text and borders.
+    """
+
     MAIN = "#1a5e9a"
     SECONDARY_LIGHT = "#e6e6e6"
     SECONDARY = "#ced4da"
@@ -14,6 +23,11 @@ class ColorPalette(str, Enum):
 
 
 def plot_design_setup() -> None:
+    """Configure matplotlib plot design and styling parameters.
+
+    Sets up consistent styling for all plots including fonts, colors,
+    grid, spines, and figure properties using the ColorPalette.
+    """
     plt.rcParams["font.family"] = "serif"
     plt.rcParams["font.size"] = 14
 
@@ -43,6 +57,14 @@ def plot_design_setup() -> None:
 def plot_score_vs_iteration(
     generation_history_scores: Sequence[float],
 ) -> None:
+    """Plot score values across iterations.
+
+    Creates a line plot showing how scores change over iterations,
+    displaying all score values with proper scaling and grid.
+
+    Args:
+        generation_history_scores: Sequence of score values, one per iteration.
+    """
     scores_array = np.array(generation_history_scores, dtype=np.float32)
     x_ticks = range(1, len(scores_array) + 1)
 
@@ -63,6 +85,14 @@ def plot_score_vs_iteration(
 def plot_relative_score_over_iteration(
     generation_history_scores: Sequence[float],
 ) -> None:
+    """Plot relative score values normalized to the best score.
+
+    Creates a line plot showing how scores change relative to the
+    maximum score achieved, with values ranging from 0 to 1.
+
+    Args:
+        generation_history_scores: Sequence of score values, one per iteration.
+    """
     scores_array = np.array(generation_history_scores, dtype=np.float32)
     best_score = max(scores_array)
     relative_scores_array = scores_array / best_score
@@ -87,6 +117,14 @@ def plot_relative_score_over_iteration(
 def plot_best_score_over_iteration(
     generation_history_scores: Sequence[float],
 ) -> None:
+    """Plot cumulative best score achieved so far across iterations.
+
+    Creates a line plot showing the running maximum score, illustrating
+    the improvement trajectory of the optimization process.
+
+    Args:
+        generation_history_scores: Sequence of score values, one per iteration.
+    """
     scores_array = np.array(generation_history_scores, dtype=np.float32)
     cumulative_best_score = np.maximum.accumulate(scores_array)
     x_ticks = range(1, len(scores_array) + 1)

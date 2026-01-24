@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""ImageNet-1000 class label mappings.
+
+This module provides a dictionary mapping ImageNet WordNet IDs (wnids)
+to human-readable class labels for the 1000 classes in ImageNet-2012.
+"""
 from collections import OrderedDict
 
 

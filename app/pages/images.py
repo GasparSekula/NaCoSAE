@@ -1,3 +1,9 @@
+"""Images page for displaying experiment results.
+
+This module renders the images page of the Streamlit dashboard,
+displaying images generated during the experiment.
+"""
+
 import streamlit as st
 
 from utils import results
