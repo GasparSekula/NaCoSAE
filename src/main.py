@@ -1,3 +1,10 @@
+"""Main entry point for the NaCoSAE pipeline.
+
+This module orchestrates the neuron concept attribution pipeline, which explains
+the behavior of individual neurons by generating and refining concept descriptions
+using language and image generation models.
+"""
+
 import os
 import random
 
@@ -52,12 +59,12 @@ _METRIC = flags.DEFINE_enum_class(
 )
 _PROMPT_PATH = flags.DEFINE_string(
     "prompt",
-    "src/prompts/templates/prompt_mils.txt",
+    "src/prompts/templates/prompt_main.txt",
     "Path to prompt for the LLM.",
 )
 _SUMMARY_PROMPT_PATH = flags.DEFINE_string(
     "summary_prompt",
-    "src/prompts/templates/summary/prompt_summary_cot.txt",
+    "src/prompts/templates/prompt_summary.txt",
     "Path to summary prompt for the LLM.",
 )
 _SAVE_HISTORIES = flags.DEFINE_bool(
@@ -73,12 +80,21 @@ _SAVE_IMAGES = flags.DEFINE_bool(
 )
 _SAVE_DIR = flags.DEFINE_string(
     "save_dir",
-    os.environ["SAVE_DIR"],
+    os.getenv("SAVE_DIR", "default_path_for_docs"),
     "Path where pipeline artifacts will be stored.",
 )
 
 
 def main(argv):
+    """Run the neuron concept attribution pipeline.
+
+    Initializes all configuration objects, creates the explanation pipeline,
+    and runs it for the specified number of iterations to generate and refine
+    concept descriptions for a target neuron.
+
+    Args:
+        argv: Command-line arguments (provided by absl).
+    """
     random.seed(_SEED)
 
     load_config = config.LoadConfig(

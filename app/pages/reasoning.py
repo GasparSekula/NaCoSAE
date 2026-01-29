@@ -1,7 +1,15 @@
+"""Reasoning page for displaying LLM's reasoning process.
+
+This module renders the reasoning page of the Streamlit dashboard,
+displaying the large language model's step-by-step reasoning and explanations
+from the experiment results.
+"""
+
 import streamlit as st
 import pandas as pd
 
 from utils import results
+from utils import reasoning_utils
 
 experiment_results: results.ExperimentResults = st.session_state.get(
     results.RESULTS_STATE_KEY
@@ -9,13 +17,4 @@ experiment_results: results.ExperimentResults = st.session_state.get(
 
 st.markdown("# LLM's reasoning process")
 
-reasoning_list = experiment_results.reasoning
-
-for i in range(len(reasoning_list) - 1):
-    st.markdown(f"### Iteration {i+1} - {reasoning_list[i][0]}")
-    st.markdown(f"{reasoning_list[i][1]}")
-
-st.markdown(
-    f"### **Summary concept:** {reasoning_list[len(reasoning_list)-1][0]}"
-)
-st.markdown(f"{reasoning_list[len(reasoning_list)-1][1]}")
+reasoning_utils.write_reasoning(experiment_results=experiment_results)

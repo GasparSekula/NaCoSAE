@@ -1,4 +1,9 @@
-"""This module defines functions for scoring explanations."""
+"""Scoring metrics for concept quality evaluation.
+
+Provides various metrics for quantifying how well a concept explains neuron
+behavior by comparing activations on synthetic concept images versus
+control images.
+"""
 
 import enum
 
@@ -10,7 +15,18 @@ def _calculate_auc(
     neuron_control_activations: torch.Tensor,
     neuron_synthetic_activations: torch.Tensor,
 ) -> float:
-    """Calculates AUC between control and synthetic activations."""
+    """Calculate AUC metric for concept scoring.
+
+    Computes the area under the ROC curve treating control activations as
+    negative class (0) and synthetic activations as positive class (1).
+
+    Args:
+        neuron_control_activations: Activations from control concept images.
+        neuron_synthetic_activations: Activations from synthetic concept images.
+
+    Returns:
+        AUC score between 0 and 1, higher is better.
+    """
     concept_labels = torch.cat(
         (
             torch.zeros([neuron_control_activations.shape[0]]),
@@ -29,7 +45,14 @@ def _calculate_auc(
 def _calculate_average_activation(
     neuron_activations: torch.Tensor,
 ) -> float:
-    """Calculates average neuron activation."""
+    """Calculate average neuron activation.
+
+    Args:
+        neuron_activations: Activation values for a neuron.
+
+    Returns:
+        Mean activation value.
+    """
     return neuron_activations.mean().item()
 
 
@@ -37,7 +60,18 @@ def _calculate_mad(
     neuron_control_activations: torch.Tensor,
     neuron_synthetic_activations: torch.Tensor,
 ) -> float:
-    """Calculates MAD between synthetic and control activations."""
+    """Calculate Mean Absolute Difference (MAD) metric.
+
+    Computes the standardized difference between synthetic and control
+    activation means, normalized by the control activation standard deviation.
+
+    Args:
+        neuron_control_activations: Activations from control concept images.
+        neuron_synthetic_activations: Activations from synthetic concept images.
+
+    Returns:
+        Standardized activation difference score.
+    """
     average_control_activation = _calculate_average_activation(
         neuron_control_activations
     )
@@ -54,6 +88,14 @@ def _calculate_mad(
 
 
 class Metric(enum.Enum):
+    """Enumeration of concept scoring metrics.
+
+    Attributes:
+        AUC: Area under ROC curve between control and synthetic activations.
+        MAD: Mean absolute difference normalized by control activation standard deviation.
+        AVG_ACTIVATION: Average activation magnitude on synthetic images.
+    """
+
     AUC = enum.member(_calculate_auc)
     MAD = enum.member(_calculate_mad)
     AVG_ACTIVATION = enum.member(_calculate_average_activation)
@@ -64,7 +106,23 @@ def calculate_metric(
     neuron_synthetic_activations: torch.Tensor,
     metric: Metric,
 ) -> float:
-    """Calculates selected metric."""
+    """Calculate the specified metric for a concept.
+
+    Computes the selected scoring metric by comparing control and synthetic
+    neuron activations. Different metrics measure different aspects of how
+    well a concept explains the neuron.
+
+    Args:
+        neuron_control_activations: Neuron activations from control images.
+        neuron_synthetic_activations: Neuron activations from synthetic concept images.
+        metric: The metric to compute (AUC, MAD, or AVG_ACTIVATION).
+
+    Returns:
+        Score value for the selected metric.
+
+    Raises:
+        ValueError: If activations are not one-dimensional.
+    """
     if (
         neuron_control_activations.ndim != 1
         or neuron_control_activations.ndim != 1

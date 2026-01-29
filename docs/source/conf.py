@@ -1,0 +1,62 @@
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+import os
+import sys
+
+root_path = os.path.abspath("../../")
+sys.path.insert(0, root_path)
+sys.path.insert(0, os.path.join(root_path, "src"))
+sys.path.insert(0, os.path.join(root_path, "app"))
+sys.path.insert(0, os.path.join(root_path, "scripts"))
+
+project = "LINE"
+copyright = "2026, Gaspar Sekula, Michał Piechota"
+author = "Gaspar Sekula, Michał Piechota"
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.githubpages",
+]
+
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
+
+templates_path = ["_templates"]
+exclude_patterns = []
+
+autodoc_mock_imports = [
+    "transformers",
+    "torch",
+    "torchvision",
+    "immutabledict",
+    "pytest",
+    "pytest_mock",
+    "dotenv",
+    "PIL",
+    "absl",
+    "matplotlib",
+    "streamlit",
+    "pandas",
+    "sentence_transformers",
+    "tqdm",
+    "sklearn",
+    "diffusers",
+    "numpy",
+]
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]
