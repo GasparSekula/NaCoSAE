@@ -208,9 +208,9 @@ def visualize_top_activating_images(
     if N == 1:
         axes = axes.reshape(2, 1)  
 
-    fig.suptitle(f"Neuron {neuron_id} top activating images comparison")
+    fig.suptitle(f"Neuron {neuron_id} top activating images comparison", fontsize=18)
     
-    row1_subtitle = f"Our concept: {our_concept.upper()} - top activating synthetic images"
+    row1_subtitle = f"LINE concept: {our_concept.upper()} - top activating synthetic images"
     row2_subtitle = f"Control concept: {control_concept.upper()} - top activating Imagenet images"
 
     for idx in range(N):
@@ -223,7 +223,7 @@ def visualize_top_activating_images(
         except Exception as e:
             logging.error("Failed to load our image %s: %s", our_files[idx], e)
         if idx == N//2:
-            ax.set_title(row1_subtitle, fontsize=10)
+            ax.set_title(row1_subtitle, fontsize=15)
 
         plt.subplots_adjust(hspace=1.5)  
 
@@ -240,7 +240,7 @@ def visualize_top_activating_images(
         except Exception as e:
             logging.error("Failed to load control image %s: %s", p, e)
         if idx == N//2:
-            ax.set_title(row2_subtitle, fontsize=10)
+            ax.set_title(row2_subtitle, fontsize=15)
 
     plt.tight_layout()
     plt.show()
